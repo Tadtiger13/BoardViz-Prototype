@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>BoardViz Demo</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+  <div id="display" class="mobile">
+    <div id="mobile-canvas">
+      <canvas id="board-bg" width="500px" height="375px"><!-- Dimensions are from jpg --></canvas>
+      <canvas id="board-hl" width="500px" height="375px"><!-- Dimensions must match   --></canvas>
+    </div>
+
+    <div id="layout-div" class="peek hidden">
+      <div id="frontcanvas" touch-action="none">
+        <canvas id="F_bg" style="z-index: 10"></canvas>
+        <canvas id="F_fab" style="z-index: 11"></canvas>
+        <canvas id="F_slk" style="z-index: 12"></canvas>
+        <canvas id="F_hl" style="z-index: 13"></canvas>
+      </div>
+      <div id="backcanvas" touch-action="none">
+        <canvas id="B_bg" style="z-index: 10"></canvas>
+        <canvas id="B_fab" style="z-index: 11"></canvas>
+        <canvas id="B_slk" style="z-index: 12"></canvas>
+        <canvas id="B_hl" style="z-index: 13"></canvas>
+      </div>
+    </div>
+
+    <div id="anno-rn2" class="annotation hidden">Sample annotation for RN2</div>
+</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./globals.js"></script>
+  <script src="./ibom/lz-string.js"></script>
+  <script src="./ibom/data.js"></script>
+  <script src="./ibom/render.js"></script>
+  <script src="./mobile.js"></script>
+</body>
+
+</html>

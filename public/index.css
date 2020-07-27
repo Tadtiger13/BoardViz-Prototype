@@ -1,0 +1,257 @@
+body {
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#box {
+    width: 300px;
+    height: 200px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+#board {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#board-img {
+    height: 100vh;
+}
+
+/* mobile.html */
+
+#display > #mobile-canvas {
+    overflow: auto;
+}
+
+#mobile-canvas {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+#mobile-canvas canvas {
+    position: absolute;
+    height: 100%; /* on a horizontal phone this is the limiting factor we want */
+    top: 0;
+    left: 0;
+}
+
+#board-bg {
+    z-index: 1;
+}
+
+#board-hl {
+    z-index: 2;
+}
+
+.annotation {
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    top: 250px;
+    right: 0;
+    /* border: 3px solid #d6d6d9; */
+    /* background-color: #f4f4f4; */
+    color: #d04040;
+    box-sizing: border-box;
+    padding: 6px;
+    z-index: 30;
+}
+
+/* ----------- */
+
+/*  main.html  */
+
+#layout-div>div {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+#layout-div canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+div#schematiccanvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+div#schematiccanvas canvas {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+#schematic-div.split div#schematiccanvas canvas {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#swap-icon {
+    position: absolute;
+    right: 20px;
+    top: 56px;
+    z-index: 20;
+}
+
+#swap-icon img {
+    width: 40px;
+}
+
+#menubar {
+    height: 40px;
+    width: 100%;
+    border-bottom: 3px solid #d6d6d9;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+}
+#menubar h2 {
+    margin: 0 0 0 20px;
+    padding: 0;
+}
+#menubar #menubuttons {
+    position: absolute;
+    right: 16px;
+}
+
+button {
+    padding: 6px;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 90px;
+}
+button:hover {
+    background-color: #cbcbce;
+}
+button.selected {
+    color: white;
+    background-color: #00aa00;
+}
+button.selected:hover {
+    background-color: #008800;
+}
+
+#display {
+    height: calc(100vh - 40px);
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+
+    /* Style for layout */
+    --pcb-edge-color: black;
+    --pad-color: #878787;
+    --pad-color-highlight: #D04040;
+    --pin1-outline-color: #ffb629;
+    --pin1-outline-color-highlight: #b4ff03;
+    --silkscreen-edge-color: #aa4;
+    --silkscreen-polygon-color: #4aa;
+    --silkscreen-text-color: #4aa;
+    --fabrication-edge-color: #907651;
+    --fabrication-polygon-color: #907651;
+    --fabrication-text-color: #a27c24;
+    --track-color: #def5f1;
+    --track-color-highlight: #D04040;
+    --zone-color: #def5f1;
+    --zone-color-highlight: #d0404080;
+}
+#display.mobile {
+     /* Style for layout */
+     --pcb-edge-color: black;
+     --pad-color: black;
+     --pad-color-highlight: #D04040;
+     --pin1-outline-color: black;
+     --pin1-outline-color-highlight: black;
+     --silkscreen-edge-color: black;
+     --silkscreen-polygon-color: black;
+     --silkscreen-text-color: black;
+     --fabrication-edge-color: black;
+     --fabrication-polygon-color: black;
+     --fabrication-text-color: black;
+     --track-color: black;
+     --track-color-highlight: #D04040;
+     --zone-color: black;
+     --zone-color-highlight: black;
+}
+
+#display>div {
+    overflow: hidden;
+}
+
+canvas {
+    cursor: crosshair;
+}
+
+canvas:active {
+    cursor: grabbing;
+}
+
+
+/* View Modes */
+/*  .full  = fullscreen
+    .split = side-by-side
+    .peek  = peek-by-inset  */
+
+div.split {
+    width: 50%;
+    height: 100%;
+}
+#schematic-div.split {
+    border-right: 3px solid #d6d6d9;
+}
+
+div.fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
+#layout-div.peek {
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border: 3px solid #d6d6d9;
+    box-sizing: border-box;
+    z-index: 5;
+}
+
+.mobile #layout-div.peek {
+    right: 0;
+    left: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Index/settings page */
+#index {
+    font-family: Arial, Helvetica, sans-serif;
+}
+#settings {
+    margin-left: 20px;
+}
+.button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.button-container button {
+    margin: 10px;
+}

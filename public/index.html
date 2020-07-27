@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>BoardViz Demo</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+</head>
+
+<body>
+  <div id="index">
+    <h1><a href="main.html">Main</a></h1>
+    <h1><a href="mobile.html">Mobile</a></h1>
+
+    <br />
+    <br />
+    <div id="settings">
+      <h2>Settings</h2>
+      <table>
+        <tr>
+          <td>View Mode:&nbsp;</td>
+          <td class="button-container">
+            <button id="btn-vm1" onclick="viewModeSetting(1)">Fullscreen</button>
+            <button id="btn-vm2" onclick="viewModeSetting(2)">Peek-By-Inset</button>
+            <button id="btn-vm3" onclick="viewModeSetting(3)">Side-By-Side</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Board Highlight Mode:&nbsp;</td>
+          <td class="button-container">
+            <button id="btn-bm1" onclick="highlightSetting(1)">Box</button>
+            <button id="btn-bm2" onclick="highlightSetting(2)">Circle</button>
+            <button id="btn-bm3" onclick="highlightSetting(3)">Crosshair</button>
+            <button id="btn-bm4" onclick="highlightSetting(4)">Layout</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Annotation Style:&nbsp;</td>
+          <td class="button-container">
+            <button id="btn-as1" onclick="annotationSetting(1)">On Board, Minimal</button>
+            <button id="btn-as2" onclick="annotationSetting(2)">Off Board, Minimal</button>
+            <button id="btn-as3" onclick="annotationSetting(3)">On Board, Full</button>
+            <button id="btn-as4" onclick="annotationSetting(4)">Off Board, Full</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="./settings.js"></script>
+</body>
+
+</html>
