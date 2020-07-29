@@ -1,4 +1,9 @@
-// TODO useful comment
+// Primary js file for main.html, the computer interface
+// Contains rendering and interaction functions for schematic
+// and sets up the socket connection and page content
+
+
+// ---- Variables ---- //
 
 // Keeps track of the currently highlighted modules for use by
 // drawHighlights() and drawSchematicHighlights() in render.js
@@ -21,15 +26,54 @@ var fullscreenShowLayout = false;
 // Socket for communicating with server and mobile page
 var socket = io();
 
-function componentClickHandler(refIds) {
-    return () => {
-        modulesSelected(refIds);
+
+// ---- Functions ---- //
+
+function initSchematicCanvas() {
+    addMouseHandlers(document.getElementById("schematiccanvas"), schematicCanvas);
+
+    var bg = schematicCanvas.bg;
+    var hl = schematicCanvas.highlight;
+
+    var ratio = window.devicePixelRatio || 1;
+
+    // Increase the canvas dimensions by the pixel ratio (display size controlled by CSS)
+    bg.width *= ratio;
+    bg.height *= ratio;
+    hl.width *= ratio;
+    hl.height *= ratio;
+
+    schematicCanvas.img.onload = function () {
+        drawCanvasImg(schematicCanvas);
+    };
+    schematicCanvas.img.src = "./images/sch-01.svg";
+}
+
+function drawSchematicHighlights() {
+    var style = getComputedStyle(topmostdiv);
+
+    var canvas = schematicCanvas.highlight;
+    prepareCanvas(canvas, false, schematicCanvas.transform);
+    clearCanvas(canvas);
+    var ctx = canvas.getContext("2d");
+    if (highlightedModules.length > 0) {
+        for (var i in highlightedModules) {
+            var boxes = schematicComponents[highlightedModules[i]].boxes;
+            for (var j in boxes) {
+                var box = boxes[j];
+                ctx.beginPath();
+                ctx.rect(box[0], box[1], box[2] - box[0], box[3] - box[1]);
+                ctx.fillStyle = style.getPropertyValue("--schematic-highlight-fill-color");
+                ctx.strokeStyle = style.getPropertyValue("--schematic-highlight-line-color");
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
     }
 }
 
 function modulesSelected(modules) {
-    highlightModules(modules);
-    socket.emit("modules selected", highlightedModules);
+    socket.emit("modules selected", modules);
 }
 
 function highlightModules(modules) {
@@ -66,7 +110,7 @@ function peekLayout() {
         // TODO in actual version, need to adapt to position of box
         var upperRightCorner = canvasToDocumentCoords(targetBox[2], targetBox[1], schematicCanvas);
         layoutDiv.style.left = upperRightCorner.x + "px";
-        layoutDiv.style.top  = (upperRightCorner.y - 200) + "px";
+        layoutDiv.style.top = (upperRightCorner.y - 200) + "px";
 
         layoutDiv.classList.remove("hidden");
 
@@ -80,10 +124,10 @@ function peekLayout() {
 
         var panx = -(module.bbox.pos[0] * allcanvas.front.transform.s + allcanvas.front.transform.x);
         var pany = -(module.bbox.pos[1] * allcanvas.front.transform.s + allcanvas.front.transform.y);
-        
+
         panx += 200 / PBI_ZOOM;  // 200 comes from the fixed pixel width of the canvas
         pany += 200 / PBI_ZOOM;  // this is determined by the CSS rule for #layout-div.peek
-        
+
         allcanvas.front.transform.panx = panx;
         allcanvas.front.transform.pany = pany;
         allcanvas.back.transform.panx = panx;
@@ -92,48 +136,6 @@ function peekLayout() {
         resizeAll();
     } else {
         layoutDiv.classList.add("hidden");
-    }
-}
-
-function initComponentClickListeners(grouped = false) {
-    var bomTable;
-    // switch (settings.canvaslayout) {
-    //   case 'F':
-    //     bomTable = pcbdata.bom.F.slice();
-    //     break;
-    //   case 'B':
-    //     bomTable = pcbdata.bom.B.slice();
-    //     break;
-    //   default:
-    //     bomTable = pcbdata.bom.both.slice();
-    //     break;
-    // }
-    bomTable = pcbdata.bom.both.slice();  // always use full data for now
-
-    // Default to always highlighting individual components
-    if (!grouped) {
-        var expandedTable = []
-        for (var bomEntry of bomTable) {
-            for (var ref of bomEntry[3]) {
-                expandedTable.push([1, bomEntry[1], bomEntry[2], [ref], bomEntry[4], bomEntry[5]]);
-            }
-        }
-        bomTable = expandedTable;
-    }
-
-    for (var i in bomTable) {
-        var bomEntry = bomTable[i];
-        var references = bomEntry[3];  // array of ["name", "refId"]
-
-        if (references !== null) {
-            var refIds = references.map(r => r[1]);
-            for (var refId of refIds) {
-                // Only make components clickable if they are part of the demo set
-                if (refId in schematicComponents) {
-                    moduleIndexToHandler[refId] = componentClickHandler(refIds);
-                }
-            }
-        }
     }
 }
 
@@ -218,6 +220,9 @@ function setViewMode(mode) {
     highlightModules(highlightedModules);
 }
 
+
+// ---- Page Setup ---- //
+
 socket.on("modules selected", (modules) => {
     highlightModules(modules);
 });
@@ -227,12 +232,10 @@ socket.on("setting viewmode", (mode) => {
 
 window.onload = () => {
     initUtils();
-    initRender();
+
+    initLayoutCanvas();
 
     initSchematicCanvas();
-
-    // Only needed for grouped components
-    // initComponentClickListeners();
 
     initSwapButton();
 

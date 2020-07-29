@@ -1,7 +1,8 @@
-// TODO useful comment
+// Contains render functions needed to display the layout canvas,
+// as well as some other canvas-related functions used by both main.js and mobile.js
 
-// Used as proxy for colors for layout render
-var topmostdiv = document.getElementById("display");
+
+// ---- Variables ---- //
 
 // Hold transform and canvas elements for manipulating layout and schematic
 var allcanvas = {
@@ -59,6 +60,8 @@ var schematicCanvas = {
   img: new Image()
 }
 
+
+// ---- Functions ---- //
 
 function deg2rad(deg) {
   return deg * Math.PI / 180;
@@ -596,12 +599,43 @@ function recalcLayerScale(layerdict, width, height) {
   }
 }
 
+function prepareCanvas(canvas, flip, transform) {
+  var ctx = canvas.getContext("2d");
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(transform.zoom, transform.zoom);
+  ctx.translate(transform.panx, transform.pany);
+  if (flip) {
+      ctx.scale(-1, 1);
+    }
+  ctx.translate(transform.x, transform.y);
+  ctx.scale(transform.s, transform.s);
+}
+
+function clearCanvas(canvas, color = null) {
+  var ctx = canvas.getContext("2d");
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  if (color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+  } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  ctx.restore();
+}
+
+function drawCanvasImg(layerdict, x = 0, y = 0) {
+  var canvas = layerdict.bg;
+  prepareCanvas(canvas, false, layerdict.transform);
+  clearCanvas(canvas);
+  canvas.getContext("2d").drawImage(layerdict.img, x, y);
+}
+
 function redrawCanvas(layerdict) {
-  if (layerdict.layer === "S" || layerdict.layer === "D") {
-    // schematic or board
+  if (layerdict.layer === "S") {
+    // schematic
     drawCanvasImg(layerdict);
     drawSchematicHighlights();
-    // drawBoardHighlights();
   } else {
     // layout (original)
     prepareLayer(layerdict);
@@ -748,9 +782,22 @@ function getMousePos(layerdict, evt) {
   var x = (evt.clientX - rect.left) * scaleX - transform.panx;
   var y = (evt.clientY - rect.top)  * scaleY - transform.pany;
 
-  // console.log(`canvas coords: (${x}, ${y})`);
-
   return { x: x, y: y };
+}
+
+function canvasToDocumentCoords(x, y, layerdict) {
+  var canvas = layerdict.highlight;
+  var transform = layerdict.transform;
+  var zoomFactor = 1 / transform.zoom;
+
+  var rect = canvas.getBoundingClientRect();  // abs. size of element
+  var scaleX = canvas.width  / rect.width  * zoomFactor;  // relationship bitmap vs. element for X
+  var scaleY = canvas.height / rect.height * zoomFactor;  // relationship bitmap vs. element for Y
+
+  var docX = (x + transform.panx) / scaleX + rect.left;
+  var docY = (y + transform.pany) / scaleY + rect.top;
+
+  return { x: docX, y: docY };
 }
 
 function isClickInBoxes(coords, boxes) {
@@ -1020,48 +1067,7 @@ function setBoardRotation(value) {
   resizeAll();
 }
 
-function initRender() {
+function initLayoutCanvas() {
   addMouseHandlers(document.getElementById("frontcanvas"), allcanvas.front);
   addMouseHandlers(document.getElementById("backcanvas"), allcanvas.back);
-}
-
-function initSchematicCanvas() {
-  addMouseHandlers(document.getElementById("schematiccanvas"), schematicCanvas);
-
-  var bg = schematicCanvas.bg;
-  var hl = schematicCanvas.highlight;
-
-  var ratio = window.devicePixelRatio || 1;
-
-  // Increase the canvas dimensions by the pixel ratio (display size controlled by CSS)
-  bg.width  *= ratio;
-  bg.height *= ratio;
-  hl.width  *= ratio;
-  hl.height *= ratio;
-
-  schematicCanvas.img.onload = function() {
-    drawCanvasImg(schematicCanvas);
-  };
-  schematicCanvas.img.src = "../sch-01.svg";
-}
-
-function drawSchematicHighlights() {
-  var canvas = schematicCanvas.highlight;
-  prepareCanvas(canvas, false, schematicCanvas.transform);
-  clearCanvas(canvas);
-  var ctx = canvas.getContext("2d");
-  if (highlightedModules.length > 0) {
-    for (var i in highlightedModules) {
-      var boxes = schematicComponents[highlightedModules[i]].boxes;
-      for (var j in boxes) {
-        var box = boxes[j];
-        ctx.beginPath();
-        ctx.rect(box[0], box[1], box[2] - box[0], box[3] - box[1]);
-        ctx.fillStyle = HIGHLIGHT_FILL;
-        ctx.strokeStyle = HIGHLIGHT_STROKE;
-        ctx.fill();
-        ctx.stroke();
-      }
-    }
-  }
 }

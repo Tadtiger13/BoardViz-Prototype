@@ -3,7 +3,7 @@
 
 <head>
   <title>BoardViz Demo</title>
-  <link rel="stylesheet" type="text/css" href="index.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
@@ -15,9 +15,9 @@
       <button id="btn-pbi" onclick="setViewMode('peek-by-inset')">Peek-By-Inset</button>
       <button id="btn-sbs" onclick="setViewMode('side-by-side')">Side-By-Side</button>
     </div>
-    <div id="swap-icon"><img src="./swap_icon.png" /></div>
+    <div id="swap-icon"><img src="./images/swap_icon.png" /></div>
   </div>
-  <div id="display">
+  <div id="display" class="main">
     <div id="schematic-div">
       <div id="schematiccanvas">
         <canvas id="schematic-bg" style="z-index: 0" width="985px" height="690px"><!-- Dimensions are from SVG --></canvas>

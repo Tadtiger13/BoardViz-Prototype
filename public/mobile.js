@@ -1,7 +1,9 @@
-// JS for mobile page (board simulator)
-// Mostly drawn from IBOM's render.js
+// Primary js file for mobile.html, the mobile interface
+// Contains rendering and interaction functions for the board
+// and sets up the socket connection and page content
 
-// ------ Constants ------- //
+
+// ---- Variables ---- //
 
 // Determines which highlight mode is used on the board
 // 1 = box, 2 = circle, 3 = crosshair, 4 = layout display
@@ -31,9 +33,8 @@ var boardCanvas = {
 
 var highlightedModules = [];
 
-// ------------------------ //
 
-// ------ Functions  ------ //
+// ---- Functions ---- //
 
 function drawBoardHighlights(modules) {
     var layoutDiv = document.getElementById("layout-div");
@@ -56,7 +57,7 @@ function drawBoardHighlights(modules) {
                     drawBoardHighlight(box, ctx, "box");
                     break;
                 case 2:
-                    drawBoardHighlight(box, ctx, "box");
+                    // drawBoardHighlight(box, ctx, "box");
                     drawBoardHighlight(box, ctx, "circle");
                     break;
                 case 3:
@@ -64,7 +65,7 @@ function drawBoardHighlights(modules) {
                     drawBoardHighlight(box, ctx, "crosshair");
                     break;
                 case 4:
-                    drawBoardHighlight(box, ctx, "box");
+                    // drawBoardHighlight(box, ctx, "box");
                     layoutDiv.classList.remove("hidden");
                     showLayout(modules[i]);
                     break;
@@ -76,22 +77,23 @@ function drawBoardHighlights(modules) {
 }
 
 function drawBoardHighlight(box, ctx, type) {
+    var style = getComputedStyle(topmostdiv);
+
+    ctx.fillStyle = style.getPropertyValue("--board-highlight-fill-color");
+    ctx.strokeStyle = style.getPropertyValue("--board-highlight-line-color");
+    ctx.lineWidth = style.getPropertyValue("--board-highlight-line-width");
+
     switch (type) {
         case "box":
             ctx.beginPath();
             ctx.rect(box[0], box[1], box[2] - box[0], box[3] - box[1]);
-            ctx.fillStyle = HIGHLIGHT_FILL;
-            ctx.strokeStyle = HIGHLIGHT_STROKE;
-            ctx.lineWidth = 2;
             ctx.fill();
             ctx.stroke();
             break;
         case "circle":
             var center = { x: (box[0] + box[2]) / 2, y: (box[1] + box[3]) / 2 };
             ctx.beginPath();
-            ctx.arc(center.x, center.y, HL_CIRCLE_RADIUS, 0, 2 * Math.PI);
-            ctx.strokeStyle = HIGHLIGHT_STROKE;
-            ctx.lineWidth = 2;
+            ctx.arc(center.x, center.y, style.getPropertyValue("--board-highlight-circle-radius"), 0, 2 * Math.PI);
             ctx.stroke();
             break;
         case "crosshair":
@@ -99,15 +101,23 @@ function drawBoardHighlight(box, ctx, type) {
             // TODO figure out how that should be displayed
             var width = boardCanvas.highlight.width / 2;
             var height = boardCanvas.highlight.height / 2;
-            var boxW = box[2] - box[0];
-            var boxH = box[3] - box[1];
 
-            ctx.fillStyle = HIGHLIGHT_FILL;
+            var midX = (box[0] + box[2]) / 2;
+            var midY = (box[1] + box[3]) / 2;
 
-            ctx.fillRect(box[0], 0, boxW, box[1]);
-            ctx.fillRect(0, box[1], box[0], boxH);
-            ctx.fillRect(box[0], box[3], boxW, height - box[3]);
-            ctx.fillRect(box[2], box[1], width - box[2], boxH);
+            ctx.beginPath();
+
+            ctx.moveTo(midX, 0);
+            ctx.lineTo(midX, box[1]);
+            ctx.moveTo(midX, box[3]);
+            ctx.lineTo(midX, height);
+            
+            ctx.moveTo(0, midY);
+            ctx.lineTo(box[0], midY);
+            ctx.moveTo(box[2], midY);
+            ctx.lineTo(width, midY);
+            
+            ctx.stroke();
 
             break;
     }
@@ -191,7 +201,7 @@ function initBoardCanvas() {
     boardCanvas.img.onload = function () {
         drawCanvasImg(boardCanvas, 0, 0);
     };
-    boardCanvas.img.src = "./arduinouno.jpg";
+    boardCanvas.img.src = "./images/arduinouno.jpg";
 
     hl.addEventListener("click", (e) => {
         var coords = getMousePos(boardCanvas, e);
@@ -216,17 +226,17 @@ function initBoardCanvas() {
     })
 }
 
-// ------------------------ //
 
+// ---- Page Setup ---- //
 
 window.onload = () => {
-    // Click listeners
-    // initRender();
+    // Click listeners for layout canvas
+    // initLayoutCanvas();
 
     initBoardCanvas();
 
-    // Trigger layout render
     allcanvas.front.transform.zoom = PBI_ZOOM;
+    // Trigger layout render
     resizeAll();
 }
 
