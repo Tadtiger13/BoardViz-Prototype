@@ -26,6 +26,24 @@ var fullscreenShowLayout = false;
 // Socket for communicating with server and mobile page
 var socket = io();
 
+// Holds svg of schematic and its highlights
+var schematicCanvas = {
+    transform: {
+      x: 0,
+      y: 0,
+      s: 1,
+      panx: 0,
+      pany: 0,
+      zoom: 2, // Start zoomed in for better aesthetics
+    },
+    pointerStates: {},
+    anotherPointerTapped: false,
+    layer: "S",
+    bg: document.getElementById("schematic-bg"),
+    highlight: document.getElementById("schematic-hl"),
+    img: new Image()
+  }
+
 
 // ---- Functions ---- //
 
@@ -141,23 +159,25 @@ function peekLayout() {
 
 function initSwapButton() {
     var swapButton = document.getElementById("swap-icon");
-    swapButton.addEventListener("click", () => {
-        var schematicDiv = document.getElementById("schematic-div");
-        var layoutDiv = document.getElementById("layout-div");
+    swapButton.addEventListener("click", swapFullscreen);
+}
 
-        if (fullscreenShowLayout) {
-            schematicDiv.classList.remove("hidden");
-            layoutDiv.classList.add("hidden");
-        } else {
-            schematicDiv.classList.add("hidden");
-            layoutDiv.classList.remove("hidden");
-        }
+function swapFullscreen() {
+    var schematicDiv = document.getElementById("schematic-div");
+    var layoutDiv = document.getElementById("layout-div");
 
-        fullscreenShowLayout = !fullscreenShowLayout;
+    if (fullscreenShowLayout) {
+        schematicDiv.classList.remove("hidden");
+        layoutDiv.classList.add("hidden");
+    } else {
+        schematicDiv.classList.add("hidden");
+        layoutDiv.classList.remove("hidden");
+    }
 
-        // Refresh layout
-        resizeAll();
-    });
+    fullscreenShowLayout = !fullscreenShowLayout;
+
+    // Refresh layout
+    resizeAll();
 }
 
 function setViewMode(mode) {
@@ -225,6 +245,9 @@ function setViewMode(mode) {
 
 socket.on("modules selected", (modules) => {
     highlightModules(modules);
+    if (viewMode === "fullscreen" && highlightedModules.length > 0) {
+        swapFullscreen();
+    }
 });
 socket.on("setting viewmode", (mode) => {
     setViewMode(mode);

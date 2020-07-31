@@ -76,6 +76,9 @@ canvas:active {
 }
 
 #display.mobile {
+    /* Div Style */
+    height: 100vh;
+
     /* Style for layout */
     --pcb-edge-color: black;
     --pad-color: black;
@@ -115,10 +118,10 @@ canvas:active {
 
 #mobile-canvas canvas {
     position: absolute;
-    height: 100%;
-    /* on a horizontal phone this is the limiting factor we want */
-    top: 0;
-    left: 0;
+    height: 100%;  /* on a horizontal phone this is the limiting factor we want */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #board-bg {
@@ -131,12 +134,14 @@ canvas:active {
 
 .annotation {
     font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20pt;
     position: absolute;
     top: 250px;
     right: 0;
     /* border: 3px solid #d6d6d9; */
     /* background-color: #f4f4f4; */
-    color: #d04040;
+    color: rgba(208, 64, 64, 0.7);
     box-sizing: border-box;
     padding: 6px;
     z-index: 30;
