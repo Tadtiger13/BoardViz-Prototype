@@ -5,6 +5,9 @@
 
 // ---- Variables ---- //
 
+const BLINK_INTERVAL_MS = 500;
+const BLINK_TOTAL_MS = 3000;
+
 // Determines which highlight mode is used on the board
 // 1 = box, 2 = circle, 3 = crosshair, 4 = layout display
 var boardHighlightMode = 1;
@@ -21,7 +24,7 @@ var boardCanvas = {
         s: 1,
         panx: 0,
         pany: 0,
-        zoom: 2
+        zoom: 1
     },
     pointerStates: {},
     anotherPointerTapped: false,
@@ -31,49 +34,91 @@ var boardCanvas = {
     img: new Image()
 };
 
+// See main.js for details -- TODO move to render.js
 var highlightedModules = [];
 
+// True if a new module has just been selected, so we don't multi-blink
+var currentlyBlinking = false;
+
+// True if blinking on, false if blinking off
+var blinkStateOn = true;
 
 // ---- Functions ---- //
 
-function drawBoardHighlights(modules) {
-    var layoutDiv = document.getElementById("layout-div");
-    layoutDiv.classList.add("hidden");
-
+function boardModulesSelected(modules, mode) {
     highlightedModules = [];
+    for (var mod of modules) {
+        highlightedModules.push(parseInt(mod));
+    }
 
+    var layoutDiv = document.getElementById("layout-div");
+    if (mode == 4 && highlightedModules.length > 0) {
+        layoutDiv.classList.remove("hidden");
+        showLayout(highlightedModules[0]);
+    } else {
+        layoutDiv.classList.add("hidden");
+    }
+
+    if (!currentlyBlinking) {
+        blinkStateOn = true;
+        drawBoardHighlights(highlightedModules, mode);
+
+        if (highlightedModules.length > 0) {
+            currentlyBlinking = true;
+            var counter = 0;
+            var intervalCode = setInterval(() => {
+                blinkStateOn = !blinkStateOn;
+                if (counter * BLINK_INTERVAL_MS > BLINK_TOTAL_MS) {
+                    clearInterval(intervalCode);
+                    currentlyBlinking = false;
+                    if (mode == 4) {
+                        blinkStateOn = false;
+                    } else {
+                        blinkStateOn = true;
+                    }
+                }
+                drawBoardHighlights(highlightedModules, mode);
+                counter++;
+            }, BLINK_INTERVAL_MS);
+        }
+    }
+
+    showAnnotations();
+}
+
+function drawBoardHighlights(modules, mode) {
     var canvas = boardCanvas.highlight;
     prepareCanvas(canvas, false, boardCanvas.transform);
     clearCanvas(canvas);
     var ctx = canvas.getContext("2d");
     if (modules.length > 0) {
-        for (var i in modules) {
-            highlightedModules.push(parseInt(modules[i]));
-
-            var box = schematicComponents[modules[i]].boardBox;
-            switch (boardHighlightMode) {
+        for (var mod of modules) {
+            var box = schematicComponents[mod].boardBox;
+            switch (mode) {
                 case 1:
                     // Just highlight the bounding box
-                    drawBoardHighlight(box, ctx, "box");
+                    if (blinkStateOn) {
+                        drawBoardHighlight(box, ctx, "box");
+                    }
                     break;
                 case 2:
                     // drawBoardHighlight(box, ctx, "box");
-                    drawBoardHighlight(box, ctx, "circle");
+                    if (blinkStateOn) {
+                        drawBoardHighlight(box, ctx, "circle");
+                    }
                     break;
                 case 3:
                     drawBoardHighlight(box, ctx, "box");
                     drawBoardHighlight(box, ctx, "crosshair");
                     break;
                 case 4:
-                    // drawBoardHighlight(box, ctx, "box");
-                    layoutDiv.classList.remove("hidden");
-                    showLayout(modules[i]);
+                    if (blinkStateOn) {
+                        drawBoardHighlight(box, ctx, "box");
+                    }
                     break;
             }
         }
     }
-
-    showAnnotations();
 }
 
 function drawBoardHighlight(box, ctx, type) {
@@ -97,10 +142,8 @@ function drawBoardHighlight(box, ctx, type) {
             ctx.stroke();
             break;
         case "crosshair":
-            // Divided by two because the canvas is currently twice as wide as the board img
-            // TODO figure out how that should be displayed
-            var width = boardCanvas.highlight.width / 2;
-            var height = boardCanvas.highlight.height / 2;
+            var width = boardCanvas.highlight.width;
+            var height = boardCanvas.highlight.height;
 
             var midX = (box[0] + box[2]) / 2;
             var midY = (box[1] + box[3]) / 2;
@@ -193,28 +236,25 @@ function initBoardCanvas() {
 
     // Increase the canvas dimensions by the pixel ratio (display size controlled by CSS)
     // TODO maybe cancel this part
-    bg.width *= ratio;
-    bg.height *= ratio;
-    hl.width *= ratio;
-    hl.height *= ratio;
+    // bg.width *= ratio;
+    // bg.height *= ratio;
+    // hl.width *= ratio;
+    // hl.height *= ratio;
 
     boardCanvas.img.onload = function () {
-        drawCanvasImg(boardCanvas, 0, 0);
+        drawCanvasImg(boardCanvas, 100, 100, "#f4f4f4");
     };
     boardCanvas.img.src = "./images/arduinouno.jpg";
 
     hl.addEventListener("click", (e) => {
         var coords = getMousePos(boardCanvas, e);
 
-        console.log(`canvas:  (${coords.x},${coords.y})`);
-        console.log(`client:  (${e.clientX},${e.clientY})`);
-        var cc = canvasToDocumentCoords(coords.x, coords.y, boardCanvas);
-        console.log(`convert: (${cc.x},${cc.y})`)
+        console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
 
         var clickHitNothing = true;
 
         for (var refId in schematicComponents) {
-            if (isClickInBoxes(coords, [schematicComponents[refId].boardBox])) {
+            if (isClickInBoxes(coords, [schematicComponents[refId].boardHitbox])) {
                 socket.emit("modules selected", [refId]);
                 clickHitNothing = false;
             }
@@ -243,12 +283,11 @@ window.onload = () => {
 
 var socket = io();
 socket.on("modules selected", (modules) => {
-    drawBoardHighlights(modules);
-    highlightedModules = modules;
+    boardModulesSelected(modules, boardHighlightMode);
 });
 socket.on("setting highlight", (mode) => {
     boardHighlightMode = mode;
-    drawBoardHighlights(highlightedModules);
+    boardModulesSelected(highlightedModules, boardHighlightMode);
 });
 socket.on("setting annotation", (mode) => {
     annotationMode = mode;

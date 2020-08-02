@@ -42,23 +42,7 @@ var allcanvas = {
   }
 };
 
-// Holds svg of schematic and its highlights
-var schematicCanvas = {
-  transform: {
-    x: 0,
-    y: 0,
-    s: 1,
-    panx: 0,
-    pany: 0,
-    zoom: 2, // Start zoomed in for better aesthetics
-  },
-  pointerStates: {},
-  anotherPointerTapped: false,
-  layer: "S",
-  bg: document.getElementById("schematic-bg"),
-  highlight: document.getElementById("schematic-hl"),
-  img: new Image()
-}
+var schematicCanvas;
 
 
 // ---- Functions ---- //
@@ -544,7 +528,9 @@ function drawBackground(canvasdict, clear = true) {
 function prepareLayer(canvasdict) {
   var flip = (canvasdict.layer == "B");
   for (var c of ["bg", "fab", "silk", "highlight"]) {
-    prepareCanvas(canvasdict[c], flip, canvasdict.transform);
+    if (canvasdict[c]) {
+      prepareCanvas(canvasdict[c], flip, canvasdict.transform);
+    }
   }
 }
 
@@ -591,11 +577,13 @@ function recalcLayerScale(layerdict, width, height) {
   }
   layerdict.transform.y = -((bbox.maxy + bbox.miny) * scalefactor - height) * 0.5;
   for (var c of ["bg", "fab", "silk", "highlight"]) {
-    canvas = layerdict[c];
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.width = (width / devicePixelRatio) + "px";
-    canvas.style.height = (height / devicePixelRatio) + "px";
+    var canvas = layerdict[c];
+    if (canvas) {
+      canvas.width = width;
+      canvas.height = height;
+      canvas.style.width = (width / devicePixelRatio) + "px";
+      canvas.style.height = (height / devicePixelRatio) + "px";
+    }
   }
 }
 
@@ -624,16 +612,17 @@ function clearCanvas(canvas, color = null) {
   ctx.restore();
 }
 
-function drawCanvasImg(layerdict, x = 0, y = 0) {
+function drawCanvasImg(layerdict, x = 0, y = 0, backgroundColor = null) {
   var canvas = layerdict.bg;
   prepareCanvas(canvas, false, layerdict.transform);
-  clearCanvas(canvas);
+  clearCanvas(canvas, backgroundColor);
   canvas.getContext("2d").drawImage(layerdict.img, x, y);
 }
 
 function redrawCanvas(layerdict) {
   if (layerdict.layer === "S") {
     // schematic
+    prepareLayer(layerdict);
     drawCanvasImg(layerdict);
     drawSchematicHighlights();
   } else {
@@ -648,7 +637,7 @@ function resizeCanvas(layerdict) {
   var canvasdivid = {
     "F": "frontcanvas",
     "B": "backcanvas",
-    "S": "schematic",     // not used
+    "S": "schematiccanvas",
     "D": "mobile-canvas"  // not used
   } [layerdict.layer];
   var width = document.getElementById(canvasdivid).clientWidth * devicePixelRatio;
@@ -657,9 +646,39 @@ function resizeCanvas(layerdict) {
   redrawCanvas(layerdict);
 }
 
+function resizeSchematic() {
+  var container = document.getElementById("schematiccanvas");
+  var width = container.clientWidth * devicePixelRatio;
+  var height = container.clientHeight * devicePixelRatio;
+
+  for (var canvas of [schematicCanvas.bg, schematicCanvas.highlight]) {
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = (width / devicePixelRatio) + "px";
+    canvas.style.height = (height / devicePixelRatio) + "px";
+  }
+
+  var scalefactor = 0.98 * Math.min(
+    width / 985,
+    height / 690
+  );
+  if (scalefactor < 0.1) {
+    scalefactor = 1;
+  }
+  schematicCanvas.transform.s = scalefactor;
+  schematicCanvas.transform.x = -(985 * scalefactor - width) * 0.5;
+  schematicCanvas.transform.y = -(690 * scalefactor - height) * 0.5;
+
+  redrawCanvas(schematicCanvas);
+}
+
 function resizeAll() {
   resizeCanvas(allcanvas.front);
   resizeCanvas(allcanvas.back);
+
+  if (schematicCanvas !== undefined) {
+    resizeSchematic();
+  }
 }
 
 function pointWithinDistanceToSegment(x, y, x1, y1, x2, y2, d) {
@@ -779,8 +798,9 @@ function getMousePos(layerdict, evt) {
   var scaleX = canvas.width  / rect.width  * zoomFactor;  // relationship bitmap vs. element for X
   var scaleY = canvas.height / rect.height * zoomFactor;  // relationship bitmap vs. element for Y
 
-  var x = (evt.clientX - rect.left) * scaleX - transform.panx;
-  var y = (evt.clientY - rect.top)  * scaleY - transform.pany;
+  // Take into account that we actually have two separate scale and transform variable sets
+  var x = ((evt.clientX - rect.left) * scaleX - transform.panx - transform.x) / transform.s;
+  var y = ((evt.clientY - rect.top)  * scaleY - transform.pany - transform.y) / transform.s;
 
   return { x: x, y: y };
 }
@@ -794,8 +814,8 @@ function canvasToDocumentCoords(x, y, layerdict) {
   var scaleX = canvas.width  / rect.width  * zoomFactor;  // relationship bitmap vs. element for X
   var scaleY = canvas.height / rect.height * zoomFactor;  // relationship bitmap vs. element for Y
 
-  var docX = (x + transform.panx) / scaleX + rect.left;
-  var docY = (y + transform.pany) / scaleY + rect.top;
+  var docX = (x * transform.s + transform.panx + transform.x) / scaleX + rect.left;
+  var docY = (y * transform.s + transform.pany + transform.y) / scaleY + rect.top;
 
   return { x: docX, y: docY };
 }
@@ -883,7 +903,7 @@ function handlePointerLeave(e, layerdict) {
 function resetTransform(layerdict) {
   layerdict.transform.panx = 0;
   layerdict.transform.pany = 0;
-  layerdict.transform.zoom = (layerdict.layer === "S" ? 2 : 1);
+  layerdict.transform.zoom = (layerdict.layer === "S" ? 1 : 1);
   redrawCanvas(layerdict);
 }
 
