@@ -843,6 +843,8 @@ function handleMouseClick(e, layerdict) {
     // Schematic click handler
     var coords = getMousePos(layerdict, e);
 
+    console.log(`click in schematic canvas at (${coords.x},${coords.y})`)
+
     for (var refId in schematicComponents) {
       if (isClickInBoxes(coords, schematicComponents[refId].boxes)) {
         modulesSelected([refId]);
