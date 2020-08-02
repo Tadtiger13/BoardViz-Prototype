@@ -3,6 +3,22 @@
 var socket = io();
 
 function viewModeSetting(mode) {
+    socket.emit("setting viewmode", mode);
+}
+
+function highlightSetting(mode) {
+    socket.emit("setting highlight", mode);
+}
+
+function annotationSetting(mode) {
+    socket.emit("setting annotation", mode);
+}
+
+function testSetting(mode) {
+    socket.emit("setting test", mode);
+}
+
+socket.on("setting viewmode", (mode) => {
     var btn1 = document.getElementById("btn-vm1");
     var btn2 = document.getElementById("btn-vm2");
     var btn3 = document.getElementById("btn-vm3");
@@ -12,23 +28,20 @@ function viewModeSetting(mode) {
     btn3.classList = "";
 
     switch (mode) {
-        case 1:
-            socket.emit("setting viewmode", "fullscreen");
+        case "fullscreen":
             console.log("setting view mode to fullscreen");
             btn1.classList.add("selected");
             break;
-        case 2:
-            socket.emit("setting viewmode", "peek-by-inset");
+        case "peek-by-inset":
             btn2.classList.add("selected");
             break;
-        case 3:
-            socket.emit("setting viewmode", "side-by-side");
+        case "side-by-side":
             btn3.classList.add("selected");
             break;
     }
-}
+});
 
-function highlightSetting(mode) {
+socket.on("setting highlight", (mode) => {
     var btn1 = document.getElementById("btn-bm1");
     var btn2 = document.getElementById("btn-bm2");
     var btn3 = document.getElementById("btn-bm3");
@@ -40,26 +53,22 @@ function highlightSetting(mode) {
     btn4.classList = "";
 
     switch (mode) {
-        case 1:
-            socket.emit("setting highlight", 1);
+        case "box":
             btn1.classList.add("selected");
             break;
-        case 2:
-            socket.emit("setting highlight", 2);
+        case "circle":
             btn2.classList.add("selected");
             break;
-        case 3:
-            socket.emit("setting highlight", 3);
+        case "crosshair":
             btn3.classList.add("selected");
             break;
-        case 4:
-            socket.emit("setting highlight", 4);
+        case "layout":
             btn4.classList.add("selected");
             break;
     }
-}
+});
 
-function annotationSetting(mode) {
+socket.on("setting annotation", (mode) => {
     var btn1 = document.getElementById("btn-as1");
     var btn2 = document.getElementById("btn-as2");
     var btn3 = document.getElementById("btn-as3");
@@ -71,26 +80,39 @@ function annotationSetting(mode) {
     btn4.classList = "";
 
     switch (mode) {
-        case 1:
-            socket.emit("setting annotation", "on min");
+        case "on min":
             btn1.classList.add("selected");
             break;
-        case 2:
-            socket.emit("setting annotation", "off min");
+        case "off min":
             btn2.classList.add("selected");
             break;
-        case 3:
-            socket.emit("setting annotation", "on max");
+        case "on max":
             btn3.classList.add("selected");
             break;
-        case 4:
-            socket.emit("setting annotation", "off max");
+        case "off max":
             btn4.classList.add("selected");
             break;
     }
-}
+});
 
-// Default to side-by-side, box, and on board min
-viewModeSetting(3);
-highlightSetting(1);
-annotationSetting(1);
+socket.on("setting test", (mode) => {
+    var btn1 = document.getElementById("btn-ts1");
+    var btn2 = document.getElementById("btn-ts2");
+    var btn3 = document.getElementById("btn-ts3");
+
+    btn1.classList = "";
+    btn2.classList = "";
+    btn3.classList = "";
+
+    switch (mode) {
+        case "off":
+            btn1.classList.add("selected");
+            break;
+        case "find-on-board":
+            btn2.classList.add("selected");
+            break;
+        case "find-on-schematic":
+            btn3.classList.add("selected");
+            break;
+    }
+});

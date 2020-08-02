@@ -8,13 +8,23 @@
 const BLINK_INTERVAL_MS = 500;
 const BLINK_TOTAL_MS = 3000;
 
+// TODO move all settings to one variable
+// See main.js for details -- TODO move to render.js
+var highlightedModules = [];
+
 // Determines which highlight mode is used on the board
-// 1 = box, 2 = circle, 3 = crosshair, 4 = layout display
-var boardHighlightMode = 1;
+// "box", "circle", "crosshair", "layout"
+var boardHighlightMode = "box";
 
 // Determines which annotation style is used on the board
 // Two words: "on"/"off" the board, and "min/max" information
 var annotationMode = "off min";
+
+// Determines whether we log the time of selections, etc
+var testMode = "off";
+
+// True if we're in find-on-board mode and a component has been selected (but not yet found)
+var currentlyTesting = false;
 
 // A layerdict that holds image and transform information for the canvas
 var boardCanvas = {
@@ -34,9 +44,6 @@ var boardCanvas = {
     img: new Image()
 };
 
-// See main.js for details -- TODO move to render.js
-var highlightedModules = [];
-
 // True if a new module has just been selected, so we don't multi-blink
 var currentlyBlinking = false;
 
@@ -45,18 +52,35 @@ var blinkStateOn = true;
 
 // ---- Functions ---- //
 
-function boardModulesSelected(modules, mode) {
+function boardModulesSelected(modules, mode, settingTest) {
     highlightedModules = [];
-    for (var mod of modules) {
-        highlightedModules.push(parseInt(mod));
+    for (var refId of modules) {
+        refId = parseInt(refId);
+        // Only highlight modules that are part of the demo set
+        if (refId in schematicComponents) {
+            highlightedModules.push(refId);
+        }
     }
 
+    var annoDiv = document.getElementById("anno");
     var layoutDiv = document.getElementById("layout-div");
+    annoDiv.classList.add("hidden");
+    layoutDiv.classList.add("hidden");
+
+    if (testMode === "find-on-board" && settingTest) {
+        // We're starting a test, even if another one is currently in progress
+        // (we allow highlightedModules to be updated)
+        console.log("Test: Find " + schematicComponents[highlightedModules[0]].name + " on board");
+        currentlyTesting = true;
+    }
+    if (currentlyTesting) {
+        // If we're in the middle of a test, we don't want to render anything
+        return;
+    }
+
     if (mode == 4 && highlightedModules.length > 0) {
         layoutDiv.classList.remove("hidden");
         showLayout(highlightedModules[0]);
-    } else {
-        layoutDiv.classList.add("hidden");
     }
 
     if (!currentlyBlinking) {
@@ -95,23 +119,23 @@ function drawBoardHighlights(modules, mode) {
         for (var mod of modules) {
             var box = schematicComponents[mod].boardBox;
             switch (mode) {
-                case 1:
+                case "box":
                     // Just highlight the bounding box
                     if (blinkStateOn) {
                         drawBoardHighlight(box, ctx, "box");
                     }
                     break;
-                case 2:
+                case "circle":
                     // drawBoardHighlight(box, ctx, "box");
                     if (blinkStateOn) {
                         drawBoardHighlight(box, ctx, "circle");
                     }
                     break;
-                case 3:
+                case "crosshair":
                     drawBoardHighlight(box, ctx, "box");
                     drawBoardHighlight(box, ctx, "crosshair");
                     break;
-                case 4:
+                case "layout":
                     if (blinkStateOn) {
                         drawBoardHighlight(box, ctx, "box");
                     }
@@ -154,12 +178,12 @@ function drawBoardHighlight(box, ctx, type) {
             ctx.lineTo(midX, box[1]);
             ctx.moveTo(midX, box[3]);
             ctx.lineTo(midX, height);
-            
+
             ctx.moveTo(0, midY);
             ctx.lineTo(box[0], midY);
             ctx.moveTo(box[2], midY);
             ctx.lineTo(width, midY);
-            
+
             ctx.stroke();
 
             break;
@@ -191,40 +215,47 @@ function showLayout(refId) {
 }
 
 function showAnnotations() {
-    var rn2Anno = document.getElementById("anno-rn2");
+    var annoDiv = document.getElementById("anno");
 
-    // Hide sample annotation
-    rn2Anno.classList.add("hidden");
+    if (highlightedModules.length > 0) {
+        // If multiple modules are ever going to be used, it will be for pins and not multi-selection,
+        // so it's ok to just show annotations for the first module
+        var refId = highlightedModules[0];
 
-    for (var refId of highlightedModules) {
-        if (refId == 72) {
-            // Show sample annotation
-            rn2Anno.classList.remove("hidden");
-            switch (annotationMode) {
-                case "on min":
-                    console.log("annotation on min");
-                    // break;
-                case "on max":
-                    console.log("annotation on max");
-                    var boardBox = schematicComponents[refId].boardBox;
-                    console.log(boardBox);
-                    var upperRightCorner = canvasToDocumentCoords(boardBox[2], boardBox[1], boardCanvas);
-                    rn2Anno.style.left = upperRightCorner.x + "px";
-                    rn2Anno.style.top = (upperRightCorner.y - 30) + "px";
-                    rn2Anno.style.right = "auto";
-                    break;
-                case "off min":
-                    console.log("annotation off min");
-                    // break;
-                case "off max":
-                    console.log("annotation off max");
-                    rn2Anno.style.left = "";
-                    rn2Anno.style.bottom = "";
-                    rn2Anno.style.top = "";
-                    rn2Anno.style.right = "";
-                    break;
-            }
+        if (annotationMode.includes("on")) {
+            // display on board
+            var boardBox = schematicComponents[refId].boardBox;
+            console.log(boardBox);
+            var upperRightCorner = canvasToDocumentCoords(boardBox[2], boardBox[1], boardCanvas);
+            annoDiv.style.left = upperRightCorner.x + "px";
+            annoDiv.style.top = (upperRightCorner.y - 30) + "px";
+            annoDiv.style.right = "auto";
+        } else {
+            // display off board
+            annoDiv.style.left = "";
+            annoDiv.style.bottom = "";
+            annoDiv.style.top = "";
+            annoDiv.style.right = "";
         }
+
+        if (annotationMode.includes("max")) {
+            // show full annotation
+            var annotationList = schematicComponents[refId].annotation;
+            var annotationText = annotationList[0];
+            for (var i = 1; i < annotationList.length; i++) {
+                annotationText += "<br />" + annotationList[i];
+            }
+            annoDiv.innerHTML = annotationText;
+        } else {
+            // show short annotation
+            annoDiv.innerHTML = schematicComponents[refId].annotation[0];
+        }
+
+        // Show annotation div
+        annoDiv.classList.remove("hidden");
+    } else {
+        // Hide annotation div
+        annoDiv.classList.add("hidden");
     }
 }
 
@@ -246,24 +277,55 @@ function initBoardCanvas() {
     };
     boardCanvas.img.src = "./images/arduinouno.jpg";
 
-    hl.addEventListener("click", (e) => {
-        var coords = getMousePos(boardCanvas, e);
+    hl.addEventListener("click", boardClickListener);
+}
 
-        console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
+function boardClickListener(e) {
+    var coords = getMousePos(boardCanvas, e);
 
-        var clickHitNothing = true;
+    console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
 
-        for (var refId in schematicComponents) {
-            if (isClickInBoxes(coords, [schematicComponents[refId].boardHitbox])) {
+    var clickHitNothing = true;
+
+    for (var refId in schematicComponents) {
+        if (isClickInBoxes(coords, [schematicComponents[refId].boardHitbox])) {
+            if (testMode === "find-on-board") {
+                if (currentlyTesting) {
+                    if (refId == highlightedModules[0]) {
+                        console.log("Found it");
+                        // We've found the right component
+                        socket.emit("modules selected", [refId], "test found");
+                        currentlyTesting = false;
+
+                        // avoid deselecting everything
+                        clickHitNothing = false;
+                    } else {
+                        // Clicked the wrong thing
+                        socket.emit("test click miss", refId);
+
+                        // Avoid double-logging
+                        clickHitNothing = false;
+                    }
+                }
+            } else if (testMode === "find-on-schematic") {
+                socket.emit("modules selected", [refId], "test set");
+                clickHitNothing = false;
+            } else {
                 socket.emit("modules selected", [refId]);
                 clickHitNothing = false;
             }
         }
+    }
 
-        if (clickHitNothing) {
+    if (clickHitNothing) {
+        if (currentlyTesting) {
+            // If we're in the middle of a test, log that we clicked nothing instead of deselecting
+            socket.emit("test click miss", null);
+        } else {
+            // Otherwise, deselect the current module
             socket.emit("modules selected", []);
         }
-    })
+    }
 }
 
 
@@ -282,8 +344,8 @@ window.onload = () => {
 
 
 var socket = io();
-socket.on("modules selected", (modules) => {
-    boardModulesSelected(modules, boardHighlightMode);
+socket.on("modules selected", (modules, msg) => {
+    boardModulesSelected(modules, boardHighlightMode, msg === "test set");
 });
 socket.on("setting highlight", (mode) => {
     boardHighlightMode = mode;
@@ -292,4 +354,11 @@ socket.on("setting highlight", (mode) => {
 socket.on("setting annotation", (mode) => {
     annotationMode = mode;
     showAnnotations();
+});
+socket.on("setting test", (mode) => {
+    testMode = mode;
+    if (mode === "off") {
+        // Off serves as cancel
+        currentlyTesting = false;
+    }
 });

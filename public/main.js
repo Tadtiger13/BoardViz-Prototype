@@ -5,23 +5,26 @@
 
 // ---- Variables ---- //
 
+// TODO move settings to single variable
+
 // Keeps track of the currently highlighted modules for use by
 // drawHighlights() and drawSchematicHighlights() in render.js
 var highlightedModules = [];
 
-// Dictionary from refId to its highlight function
-// This exists to support grouped components
-// Currently unused
-var moduleIndexToHandler = {};
-
-// checked by some functions in render.js, so we initialize it here
-var highlightedNet = null;
-
 // Tracks which view mode is currently in use
 var viewMode;
 
+// Determines whether we log the time of selections, etc
+var testMode;
+
+// True if we're in find-on-schematic mode and a component has been selected but not yet found
+var currentlyTesting = false;
+
 // Tracks which screen is currently being displayed in fullscreen mode
 var fullscreenShowLayout = false;
+
+// checked by some functions in render.js, so we initialize it here
+var highlightedNet = null;
 
 // Socket for communicating with server and mobile page
 var socket = io();
@@ -91,10 +94,21 @@ function drawSchematicHighlights() {
 }
 
 function modulesSelected(modules) {
-    socket.emit("modules selected", modules);
+    if (testMode === "find-on-board") {
+        socket.emit("modules selected", modules, "test set");
+    } else if (testMode === "find-on-schematic") {
+        if (currentlyTesting && modules.length > 0 && modules[0] == highlightedModules[0]) {
+            // We've found the right one, end test
+            console.log("Found it");
+            socket.emit("modules selected", modules, "test found");
+            currentlyTesting = false;
+        }
+    } else {
+        socket.emit("modules selected", modules);
+    }
 }
 
-function highlightModules(modules) {
+function highlightModules(modules, flipFullscreen, settingTest) {
     highlightedModules = [];
     for (var refId of modules) {
         refId = parseInt(refId);
@@ -102,6 +116,19 @@ function highlightModules(modules) {
         if (refId in schematicComponents) {
             highlightedModules.push(refId);
         }
+    }
+
+    if (testMode === "find-on-schematic" && settingTest) {
+        currentlyTesting = true;
+        // TODO maybe clear highlights
+        console.log("Test: Find " + schematicComponents[highlightedModules[0]].name + " on schematic");
+    }
+    if (currentlyTesting) {
+        return;
+    }
+
+    if (viewMode === "fullscreen" && flipFullscreen && highlightedModules.length > 0) {
+        swapFullscreen();
     }
 
     if (viewMode === "peek-by-inset") {
@@ -237,21 +264,25 @@ function setViewMode(mode) {
 
     resetAllTransform();
     resizeAll();
-    highlightModules(highlightedModules);
+    highlightModules(highlightedModules, false);
 }
 
 
 // ---- Page Setup ---- //
 
-socket.on("modules selected", (modules) => {
-    highlightModules(modules);
-    if (viewMode === "fullscreen" && highlightedModules.length > 0) {
-        swapFullscreen();
-    }
+socket.on("modules selected", (modules, msg) => {
+    highlightModules(modules, true, msg === "test set");
 });
 socket.on("setting viewmode", (mode) => {
     setViewMode(mode);
-})
+});
+socket.on("setting test", (mode) => {
+    testMode = mode;
+    if (mode === "off") {
+        // Off serves as cancel
+        currentlyTesting = false;
+    }
+});
 
 window.onload = () => {
     initUtils();

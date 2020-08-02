@@ -845,7 +845,6 @@ function handleMouseClick(e, layerdict) {
 
     for (var refId in schematicComponents) {
       if (isClickInBoxes(coords, schematicComponents[refId].boxes)) {
-        // TODO switch to simply emitting socket event
         modulesSelected([refId]);
         clickHitNothing = false;
       }
@@ -872,7 +871,6 @@ function handleMouseClick(e, layerdict) {
     if (highlightedNet === null) {
       var modules = bboxHitScan(layerdict.layer, ...v);
       if (modules.length > 0) {
-        // TODO switch to simply emitting socket event
         modulesSelected(modules);
         clickHitNothing = false;
       }
@@ -885,7 +883,13 @@ function handleMouseClick(e, layerdict) {
   }
 
   if (clickHitNothing) {
-    modulesSelected([]);
+    if (currentlyTesting) {
+        // If we're in the middle of a test, log that we clicked nothing instead of deselecting
+        socket.emit("test click miss", null);
+    } else {
+        // Otherwise, deselect the current module
+        modulesSelected([]);
+    }
   }
 }
 
