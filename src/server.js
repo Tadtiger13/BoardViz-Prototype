@@ -19,6 +19,10 @@ const logger = winston.createLogger({
   ],
 });
 
+function logWithTime(msg) {
+  logger.info(currentTime() + ": " + msg);
+}
+
 
 // Server setting vars
 var serverModules = [];
@@ -34,11 +38,21 @@ var testStart = 0;
 function currentTimeMS() {
   return (new Date()).getTime();
 }
+function currentTime() {
+  return (new Date()).toString();
+}
 
 
-logger.info("Server started up at " + (new Date).toString());
+logWithTime("Server started up");
 
 io.on("connection", (socket) => {
+  var clientIp = socket.request.connection.remoteAddress;
+  logWithTime("Connected to " + clientIp.toString());
+
+  socket.on("disconnect", () => {
+    logWithTime("Disconnected from " + clientIp.toString());
+  })
+
   // Send the current settings to any new connection
   io.emit("modules selected", serverModules);
   io.emit("setting viewmode", serverViewmode);
@@ -56,11 +70,11 @@ io.on("connection", (socket) => {
 
     if (msg === "test set") {
       testStart = currentTimeMS();
-      logger.info(`Test: Find module ${modules[0]} on ${testTarget}`);
+      logWithTime(`Test: Find module ${modules[0]} on ${testTarget}`);
       currentlyTesting = true;
     } else if (msg === "test found") {
       var testTime = currentTimeMS() - testStart;
-      logger.info(`Test: Module ${modules[0]} found on ${testTarget} in ${testTime} ms`);
+      logWithTime(`Test: Module ${modules[0]} found on ${testTarget} in ${testTime} ms`);
       currentlyTesting = false;
     }
   });
@@ -85,16 +99,16 @@ io.on("connection", (socket) => {
 
     if (currentlyTesting) {
       // We're canceling an ongoing test
-      logger.info(`Test canceled after ${currentTimeMS() - testStart} ms`);
+      logWithTime(`Test canceled after ${currentTimeMS() - testStart} ms`);
       currentlyTesting = false;
     }
   });
   socket.on("test click miss", (module) => {
     if (currentlyTesting) {
       if (module) {
-        logger.info(`Clicked incorrect module ${module} after ${currentTimeMS() - testStart} ms`);
+        logWithTime(`Clicked incorrect module ${module} after ${currentTimeMS() - testStart} ms`);
       } else {
-        logger.info(`Clicked nothing after ${currentTimeMS() - testStart} ms`);
+        logWithTime(`Clicked nothing after ${currentTimeMS() - testStart} ms`);
       }
     }
   });
