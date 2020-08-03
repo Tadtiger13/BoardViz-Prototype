@@ -47,10 +47,10 @@ logWithTime("Server started up");
 
 io.on("connection", (socket) => {
   var clientIp = socket.request.connection.remoteAddress;
-  logWithTime("Connected to " + clientIp.toString());
+  logWithTime(`Connected to ${clientIp.toString()} (socket ${socket.id})`);
 
   socket.on("disconnect", () => {
-    logWithTime("Disconnected from " + clientIp.toString());
+    logWithTime(`Disconnected from ${clientIp.toString()} (socket ${socket.id})`);
   })
 
   // Send the current settings to any new connection

@@ -78,7 +78,7 @@ function boardModulesSelected(modules, mode, settingTest) {
         return;
     }
 
-    if (mode == 4 && highlightedModules.length > 0) {
+    if (mode == "layout" && highlightedModules.length > 0) {
         layoutDiv.classList.remove("hidden");
         showLayout(highlightedModules[0]);
     }
