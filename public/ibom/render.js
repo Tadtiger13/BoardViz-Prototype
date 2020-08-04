@@ -623,7 +623,7 @@ function redrawCanvas(layerdict) {
   if (layerdict.layer === "S") {
     // schematic
     prepareLayer(layerdict);
-    drawCanvasImg(layerdict);
+    drawCanvasImg(layerdict, 0, SCH02_MAGIC_Y);
     drawSchematicHighlights();
   } else {
     // layout (original)
@@ -658,16 +658,27 @@ function resizeSchematic() {
     canvas.style.height = (height / devicePixelRatio) + "px";
   }
 
+  // sch-01.svg has viewbox 0 0 985 690
+  // var minX = 0;
+  // var minY = 0;
+  // var maxX = 985;
+  // var maxY = 690;
+  // sch-02-color.svg has viewbox -90 -190 390 260 (and also mm widths)
+  var minX = 0;
+  var minY = 0;
+  var maxX = 985;
+  var maxY = 663;
+
   var scalefactor = 0.98 * Math.min(
-    width / 985,
-    height / 690
+    width / (maxX - minX),
+    height / (maxY - minY)
   );
   if (scalefactor < 0.1) {
     scalefactor = 1;
   }
   schematicCanvas.transform.s = scalefactor;
-  schematicCanvas.transform.x = -(985 * scalefactor - width) * 0.5;
-  schematicCanvas.transform.y = -(690 * scalefactor - height) * 0.5;
+  schematicCanvas.transform.x = -((maxX + minX) * scalefactor - width) * 0.5;
+  schematicCanvas.transform.y = -((maxY + minY) * scalefactor - height) * 0.5;
 
   redrawCanvas(schematicCanvas);
 }

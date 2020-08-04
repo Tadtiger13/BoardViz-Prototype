@@ -230,21 +230,25 @@ function showAnnotations() {
             annoDiv.style.right = "";
         }
 
-        if (serverSettings.annotation.includes("max")) {
-            // show full annotation
-            var annotationList = schematicComponents[refId].annotation;
-            var annotationText = annotationList[0];
-            for (var i = 1; i < annotationList.length; i++) {
-                annotationText += "<br />" + annotationList[i];
-            }
-            annoDiv.innerHTML = annotationText;
-        } else {
-            // show short annotation
-            annoDiv.innerHTML = schematicComponents[refId].annotation[0];
-        }
+        if (schematicComponents[refId].annotation.length > 0) {
+            // Only display the annotation if it actually exists
 
-        // Show annotation div
-        annoDiv.classList.remove("hidden");
+            if (serverSettings.annotation.includes("max")) {
+                // show full annotation
+                var annotationList = schematicComponents[refId].annotation;
+                var annotationText = annotationList[0];
+                for (var i = 1; i < annotationList.length; i++) {
+                    annotationText += "<br />" + annotationList[i];
+                }
+                annoDiv.innerHTML = annotationText;
+            } else {
+                // show short annotation
+                annoDiv.innerHTML = schematicComponents[refId].annotation[0];
+            }
+
+            // Show annotation div
+            annoDiv.classList.remove("hidden");
+        }
     } else {
         // Hide annotation div
         annoDiv.classList.add("hidden");
@@ -272,10 +276,18 @@ function initBoardCanvas() {
     hl.addEventListener("click", boardClickListener);
 }
 
+var clicks = []
+function printClicks() {
+    for (var i = 0; i < clicks.length - 1; i += 2) {
+        console.log(`[${clicks[i].x.toFixed(2)},${clicks[i].y.toFixed(2)},${clicks[i+1].x.toFixed(2)},${clicks[i+1].y.toFixed(2)}]`)
+    }
+}
+
 function boardClickListener(e) {
     var coords = getMousePos(boardCanvas, e);
 
-    console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
+    // console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
+    clicks.push(coords)
 
     var clickHitNothing = true;
 

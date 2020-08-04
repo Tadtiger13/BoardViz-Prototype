@@ -58,7 +58,8 @@ canvas:active {
     /* Style for layout */
     --pcb-edge-color: black;
     --pad-color: #878787;
-    --pad-color-highlight: #D04040;
+    /* --pad-color-highlight: #d04040; */
+    --pad-color-highlight: #007bff;
     --pin1-outline-color: #ffb629;
     --pin1-outline-color-highlight: #b4ff03;
     --silkscreen-edge-color: #aa4;
@@ -68,13 +69,16 @@ canvas:active {
     --fabrication-polygon-color: #907651;
     --fabrication-text-color: #a27c24;
     --track-color: #def5f1;
-    --track-color-highlight: #D04040;
+    /* --track-color-highlight: #d04040; */
+    --track-color-highlight: #007bff;
     --zone-color: #def5f1;
     --zone-color-highlight: #d0404080;
 
     /* Style for schematic */
-    --schematic-highlight-fill-color: rgba(208, 64, 64, 0.25);
-    --schematic-highlight-line-color: rgba(208, 64, 64, 1);
+    /* --schematic-highlight-fill-color: rgba(208, 64, 64, 0.25); */
+    --schematic-highlight-fill-color: rgba(0, 123, 255, 0.25);
+    /* --schematic-highlight-line-color: rgba(208, 64, 64, 1); */
+    --schematic-highlight-line-color: rgba(0, 123, 255, 1);
 }
 
 #display.mobile {
@@ -84,7 +88,8 @@ canvas:active {
     /* Style for layout */
     --pcb-edge-color: black;
     --pad-color: black;
-    --pad-color-highlight: #D04040;
+    --pad-color-highlight: #d04040;
+    /* --pad-color-highlight: #007bff; */
     --pin1-outline-color: black;
     --pin1-outline-color-highlight: black;
     --silkscreen-edge-color: black;
@@ -94,13 +99,16 @@ canvas:active {
     --fabrication-polygon-color: black;
     --fabrication-text-color: black;
     --track-color: black;
-    --track-color-highlight: #D04040;
+    --track-color-highlight: #d04040;
+    /* --track-color-highlight: #007bff; */
     --zone-color: black;
     --zone-color-highlight: black;
 
     /* Style for board */
     --board-highlight-fill-color: rgba(208, 64, 64, 0.7);
+    /* --board-highlight-fill-color: rgba(0, 123, 255, 0.7); */
     --board-highlight-line-color: rgba(208, 64, 64, 0.7);
+    /* --board-highlight-line-color: rgba(0, 123, 255, 0.7); */
     --board-highlight-line-width: 2;
     --board-highlight-circle-radius: 20;
 }
@@ -144,6 +152,7 @@ canvas:active {
     /* border: 3px solid #d6d6d9; */
     /* background-color: #f4f4f4; */
     color: rgba(208, 64, 64, 0.7);
+    /* color: rgba(0, 123, 255, 0.7); */
     box-sizing: border-box;
     padding: 6px;
     z-index: 30;

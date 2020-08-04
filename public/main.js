@@ -65,9 +65,9 @@ function initSchematicCanvas() {
     hl.height *= ratio;
 
     schematicCanvas.img.onload = function () {
-        drawCanvasImg(schematicCanvas);
+        drawCanvasImg(schematicCanvas, 0, SCH02_MAGIC_Y);
     };
-    schematicCanvas.img.src = "./images/sch-01.svg";
+    schematicCanvas.img.src = "./images/sch-02-color.svg";
 }
 
 function drawSchematicHighlights() {
@@ -330,6 +330,36 @@ socket.on("test", (type, value) => {
     }
 });
 
+function selectModuleByName(name) {
+    if (name === null) {
+        socket.emit("modules selected", []);
+        console.log("Deselecting modules");
+        return;
+    }
+    for (var i in schematicComponents) {
+        if (schematicComponents[i].name == name) {
+            socket.emit("modules selected", [i]);
+            console.log("Module found");
+            return;
+        }
+    }
+    console.log("Module not found");
+}
+
+function selectModuleById(id) {
+    if (id === null) {
+        socket.emit("modules selected", []);
+        console.log("Deselecting modules");
+        return;
+    }
+    if (id in schematicComponents) {
+        socket.emit("modules selected", [id]);
+        console.log("Module found");
+        return;
+    }
+    console.log("Module not found");
+}
+
 window.onload = () => {
     initUtils();
 
@@ -342,6 +372,8 @@ window.onload = () => {
     // Initiates actual render
     updateViewmode();
 
-    console.log(pcbdata.modules)
+    for (var i in schematicComponents) {
+        console.log(`${i}: ${schematicComponents[i].name}`)
+    }
 }
 window.onresize = resizeAll;
