@@ -11,14 +11,14 @@
 // drawHighlights() and drawSchematicHighlights() in render.js
 var highlightedModules = [];
 
-// Tracks which view mode is currently in use
-var viewMode;
-
 // Determines whether we log the time of selections, etc
 var testMode;
 
 // True if we're in find-on-schematic mode and a component has been selected but not yet found
 var currentlyTesting = false;
+
+
+var testModule = null;
 
 // Tracks which screen is currently being displayed in fullscreen mode
 var fullscreenShowLayout = false;
@@ -94,21 +94,26 @@ function drawSchematicHighlights() {
 }
 
 function modulesSelected(modules) {
-    if (testMode === "find-on-board") {
-        socket.emit("modules selected", modules, "test set");
-    } else if (testMode === "find-on-schematic") {
-        if (currentlyTesting && modules.length > 0 && modules[0] == highlightedModules[0]) {
-            // We've found the right one, end test
-            console.log("Found it");
-            socket.emit("modules selected", modules, "test found");
-            currentlyTesting = false;
-        }
+    if (modules.length == 0) {
+        // We just want to deselect
+        socket.emit("modules selected", []);
     } else {
-        socket.emit("modules selected", modules);
+        if (serverSettings.test.includes("board")) {
+            // We're selecting a component for the user to find on the board
+            socket.emit("test", "set", modules[0]);
+        } else if (serverSettings.test.includes("schematic")) {
+            // User will be trying to find a component on the schematic/layout
+            if (testModule !== null && modules[0] == testModule) {
+                socket.emit("test", "found", modules[0]);
+            }
+        } else {
+            // Test mode is off, simply selecting
+            socket.emit("modules selected", [modules]);
+        }
     }
 }
 
-function highlightModules(modules, flipFullscreen, settingTest) {
+function highlightModules(modules, flipFullscreen) {
     highlightedModules = [];
     for (var refId of modules) {
         refId = parseInt(refId);
@@ -118,20 +123,17 @@ function highlightModules(modules, flipFullscreen, settingTest) {
         }
     }
 
-    if (testMode === "find-on-schematic" && settingTest) {
-        currentlyTesting = true;
-        // TODO maybe clear highlights
-        console.log("Test: Find " + schematicComponents[highlightedModules[0]].name + " on schematic");
-    }
-    if (currentlyTesting) {
-        return;
+    if (serverSettings.test.includes("off") && testModule !== null) {
+        // If we're in the middle of a test without BoardViz, we don't want to render any highlights
+        console.log("not displaying b/c test")
+        highlightedModules = [];
     }
 
-    if (viewMode === "fullscreen" && flipFullscreen && highlightedModules.length > 0) {
+    if (serverSettings.viewmode === "fullscreen" && flipFullscreen && highlightedModules.length > 0) {
         swapFullscreen();
     }
 
-    if (viewMode === "peek-by-inset") {
+    if (serverSettings.viewmode === "peek-by-inset") {
         peekLayout();
     }
 
@@ -207,14 +209,21 @@ function swapFullscreen() {
     resizeAll();
 }
 
-function setViewMode(mode) {
+function setViewmode(mode) {
+    if (mode !== serverSettings.viewmode) {
+        serverSettings.viewmode = mode;
+        socket.emit("settings", serverSettings);
+    }
+}
+
+function updateViewmode() {
     var fullscreenButton = document.getElementById("btn-fsn");
     var peekByInsetButton = document.getElementById("btn-pbi");
     var sideBySideButton = document.getElementById("btn-sbs");
 
-    fullscreenButton.classList = "";
-    peekByInsetButton.classList = "";
-    sideBySideButton.classList = "";
+    // fullscreenButton.classList = "";
+    // peekByInsetButton.classList = "";
+    // sideBySideButton.classList = "";
 
     var schematicDiv = document.getElementById("schematic-div");
     var layoutDiv = document.getElementById("layout-div");
@@ -225,11 +234,9 @@ function setViewMode(mode) {
     var swapButton = document.getElementById("swap-icon");
     swapButton.classList = "";
 
-    switch (mode) {
+    switch (serverSettings.viewmode) {
         case "fullscreen":
-            viewMode = "fullscreen";
-
-            fullscreenButton.classList.add("selected");
+            // fullscreenButton.classList.add("selected");
 
             schematicDiv.classList.add("fullscreen");
             layoutDiv.classList.add("fullscreen");
@@ -238,9 +245,7 @@ function setViewMode(mode) {
 
             break;
         case "peek-by-inset":
-            viewMode = "peek-by-inset";
-
-            peekByInsetButton.classList.add("selected");
+            // peekByInsetButton.classList.add("selected");
 
             schematicDiv.classList.add("fullscreen");
             layoutDiv.classList.add("peek");
@@ -250,9 +255,7 @@ function setViewMode(mode) {
 
             break;
         default:  // "side-by-side"
-            viewMode = "side-by-side";
-
-            sideBySideButton.classList.add("selected");
+            // sideBySideButton.classList.add("selected");
 
             schematicDiv.classList.add("split");
             layoutDiv.classList.add("split");
@@ -270,17 +273,60 @@ function setViewMode(mode) {
 
 // ---- Page Setup ---- //
 
-socket.on("modules selected", (modules, msg) => {
-    highlightModules(modules, true, msg === "test set");
+socket.on("modules selected", (modules) => {
+    highlightModules(modules, true);
 });
-socket.on("setting viewmode", (mode) => {
-    setViewMode(mode);
+
+socket.on("settings", (newSettings) => {
+    serverSettings = newSettings;
+
+    updateViewmode();
+
+    if (serverSettings.test === "off") {
+        document.getElementById("teststatus").innerHTML = "Off";
+    }
 });
-socket.on("setting test", (mode) => {
-    testMode = mode;
-    if (mode === "off") {
-        // Off serves as cancel
-        currentlyTesting = false;
+
+socket.on("test", (type, value) => {
+    if (serverSettings.test === "off") {
+        // Ignore errant test events
+        return;
+    }
+
+    var statusSpan = document.getElementById("teststatus");
+
+    switch (type) {
+        case "set":
+            if (!(value in schematicComponents)) {
+                // Somehow we've tried to test an invalid value
+                socket.emit("test", "cancel", null);
+                return;
+            }
+
+            if (serverSettings.test.includes("schematic")) {
+                // The user must find a module on the schematic/layout
+                testModule = value;
+            }
+
+            statusSpan.innerHTML = "Active";
+
+            break;
+
+        case "found":
+            if (serverSettings.test.includes("schematic")) {
+                // The user found the module on the schematic/layout
+                // TODO refresh display
+                testModule = null;
+            }
+
+            statusSpan.innerHTML = "Found";
+
+            break;
+
+        case "cancel":
+            testModule = null;
+            statusSpan.innerHTML = "Canceled";
+            break; 
     }
 });
 
@@ -294,6 +340,8 @@ window.onload = () => {
     initSwapButton();
 
     // Initiates actual render
-    setViewMode("side-by-side");
+    updateViewmode();
+
+    console.log(pcbdata.modules)
 }
 window.onresize = resizeAll;

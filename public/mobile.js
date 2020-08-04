@@ -12,19 +12,15 @@ const BLINK_TOTAL_MS = 3000;
 // See main.js for details -- TODO move to render.js
 var highlightedModules = [];
 
-// Determines which highlight mode is used on the board
-// "box", "circle", "crosshair", "layout"
-var boardHighlightMode = "box";
-
-// Determines which annotation style is used on the board
-// Two words: "on"/"off" the board, and "min/max" information
-var annotationMode = "off min";
-
 // Determines whether we log the time of selections, etc
 var testMode = "off";
 
 // True if we're in find-on-board mode and a component has been selected (but not yet found)
 var currentlyTesting = false;
+
+// The module to be found
+// Note that this value MUST be null unless we are actively testing "board"
+var testModule = null;
 
 // A layerdict that holds image and transform information for the canvas
 var boardCanvas = {
@@ -52,7 +48,10 @@ var blinkStateOn = true;
 
 // ---- Functions ---- //
 
-function boardModulesSelected(modules, mode, settingTest) {
+// Handles modules being selected for the board
+// Note that we pass in a highlight mode, instead of just reading it live from serverSettings,
+// because we don't want it to change mid-blink
+function boardModulesSelected(modules, mode) {
     highlightedModules = [];
     for (var refId of modules) {
         refId = parseInt(refId);
@@ -67,15 +66,9 @@ function boardModulesSelected(modules, mode, settingTest) {
     annoDiv.classList.add("hidden");
     layoutDiv.classList.add("hidden");
 
-    if (testMode === "find-on-board" && settingTest) {
-        // We're starting a test, even if another one is currently in progress
-        // (we allow highlightedModules to be updated)
-        console.log("Test: Find " + schematicComponents[highlightedModules[0]].name + " on board");
-        currentlyTesting = true;
-    }
-    if (currentlyTesting) {
-        // If we're in the middle of a test, we don't want to render anything
-        return;
+    if (serverSettings.test.includes("off") && testModule !== null) {
+        // If we're in the middle of a test without BoardViz, we don't want to render any highlights
+        highlightedModules = [];
     }
 
     if (mode == "layout" && highlightedModules.length > 0) {
@@ -95,7 +88,7 @@ function boardModulesSelected(modules, mode, settingTest) {
                 if (counter * BLINK_INTERVAL_MS > BLINK_TOTAL_MS) {
                     clearInterval(intervalCode);
                     currentlyBlinking = false;
-                    if (mode == 4) {
+                    if (mode == "layout") {
                         blinkStateOn = false;
                     } else {
                         blinkStateOn = true;
@@ -217,15 +210,14 @@ function showLayout(refId) {
 function showAnnotations() {
     var annoDiv = document.getElementById("anno");
 
-    if (highlightedModules.length > 0) {
+    if (serverSettings.annotation !== "none" && highlightedModules.length > 0) {
         // If multiple modules are ever going to be used, it will be for pins and not multi-selection,
         // so it's ok to just show annotations for the first module
         var refId = highlightedModules[0];
 
-        if (annotationMode.includes("on")) {
+        if (serverSettings.annotation.includes("on")) {
             // display on board
             var boardBox = schematicComponents[refId].boardBox;
-            console.log(boardBox);
             var upperRightCorner = canvasToDocumentCoords(boardBox[2], boardBox[1], boardCanvas);
             annoDiv.style.left = upperRightCorner.x + "px";
             annoDiv.style.top = (upperRightCorner.y - 30) + "px";
@@ -238,7 +230,7 @@ function showAnnotations() {
             annoDiv.style.right = "";
         }
 
-        if (annotationMode.includes("max")) {
+        if (serverSettings.annotation.includes("max")) {
             // show full annotation
             var annotationList = schematicComponents[refId].annotation;
             var annotationText = annotationList[0];
@@ -289,38 +281,31 @@ function boardClickListener(e) {
 
     for (var refId in schematicComponents) {
         if (isClickInBoxes(coords, [schematicComponents[refId].boardHitbox])) {
-            if (testMode === "find-on-board") {
-                if (currentlyTesting) {
-                    if (refId == highlightedModules[0]) {
-                        console.log("Found it");
-                        // We've found the right component
-                        socket.emit("modules selected", [refId], "test found");
-                        currentlyTesting = false;
-
-                        // avoid deselecting everything
-                        clickHitNothing = false;
+            clickHitNothing = false;
+            
+            if (serverSettings.test.includes("board")) {
+                // User will be trying to find a component on the board
+                if (testModule !== null) {
+                    if (refId == testModule) {
+                        socket.emit("test", "found", refId);
                     } else {
-                        // Clicked the wrong thing
-                        socket.emit("test click miss", refId);
-
-                        // Avoid double-logging
-                        clickHitNothing = false;
+                        socket.emit("test", "miss", refId);
                     }
                 }
-            } else if (testMode === "find-on-schematic") {
-                socket.emit("modules selected", [refId], "test set");
-                clickHitNothing = false;
+            } else if (serverSettings.test.includes("schematic")) {
+                // We're selecting a component for the user to find on the schematic
+                socket.emit("test", "set", refId);
             } else {
+                // Test mode is off, simply selecting
                 socket.emit("modules selected", [refId]);
-                clickHitNothing = false;
             }
         }
     }
 
     if (clickHitNothing) {
-        if (currentlyTesting) {
-            // If we're in the middle of a test, log that we clicked nothing instead of deselecting
-            socket.emit("test click miss", null);
+        if (testModule !== null) {
+            // If we're in the middle of a test, log that we clicked nothing
+            socket.emit("test", "miss", null);
         } else {
             // Otherwise, deselect the current module
             socket.emit("modules selected", []);
@@ -344,21 +329,48 @@ window.onload = () => {
 
 
 var socket = io();
-socket.on("modules selected", (modules, msg) => {
-    boardModulesSelected(modules, boardHighlightMode, msg === "test set");
+
+socket.on("modules selected", (modules) => {
+    boardModulesSelected(modules, serverSettings.highlight);
 });
-socket.on("setting highlight", (mode) => {
-    boardHighlightMode = mode;
-    boardModulesSelected(highlightedModules, boardHighlightMode);
-});
-socket.on("setting annotation", (mode) => {
-    annotationMode = mode;
+
+socket.on("settings", (newSettings) => {
+    serverSettings = newSettings;
+
+    boardModulesSelected(highlightedModules, serverSettings.highlight);
     showAnnotations();
 });
-socket.on("setting test", (mode) => {
-    testMode = mode;
-    if (mode === "off") {
-        // Off serves as cancel
-        currentlyTesting = false;
+
+socket.on("test", (type, value) => {
+    if (serverSettings.test === "off") {
+        // Ignore errant test events
+        return;
+    }
+
+    switch (type) {
+        case "set":
+            if (!(value in schematicComponents)) {
+                // Somehow we've tried to test an invalid value
+                socket.emit("test", "cancel", null);
+                return;
+            }
+
+            if (serverSettings.test.includes("board")) {
+                // The user must find a module on the board
+                testModule = value;
+            }
+            break;
+
+        case "found":
+            if (serverSettings.test.includes("board")) {
+                // The user found the module on the board
+                // TODO refresh display
+                testModule = null;
+            }
+            break;
+
+        case "cancel":
+            testModule = null;
+            break; 
     }
 });

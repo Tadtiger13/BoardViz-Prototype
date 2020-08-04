@@ -89,7 +89,7 @@ canvas:active {
     --pin1-outline-color-highlight: black;
     --silkscreen-edge-color: black;
     --silkscreen-polygon-color: black;
-    --silkscreen-text-color: black;
+    --silkscreen-text-color: rgba(0, 0, 0, 0);
     --fabrication-edge-color: black;
     --fabrication-polygon-color: black;
     --fabrication-text-color: black;
@@ -213,6 +213,16 @@ div#schematiccanvas canvas {
 #menubar #menubuttons {
     position: absolute;
     right: 16px;
+}
+
+#menubar #testmode {
+    position: absolute;
+    right: 16px;
+}
+
+#menubar #testmode #teststatus {
+    width: 70px;
+    display: inline-block;
 }
 
 /* View Modes */

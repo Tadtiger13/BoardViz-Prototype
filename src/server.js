@@ -19,97 +19,132 @@ const logger = winston.createLogger({
   ],
 });
 
-function logWithTime(msg) {
-  logger.info(currentTime() + ": " + msg);
-}
-
+// Tracks number of active connections
+var connectionCount = 0;
 
 // Server setting vars
 var serverModules = [];
-var serverViewmode = "side-by-side";
-var serverHighlight = "box";
-var serverAnnotation = "on min";
-var serverTest = "off";
+var serverTest = "off"; // TODO remove
+
+var serverSettings = {
+  viewmode: "side-by-side",   // "side-by-side", "fullscreen", "peek-by-inset"
+  highlight: "box",           // "box", "circle", "crosshair", "layout"
+  annotation: "on min",       // "[on/off] [min/max]", "none"
+  test: "off"                 // "off", "[board/schematic] [on/off]"
+};
 
 // Test state
-var currentlyTesting = false;
+var testModule = null;
+var currentlyTesting = false; // TODO remove
 var testStart = 0;
+
+
+// ---- Functions ---- //
 
 function currentTimeMS() {
   return (new Date()).getTime();
 }
-function currentTime() {
-  return (new Date()).toString();
+
+function timeStamp() {
+  return (new Date()).toLocaleString();
 }
 
+function logWithTime(msg) {
+  logger.info(timeStamp() + ": " + msg);
+}
+
+// Handles receiving a "test" event from a socket
+// type is "set", "miss", "found", or "cancel"
+// value is the module refId or null
+function handleTestEvent(type, value) {
+  if (serverSettings.test === "off") {
+    // Ignore errant test events
+    return;
+  }
+
+  // Echo event to all sockets
+  io.emit("test", type, value);
+
+  switch (type) {
+    case "set":
+      // Make sure the module is highlighted for everyone
+      io.emit("modules selected", [value]);
+      
+      testStart = currentTimeMS();
+      testModule = value;
+      var testString = (serverSettings.test.includes("board") ? "board" : "schematic") + " ";
+      testString += (serverSettings.test.includes("on") ? "with" : "without") + " BoardViz";
+      logWithTime(`Test: Find module ${value} on ${testString}`);
+      break;
+
+    case "miss":
+      if (testModule !== null) {
+        if (value !== null) {
+          logWithTime(`Test: Clicked incorrect module ${module} after ${currentTimeMS() - testStart} ms`);
+        } else {
+          logWithTime(`Test: Clicked non-module after ${currentTimeMS() - testStart} ms`);
+        }
+      }
+      break;
+
+    case "found":
+      logWithTime(`Test: Module ${value} found in ${currentTimeMS() - testStart} ms`);
+      testModule = null;
+
+      // Make sure the module is highlighted for everyone
+      io.emit("modules selected", [value]);
+
+      break;
+
+    case "cancel":
+      logWithTime(`Test: Canceled after ${currentTimeMS() - testStart}`);
+      testModule = null;
+      break;
+  }
+}
+
+
+// ---- Server Execution ---- //
 
 logWithTime("Server started up");
 
 io.on("connection", (socket) => {
+  connectionCount++;
+
   var clientIp = socket.request.connection.remoteAddress;
-  logWithTime(`Connected to ${clientIp.toString()} (socket ${socket.id})`);
+  logWithTime(`Connected to ${clientIp} (${connectionCount} active connections)`);
 
   socket.on("disconnect", () => {
-    logWithTime(`Disconnected from ${clientIp.toString()} (socket ${socket.id})`);
+    connectionCount--;
+    logWithTime(`Disconnected ${clientIp} (${connectionCount} active connections remaining)`);
   })
 
   // Send the current settings to any new connection
   io.emit("modules selected", serverModules);
-  io.emit("setting viewmode", serverViewmode);
-  io.emit("setting highlight", serverHighlight);
-  io.emit("setting annotation", serverAnnotation);
   io.emit("setting test", serverTest);
 
-  // Echo any message received to all sockets
-  // TODO maybe consolidate single setting event
-  socket.on("modules selected", (modules, msg) => {
+  io.emit("settings", serverSettings);
+
+  socket.on("modules selected", (modules) => {
     serverModules = modules;
-    io.emit("modules selected", modules, msg);
+    io.emit("modules selected", modules);
+  });
 
-    var testTarget = serverTest === "find-on-board" ? "board" : "schematic";
+  socket.on("settings", (newSettings) => {
+    var oldTest = serverSettings.test;
+    serverSettings = newSettings;
+    io.emit("settings", serverSettings);
 
-    if (msg === "test set") {
-      testStart = currentTimeMS();
-      logWithTime(`Test: Find module ${modules[0]} on ${testTarget}`);
-      currentlyTesting = true;
-    } else if (msg === "test found") {
-      var testTime = currentTimeMS() - testStart;
-      logWithTime(`Test: Module ${modules[0]} found on ${testTarget} in ${testTime} ms`);
-      currentlyTesting = false;
-    }
-  });
-  socket.on("setting viewmode", (mode) => {
-    serverViewmode = mode;
-    io.emit("setting viewmode", mode);
-  });
-  socket.on("setting highlight", (mode) => {
-    serverHighlight = mode;
-    io.emit("setting highlight", mode);
-  });
-  socket.on("setting annotation", (mode) => {
-    serverAnnotation = mode;
-    io.emit("setting annotation", mode);
-  });
-  socket.on("setting test", (mode) => {
-    serverTest = mode;
-    io.emit("setting test", mode);
+    if (oldTest !== serverSettings.test) {
+      // Any time we change the test mode, we should deselect existing highlights
+      io.emit("modules selected", []);
 
-    // Any time we change test mode we should clear the selected modules
-    io.emit("modules selected", []);
-
-    if (currentlyTesting) {
-      // We're canceling an ongoing test
-      logWithTime(`Test canceled after ${currentTimeMS() - testStart} ms`);
-      currentlyTesting = false;
-    }
-  });
-  socket.on("test click miss", (module) => {
-    if (currentlyTesting) {
-      if (module) {
-        logWithTime(`Clicked incorrect module ${module} after ${currentTimeMS() - testStart} ms`);
-      } else {
-        logWithTime(`Clicked nothing after ${currentTimeMS() - testStart} ms`);
+      if (testModule !== null) {
+        // If we're changing the test mode during a test, cancel the test
+        handleTestEvent("cancel", null);
       }
     }
   });
+
+  socket.on("test", handleTestEvent);
 });

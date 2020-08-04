@@ -879,15 +879,15 @@ function handleMouseClick(e, layerdict) {
     }
 
     // Don't deselect and close the layout in peek-by-inset mode because it's disorienting
-    if (viewMode === "peek-by-inset") {
+    if (serverSettings.viewmode === "peek-by-inset") {
       clickHitNothing = false;
     }
   }
 
   if (clickHitNothing) {
-    if (currentlyTesting) {
+    if (testModule !== null) {
         // If we're in the middle of a test, log that we clicked nothing instead of deselecting
-        socket.emit("test click miss", null);
+        socket.emit("test", "miss", null);
     } else {
         // Otherwise, deselect the current module
         modulesSelected([]);
@@ -1012,7 +1012,7 @@ function handlePointerMove(e, layerdict) {
   if (settings.redrawOnDrag) {
     redrawCanvas(layerdict);
 
-    if (viewMode === "peek-by-inset") {
+    if (serverSettings.viewmode === "peek-by-inset") {
       peekLayout();
     }
   }
@@ -1047,7 +1047,7 @@ function handleMouseWheel(e, layerdict) {
   t.pany += devicePixelRatio * y * zoomd;
   redrawCanvas(layerdict);
 
-  if (viewMode === "peek-by-inset") {
+  if (serverSettings.viewmode === "peek-by-inset") {
     peekLayout();
   }
 }

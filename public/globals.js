@@ -58,3 +58,21 @@ const schematicComponents = {
         annotation: ["Vr: 100V", "Vf: 1V", "Imax: 150mA", "DIODE", "1206", "CD1206-S01575"]
     }
 };
+
+var serverSettings = {
+    // Determines what display mode is used for the schematic/layout
+    // "side-by-side", "fullscreen", "peek-by-inset"
+    viewmode: "side-by-side",
+
+    // Determines which highlight mode is used on the board
+    // "box", "circle", "crosshair", "layout"
+    highlight: "box",
+
+    // Determines which annotation style is used on the board
+    // "[on/off] [min/max]", "none"
+    annotation: "on min",
+
+    // Determines which test mode is in use
+    // "off", "[board/schematic] [on/off]"
+    test: "off"
+  };

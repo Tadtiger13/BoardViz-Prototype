@@ -43,14 +43,23 @@
             <button id="btn-as2" onclick="annotationSetting('off min')">Off Board, Minimal</button>
             <button id="btn-as3" onclick="annotationSetting('on max')">On Board, Full</button>
             <button id="btn-as4" onclick="annotationSetting('off max')">Off Board, Full</button>
+            <button id="btn-as5" onclick="annotationSetting('none')">None</button>
           </td>
         </tr>
         <tr>
           <td>Testing Mode:&nbsp;</td>
           <td class="button-container">
             <button id="btn-ts1" onclick="testSetting('off')">Off</button>
-            <button id="btn-ts2" onclick="testSetting('find-on-board')">Find on Board</button>
-            <button id="btn-ts3" onclick="testSetting('find-on-schematic')">Find on Schematic</button>
+            <button id="btn-ts2" onclick="testSetting('board off')">Find on Board<br />No Help</button>
+            <button id="btn-ts3" onclick="testSetting('schematic off')">Find on Schematic<br />No Help</button>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="button-container">
+            <button id="btn-tsr" onclick="autoTest()">Auto</button>
+            <button id="btn-ts4" onclick="testSetting('board on')">Find on Board<br />BoardViz</button>
+            <button id="btn-ts5" onclick="testSetting('schematic on')">Find on Schematic<br />BoardViz</button>
           </td>
         </tr>
       </table>
@@ -58,6 +67,7 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="./globals.js"></script>
   <script src="./index.js"></script>
 </body>
 

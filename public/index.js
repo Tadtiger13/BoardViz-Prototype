@@ -1,118 +1,89 @@
 // TODO nice comment
 
+var buttons = {
+    "viewmode": {
+        "fullscreen": document.getElementById("btn-vm1"),
+        "peek-by-inset": document.getElementById("btn-vm2"),
+        "side-by-side": document.getElementById("btn-vm3")
+    },
+    "highlight": {
+        "box": document.getElementById("btn-bm1"),
+        "circle": document.getElementById("btn-bm2"),
+        "crosshair": document.getElementById("btn-bm3"),
+        "layout": document.getElementById("btn-bm4")
+    },
+    "annotation": {
+        "on min": document.getElementById("btn-as1"),
+        "off min": document.getElementById("btn-as2"),
+        "on max": document.getElementById("btn-as3"),
+        "off max": document.getElementById("btn-as4"),
+        "none": document.getElementById("btn-as5")
+    },
+    "test": {
+        "off": document.getElementById("btn-ts1"),
+        "board off": document.getElementById("btn-ts2"),
+        "schematic off": document.getElementById("btn-ts3"),
+        "board on": document.getElementById("btn-ts4"),
+        "schematic on": document.getElementById("btn-ts5")
+    }
+}
+
 var socket = io();
 
+var auto = false;
+
 function viewModeSetting(mode) {
-    socket.emit("setting viewmode", mode);
+    serverSettings.viewmode = mode;
+    socket.emit("settings", serverSettings);
 }
 
 function highlightSetting(mode) {
-    socket.emit("setting highlight", mode);
+    serverSettings.highlight = mode;
+    socket.emit("settings", serverSettings);
 }
 
 function annotationSetting(mode) {
-    socket.emit("setting annotation", mode);
+    serverSettings.annotation = mode;
+    socket.emit("settings", serverSettings);
 }
 
 function testSetting(mode) {
-    socket.emit("setting test", mode);
+    if (mode === "off") {
+        auto = false;
+        document.getElementById("btn-tsr").classList.remove("selected");
+    } else if (auto) {
+        mode = mode.includes("board") ? "board" : "schematic";
+        if (Math.floor(Math.random() * 2) == 0) {
+            mode += " on";
+        } else {
+            mode += " off";
+        }
+    }
+
+    serverSettings.test = mode;
+    socket.emit("settings", serverSettings);
 }
 
-socket.on("setting viewmode", (mode) => {
-    var btn1 = document.getElementById("btn-vm1");
-    var btn2 = document.getElementById("btn-vm2");
-    var btn3 = document.getElementById("btn-vm3");
+function autoTest() {
+    auto = true;
+    document.getElementById("btn-tsr").classList.add("selected");
 
-    btn1.classList = "";
-    btn2.classList = "";
-    btn3.classList = "";
+    testSetting(serverSettings.test);
+}
 
-    switch (mode) {
-        case "fullscreen":
-            console.log("setting view mode to fullscreen");
-            btn1.classList.add("selected");
-            break;
-        case "peek-by-inset":
-            btn2.classList.add("selected");
-            break;
-        case "side-by-side":
-            btn3.classList.add("selected");
-            break;
+socket.on("settings", (newSettings) => {
+    serverSettings = newSettings;
+    
+    // Deselect all buttons
+    for (var buttonSet in buttons) {
+        for (var button in buttons[buttonSet]) {
+            buttons[buttonSet][button].classList = "";
+        }
     }
-});
 
-socket.on("setting highlight", (mode) => {
-    var btn1 = document.getElementById("btn-bm1");
-    var btn2 = document.getElementById("btn-bm2");
-    var btn3 = document.getElementById("btn-bm3");
-    var btn4 = document.getElementById("btn-bm4");
-
-    btn1.classList = "";
-    btn2.classList = "";
-    btn3.classList = "";
-    btn4.classList = "";
-
-    switch (mode) {
-        case "box":
-            btn1.classList.add("selected");
-            break;
-        case "circle":
-            btn2.classList.add("selected");
-            break;
-        case "crosshair":
-            btn3.classList.add("selected");
-            break;
-        case "layout":
-            btn4.classList.add("selected");
-            break;
-    }
-});
-
-socket.on("setting annotation", (mode) => {
-    var btn1 = document.getElementById("btn-as1");
-    var btn2 = document.getElementById("btn-as2");
-    var btn3 = document.getElementById("btn-as3");
-    var btn4 = document.getElementById("btn-as4");
-
-    btn1.classList = "";
-    btn2.classList = "";
-    btn3.classList = "";
-    btn4.classList = "";
-
-    switch (mode) {
-        case "on min":
-            btn1.classList.add("selected");
-            break;
-        case "off min":
-            btn2.classList.add("selected");
-            break;
-        case "on max":
-            btn3.classList.add("selected");
-            break;
-        case "off max":
-            btn4.classList.add("selected");
-            break;
-    }
-});
-
-socket.on("setting test", (mode) => {
-    var btn1 = document.getElementById("btn-ts1");
-    var btn2 = document.getElementById("btn-ts2");
-    var btn3 = document.getElementById("btn-ts3");
-
-    btn1.classList = "";
-    btn2.classList = "";
-    btn3.classList = "";
-
-    switch (mode) {
-        case "off":
-            btn1.classList.add("selected");
-            break;
-        case "find-on-board":
-            btn2.classList.add("selected");
-            break;
-        case "find-on-schematic":
-            btn3.classList.add("selected");
-            break;
-    }
+    // Select correct buttons
+    buttons["viewmode"][serverSettings.viewmode].classList.add("selected");
+    buttons["highlight"][serverSettings.highlight].classList.add("selected");
+    buttons["annotation"][serverSettings.annotation].classList.add("selected");
+    buttons["test"][serverSettings.test].classList.add("selected");
 });
