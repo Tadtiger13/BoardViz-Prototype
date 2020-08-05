@@ -35,8 +35,16 @@ var serverSettings = {
 
 // Test state
 var testModule = null;
-var currentlyTesting = false; // TODO remove
 var testStart = 0;
+
+// "off", "auto", or "manual"
+var testSelectionMode = "off";
+
+// null when auto is off, or the index of the refId and enable/disable arrays when auto is on
+var testAutoIndex = null;
+
+var moduleArray = [44, 57, 58, 59, 62, 64, 66, 67, 72, 74, 75, 78, 79, 80, 81, 83, 85, 86, 88, 89];
+var onOffArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 
 // ---- Functions ---- //
@@ -56,7 +64,7 @@ function logWithTime(msg) {
 // Handles receiving a "test" event from a socket
 // type is "set", "miss", "found", or "cancel"
 // value is the module refId or null
-function handleTestEvent(type, value) {
+function handleTestEvent(type, value, fromAuto = false) {
   if (serverSettings.test === "off") {
     // Ignore errant test events
     return;
@@ -67,9 +75,14 @@ function handleTestEvent(type, value) {
 
   switch (type) {
     case "set":
+      if (testSelectionMode !== "manual" && !fromAuto) {
+        // Ignore selections made manually when not in manual mode
+        break;
+      }
+
       // Make sure the module is highlighted for everyone
       io.emit("modules selected", [value]);
-      
+
       testStart = currentTimeMS();
       testModule = value;
       var testString = (serverSettings.test.includes("board") ? "board" : "schematic") + " ";
@@ -100,7 +113,65 @@ function handleTestEvent(type, value) {
       logWithTime(`Test: Canceled after ${currentTimeMS() - testStart}`);
       testModule = null;
       break;
+
+    // Auto Mode only
+    case "next":
+      if (testAutoIndex === null) {
+        // We're not currently in auto mode
+        break;
+      }
+
+      // Advancing to next test
+      if (testAutoIndex >= 20) {
+        // Let the settings page know we're done with the auto test
+        io.emit("test", "done", null);
+        testAutoIndex = null;
+        logWithTime("Finished auto test");
+      } else {
+        // Set BoardViz to on/off for this test from the shuffled onOffArray
+        var testMode = (serverSettings.test.includes("board") ? "board" : "schematic") + " ";
+        testMode += (onOffArray[testAutoIndex] == 0 ? "off" : "on");
+        serverSettings.test = testMode;
+        io.emit("settings", serverSettings);
+
+        // Get the next module to test from the shuffled moduleArray
+        handleTestEvent("set", moduleArray[testAutoIndex], true);
+
+        testAutoIndex++;
+      }
+
+      break;
   }
+}
+
+function turnOffTest() {
+  // Any time we change the test mode, we should deselect existing highlights
+  io.emit("modules selected", []);
+
+  if (testModule !== null) {
+    // If we're changing the test mode during a test, cancel the test
+    handleTestEvent("cancel", null);
+  }
+}
+
+// Fisher-Yates shuffle algorithm to randomize an array
+// Credit to Mike Bostock: https://bost.ocks.org/mike/shuffle/
+function shuffle(arr) {
+  var m = arr.length, t, i;
+
+  // While there remain elements to shuffle…
+  while (m) {
+
+    // Pick a remaining element…
+    i = Math.floor(Math.random() * m--);
+
+    // And swap it with the current element.
+    t = arr[m];
+    arr[m] = arr[i];
+    arr[i] = t;
+  }
+
+  return arr;
 }
 
 
@@ -121,9 +192,8 @@ io.on("connection", (socket) => {
 
   // Send the current settings to any new connection
   io.emit("modules selected", serverModules);
-  io.emit("setting test", serverTest);
-
   io.emit("settings", serverSettings);
+  io.emit("selectionmode", testSelectionMode);
 
   socket.on("modules selected", (modules) => {
     serverModules = modules;
@@ -136,15 +206,42 @@ io.on("connection", (socket) => {
     io.emit("settings", serverSettings);
 
     if (oldTest !== serverSettings.test) {
-      // Any time we change the test mode, we should deselect existing highlights
-      io.emit("modules selected", []);
-
-      if (testModule !== null) {
-        // If we're changing the test mode during a test, cancel the test
-        handleTestEvent("cancel", null);
-      }
+      turnOffTest();
     }
   });
 
   socket.on("test", handleTestEvent);
+
+  socket.on("selectionmode", (mode) => {
+    io.emit("selectionmode", mode);
+
+    if (testSelectionMode !== mode) {
+      // We're changing the test mode, so cancel any current test
+      turnOffTest();
+      if (testAutoIndex !== null) {
+        logWithTime("Canceling auto test");
+        testAutoIndex = null;
+      }
+    }
+
+    testSelectionMode = mode;
+
+    switch (testSelectionMode) {
+      case "off":
+        serverSettings.test = "off";
+        io.emit("settings", serverSettings);
+        break;
+
+      case "auto":
+        // We're setting up an automatic test run
+        moduleArray = shuffle(moduleArray);
+        onOffArray = shuffle(onOffArray);
+
+        testAutoIndex = 0;
+
+        logWithTime("Started auto test");
+
+        break;
+    }
+  });
 });

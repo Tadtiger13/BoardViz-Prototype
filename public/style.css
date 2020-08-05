@@ -147,7 +147,8 @@ canvas:active {
     font-weight: bold;
     font-size: 20pt;
     position: absolute;
-    top: 250px;
+    /* top: 250px; */
+    bottom: 0;
     right: 0;
     /* border: 3px solid #d6d6d9; */
     /* background-color: #f4f4f4; */
@@ -227,6 +228,7 @@ div#schematiccanvas canvas {
 #menubar #testmode {
     position: absolute;
     right: 16px;
+    font-weight: bold;
 }
 
 #menubar #testmode #teststatus {
@@ -267,8 +269,9 @@ div.fullscreen {
 }
 
 .mobile #layout-div.peek {
-    right: 0;
+    right: auto;
     left: auto;
+    border: none;
 }
 
 

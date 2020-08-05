@@ -283,7 +283,9 @@ socket.on("settings", (newSettings) => {
     updateViewmode();
 
     if (serverSettings.test === "off") {
-        document.getElementById("teststatus").innerHTML = "Off";
+        var statusSpan = document.getElementById("teststatus");
+        statusSpan.innerHTML = "Off";
+        statusSpan.style.color = "";
     }
 });
 
@@ -309,6 +311,7 @@ socket.on("test", (type, value) => {
             }
 
             statusSpan.innerHTML = "Active";
+            statusSpan.style.color = "#007bff"; // highlight blue
 
             break;
 
@@ -320,12 +323,14 @@ socket.on("test", (type, value) => {
             }
 
             statusSpan.innerHTML = "Found";
+            statusSpan.style.color = "#00aa00"; // green
 
             break;
 
         case "cancel":
             testModule = null;
             statusSpan.innerHTML = "Canceled";
+            statusSpan.style.color = "#d04040"; // red
             break; 
     }
 });

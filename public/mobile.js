@@ -186,6 +186,15 @@ function drawBoardHighlight(box, ctx, type) {
 function showLayout(refId) {
     resizeAll();  // this is required to properly initialize transform.s/x/y
 
+    // Size and position the div
+    var layoutDiv = document.getElementById("layout-div");
+    layoutDiv.style.right = (window.innerWidth - boardCanvas.bg.getBoundingClientRect().right) + "px";
+
+    // The layout box should never be more than a third of the mobile screen
+    var sideLength = Math.min(200, window.innerWidth / 3, window.innerHeight / 3);
+    layoutDiv.style.width = sideLength + "px";
+    layoutDiv.style.height = sideLength + "px";
+
     // Zoom and pan to module
     allcanvas.front.transform.zoom = PBI_ZOOM;
     allcanvas.back.transform.zoom = PBI_ZOOM;
@@ -195,8 +204,8 @@ function showLayout(refId) {
     var panx = -(module.bbox.pos[0] * allcanvas.front.transform.s + allcanvas.front.transform.x);
     var pany = -(module.bbox.pos[1] * allcanvas.front.transform.s + allcanvas.front.transform.y);
 
-    panx += 200 / PBI_ZOOM;  // 200 comes from the fixed pixel width of the canvas
-    pany += 200 / PBI_ZOOM;  // this is determined by the CSS rule for #layout-div.peek
+    panx += sideLength / PBI_ZOOM;
+    pany += sideLength / PBI_ZOOM;
 
     allcanvas.front.transform.panx = panx;
     allcanvas.front.transform.pany = pany;
@@ -227,7 +236,7 @@ function showAnnotations() {
             annoDiv.style.left = "";
             annoDiv.style.bottom = "";
             annoDiv.style.top = "";
-            annoDiv.style.right = "";
+            annoDiv.style.right = (window.innerWidth - boardCanvas.bg.getBoundingClientRect().right) + "px";
         }
 
         if (schematicComponents[refId].annotation.length > 0) {
@@ -276,18 +285,10 @@ function initBoardCanvas() {
     hl.addEventListener("click", boardClickListener);
 }
 
-var clicks = []
-function printClicks() {
-    for (var i = 0; i < clicks.length - 1; i += 2) {
-        console.log(`[${clicks[i].x.toFixed(2)},${clicks[i].y.toFixed(2)},${clicks[i+1].x.toFixed(2)},${clicks[i+1].y.toFixed(2)}]`)
-    }
-}
-
 function boardClickListener(e) {
     var coords = getMousePos(boardCanvas, e);
 
     // console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
-    clicks.push(coords)
 
     var clickHitNothing = true;
 

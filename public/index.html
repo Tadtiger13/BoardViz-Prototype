@@ -49,17 +49,37 @@
         <tr>
           <td>Testing Mode:&nbsp;</td>
           <td class="button-container">
-            <button id="btn-ts1" onclick="testSetting('off')">Off</button>
-            <button id="btn-ts2" onclick="testSetting('board off')">Find on Board<br />No Help</button>
-            <button id="btn-ts3" onclick="testSetting('schematic off')">Find on Schematic<br />No Help</button>
+            <button id="btn-test-off" onclick="testPanel('off')">Off</button>
+            <button id="btn-test-manual" onclick="testPanel('manual')">Manual</button>
+            <button id="btn-test-auto" onclick="testPanel('auto')">Auto</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div id="testpanel">
+      <h1>Test Control Panel</h1>
+      <table>
+        <tr>
+          <td>Direction:&nbsp;</td>
+          <td class="button-container">
+            <button id="btn-panel-board" onclick="testPanel('board')">Find on Board</button>
+            <button id="btn-panel-schematic" onclick="testPanel('schematic')">Find on Schematic</button>
+          </td>
+        </tr>
+        <tr id="testpanel-manual">
+          <td>BoardViz:&nbsp;</td>
+          <td class="button-container">
+            <button id="btn-panel-enabled" onclick="testPanel('enabled')">Enabled</button>
+            <button id="btn-panel-disabled" onclick="testPanel('disabled')">Disabled</button>
           </td>
         </tr>
         <tr>
-          <td></td>
-          <td class="button-container">
-            <button id="btn-tsr" onclick="autoTest()">Auto</button>
-            <button id="btn-ts4" onclick="testSetting('board on')">Find on Board<br />BoardViz</button>
-            <button id="btn-ts5" onclick="testSetting('schematic on')">Find on Schematic<br />BoardViz</button>
+          <td>Status:&nbsp;</td>
+          <td id="testpanel-status"></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="button-container">
+            <button id="btn-panel-action" onclick="testPanel('action')">Cancel</button>
           </td>
         </tr>
       </table>
