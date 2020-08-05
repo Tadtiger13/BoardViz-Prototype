@@ -208,6 +208,11 @@ socket.on("test", (type, value) => {
             buttonString = "N/A"
             break;
     }
+    if (testSelectionMode === "manual") {
+        // The only thing this button does in manual mode is cancel
+        buttonString = "Cancel";
+    }
+
     status.innerHTML = statusString;
     button.innerHTML = buttonString;
 });

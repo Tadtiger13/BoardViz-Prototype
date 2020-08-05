@@ -110,7 +110,7 @@ function handleTestEvent(type, value, fromAuto = false) {
       break;
 
     case "cancel":
-      logWithTime(`Test: Canceled after ${currentTimeMS() - testStart}`);
+      logWithTime(`Test: Canceled after ${currentTimeMS() - testStart} ms`);
       testModule = null;
       break;
 
