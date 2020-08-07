@@ -24,13 +24,13 @@ var connectionCount = 0;
 
 // Server setting vars
 var serverModules = [];
-var serverTest = "off"; // TODO remove
 
 var serverSettings = {
   viewmode: "side-by-side",   // "side-by-side", "fullscreen", "peek-by-inset"
   highlight: "box",           // "box", "circle", "crosshair", "layout"
   annotation: "on min",       // "[on/off] [min/max]", "none"
-  test: "off"                 // "off", "[board/schematic] [on/off]"
+  test: "off",                // "off", "[board/schematic] [on/off]"
+  sound: "on",                // "on", "off"
 };
 
 // Test state
@@ -239,8 +239,22 @@ io.on("connection", (socket) => {
 
         testAutoIndex = 0;
 
-        logWithTime("Started auto test");
+        if (serverSettings.test === "off") {
+          // If test mode was off, default to Find on Board
+          serverSettings.test = "board on";
+          io.emit("settings", serverSettings);
+        }
 
+        logWithTime("Initialized auto test for find on " + (serverSettings.test.includes("board") ? "board" : "schematic"));
+
+        break;
+
+      case "manual":
+        if (serverSettings.test === "off") {
+          // If test mode was off, default to Find on Board
+          serverSettings.test = "board on";
+          io.emit("settings", serverSettings);
+        }
         break;
     }
   });

@@ -288,9 +288,24 @@ function initBoardCanvas() {
 function boardClickListener(e) {
     var coords = getMousePos(boardCanvas, e);
 
-    // console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
+    console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
 
     var clickHitNothing = true;
+
+    if (serverSettings.test.includes("board") && testModule !== null) {
+        // User is trying to find a component on the board
+        // Check if the user clicked inside the padded hitbox
+        var hitbox = schematicComponents[testModule].boardHitbox;
+        hitbox[0] -= TEST_HITBOX_PADDING;
+        hitbox[1] -= TEST_HITBOX_PADDING;
+        hitbox[2] += TEST_HITBOX_PADDING;
+        hitbox[3] += TEST_HITBOX_PADDING;
+        if (isClickInBoxes(coords, hitbox)) {
+            // We're in the padded hitbox, so exit early (don't evaluate other modules being clicked)
+            socket.emit("test", "found", refId);
+            return;
+        }
+    }
 
     for (var refId in schematicComponents) {
         if (isClickInBoxes(coords, [schematicComponents[refId].boardHitbox])) {

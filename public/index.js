@@ -24,6 +24,10 @@ var buttons = {
         "schematic": document.getElementById("btn-panel-schematic"),
         "enabled": document.getElementById("btn-panel-enabled"),
         "disabled": document.getElementById("btn-panel-disabled")
+    },
+    "sound": {
+        "on": document.getElementById("btn-sound-on"),
+        "off": document.getElementById("btn-sound-off")
     }
 }
 
@@ -55,29 +59,11 @@ function annotationSetting(mode) {
     socket.emit("settings", serverSettings);
 }
 
-function testSetting(mode) {
-    if (mode === "off") {
-        auto = false;
-        document.getElementById("btn-tsr").classList.remove("selected");
-    } else if (auto) {
-        mode = mode.includes("board") ? "board" : "schematic";
-        if (Math.floor(Math.random() * 2) == 0) {
-            mode += " on";
-        } else {
-            mode += " off";
-        }
-    }
-
-    serverSettings.test = mode;
+function soundButton(mode) {
+    serverSettings.sound = mode;
     socket.emit("settings", serverSettings);
 }
 
-function autoTest() {
-    auto = true;
-    document.getElementById("btn-tsr").classList.add("selected");
-
-    testSetting(serverSettings.test);
-}
 
 function testPanel(button) {
     switch (button) {
@@ -90,6 +76,10 @@ function testPanel(button) {
         case "board":
         case"schematic":
             var testMode = button + " " + (serverSettings.test.includes("on") ? "on" : "off");
+            if (testSelectionMode === "auto" && testMode !== serverSettings.test) {
+                // If we're in auto mode, reset the auto test state if we're changing test target
+                socket.emit("selectionmode", "auto");
+            }
             serverSettings.test = testMode;
             socket.emit("settings", serverSettings);
             break;
@@ -132,6 +122,7 @@ socket.on("settings", (newSettings) => {
     buttons["viewmode"][serverSettings.viewmode].classList.add("selected");
     buttons["highlight"][serverSettings.highlight].classList.add("selected");
     buttons["annotation"][serverSettings.annotation].classList.add("selected");
+    buttons["sound"][serverSettings.sound].classList.add("selected");
 
     if (serverSettings.test.includes("board")) {
         buttons["test"]["board"].classList.add("selected");
@@ -182,6 +173,7 @@ socket.on("test", (type, value) => {
     var button = document.getElementById("btn-panel-action");
     var statusString = status.innerHTML;
     var buttonString = button.innerHTML;
+    console.log(`value: ${value}, testModule: ${testModule}`)
     switch (type) {
         case "set":
             testStatus = "Active";

@@ -157,6 +157,7 @@ canvas:active {
     box-sizing: border-box;
     padding: 6px;
     z-index: 30;
+    pointer-events: none;
 }
 
 /* ---- main.html ----- */

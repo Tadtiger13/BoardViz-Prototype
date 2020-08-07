@@ -10,6 +10,9 @@ const PBI_ZOOM = 2.5;
 // y offset to trim top whitespace from sch-02-color.svg and center correctly
 const SCH02_MAGIC_Y = -40;
 
+// extra padding for board components in test mode
+const TEST_HITBOX_PADDING = 3;
+
 // Prototype elements (hardcoded)
 // Z1, RN2, C7, C8, C6, D3
 // TODO improve accuracy/aesthetic of boxes
@@ -176,7 +179,11 @@ var serverSettings = {
 
     // Determines which test mode is in use
     // "off", "[board/schematic] [on/off]"
-    test: "off"
+    test: "off",
+
+    // Determines whether the sounds play or not in test mode
+    // "off" or "on"
+    sound: "on",
 };
 
 

@@ -17,7 +17,7 @@ var testMode;
 // True if we're in find-on-schematic mode and a component has been selected but not yet found
 var currentlyTesting = false;
 
-
+// TODO comment this
 var testModule = null;
 
 // Tracks which screen is currently being displayed in fullscreen mode
@@ -45,7 +45,11 @@ var schematicCanvas = {
     bg: document.getElementById("schematic-bg"),
     highlight: document.getElementById("schematic-hl"),
     img: new Image()
-  }
+}
+
+// Audio to give feedback during test mode
+var successSound = new Audio("./sounds/win7tada.m4a");
+var failureSound = new Audio("./sounds/win7nope.m4a");
 
 
 // ---- Functions ---- //
@@ -315,6 +319,12 @@ socket.on("test", (type, value) => {
 
             break;
 
+        case "miss":
+            if (serverSettings.sound == "on") {
+                failureSound.play();
+            }
+            break;
+
         case "found":
             if (serverSettings.test.includes("schematic")) {
                 // The user found the module on the schematic/layout
@@ -324,6 +334,10 @@ socket.on("test", (type, value) => {
 
             statusSpan.innerHTML = "Found";
             statusSpan.style.color = "#00aa00"; // green
+
+            if (serverSettings.sound == "on") {
+                successSound.play();
+            }
 
             break;
 
