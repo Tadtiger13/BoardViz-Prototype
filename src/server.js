@@ -93,7 +93,7 @@ function handleTestEvent(type, value, fromAuto = false) {
     case "miss":
       if (testModule !== null) {
         if (value !== null) {
-          logWithTime(`Test: Clicked incorrect module ${module} after ${currentTimeMS() - testStart} ms`);
+          logWithTime(`Test: Clicked incorrect module ${value} after ${currentTimeMS() - testStart} ms`);
         } else {
           logWithTime(`Test: Clicked non-module after ${currentTimeMS() - testStart} ms`);
         }
@@ -208,6 +208,10 @@ io.on("connection", (socket) => {
     if (oldTest !== serverSettings.test) {
       turnOffTest();
     }
+  });
+
+  socket.on("log", (msg) => {
+    logWithTime(msg);
   });
 
   socket.on("test", handleTestEvent);

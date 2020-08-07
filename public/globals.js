@@ -11,7 +11,7 @@ const PBI_ZOOM = 2.5;
 const SCH02_MAGIC_Y = -40;
 
 // extra padding for board components in test mode
-const TEST_HITBOX_PADDING = 3;
+const TEST_HITBOX_PADDING = 2.5;
 
 // Prototype elements (hardcoded)
 // Z1, RN2, C7, C8, C6, D3

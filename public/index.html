@@ -59,35 +59,42 @@
     <div id="testpanel">
       <h1>Test Control Panel</h1>
       <table>
-        <tr>
-          <td>Direction:&nbsp;</td>
-          <td class="button-container">
-            <button id="btn-panel-board" onclick="testPanel('board')">Find on Board</button>
-            <button id="btn-panel-schematic" onclick="testPanel('schematic')">Find on Schematic</button>
-          </td>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- this is a spacer --></td>
-          <td>Sound:&nbsp;</td>
-          <td class="button-container">
-            <button id="btn-sound-on" onclick="soundButton('on')">On</button>
-            <button id="btn-sound-off" onclick="soundButton('off')">Off</button>
-          </td>
-        </tr>
-        <tr id="testpanel-manual">
-          <td>BoardViz:&nbsp;</td>
-          <td class="button-container">
-            <button id="btn-panel-enabled" onclick="testPanel('enabled')">Enabled</button>
-            <button id="btn-panel-disabled" onclick="testPanel('disabled')">Disabled</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Status:&nbsp;</td>
-          <td id="testpanel-status"></td>
-        </tr>
-        <tr>
-          <td colspan="2" class="button-container">
-            <button id="btn-panel-action" onclick="testPanel('action')">Cancel</button>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>Direction:&nbsp;</td>
+            <td class="button-container">
+              <button id="btn-panel-board" onclick="testPanel('board')">Find on Board</button>
+              <button id="btn-panel-schematic" onclick="testPanel('schematic')">Find on Schematic</button>
+            </td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- this is a spacer --></td>
+            <td>Sound:&nbsp;</td>
+            <td class="button-container">
+              <button id="btn-sound-on" onclick="soundButton('on')">On</button>
+              <button id="btn-sound-off" onclick="soundButton('off')">Off</button>
+            </td>
+          </tr>
+          <tr id="testpanel-manual">
+            <td>BoardViz:&nbsp;</td>
+            <td class="button-container">
+              <button id="btn-panel-enabled" onclick="testPanel('enabled')">Enabled</button>
+              <button id="btn-panel-disabled" onclick="testPanel('disabled')">Disabled</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Status:&nbsp;</td>
+            <td id="testpanel-status"></td>
+          </tr>
+          <tr>
+            <td colspan="2" id="action-btn-td" class="button-container">
+              <button id="btn-panel-action" onclick="testPanel('action')">Cancel</button>
+            </td>
+            <td colspan="2" style="text-align: right;">Log Tag:&nbsp;</td>
+            <td class="button-container">
+              <input type="text" id="logfield" />
+              <button id="btn-panel-log" onclick="logField()">Log</button>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>

@@ -64,6 +64,11 @@ function soundButton(mode) {
     socket.emit("settings", serverSettings);
 }
 
+function logField() {
+    var logfield = document.getElementById("logfield");
+    socket.emit("log", logfield.value);
+    logfield.value = "";
+}
 
 function testPanel(button) {
     switch (button) {

@@ -84,6 +84,7 @@ canvas:active {
 #display.mobile {
     /* Div Style */
     height: 100vh;
+    background-color: #f4f4f4;
 
     /* Style for layout */
     --pcb-edge-color: black;
@@ -124,6 +125,10 @@ canvas:active {
     position: relative;
     height: 100%;
     width: 100%;
+    max-height: 6in; /* experimental */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #mobile-canvas canvas {
@@ -145,7 +150,7 @@ canvas:active {
 .annotation {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
-    font-size: 20pt;
+    font-size: 18pt;
     position: absolute;
     /* top: 250px; */
     bottom: 0;
@@ -296,4 +301,8 @@ div.fullscreen {
     margin: 10px;
     width: 170px;
     border-radius: 4px;
+}
+
+#action-btn-td {
+    display: table-cell;
 }

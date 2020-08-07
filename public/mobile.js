@@ -188,7 +188,10 @@ function showLayout(refId) {
 
     // Size and position the div
     var layoutDiv = document.getElementById("layout-div");
-    layoutDiv.style.right = (window.innerWidth - boardCanvas.bg.getBoundingClientRect().right) + "px";
+    // layoutDiv.style.top = (boardCanvas.bg.getBoundingClientRect().top) + "px";
+    layoutDiv.style.top = 0;
+    // layoutDiv.style.right = (window.innerWidth - boardCanvas.bg.getBoundingClientRect().right) + "px";
+    layoutDiv.style.right = 0;
 
     // The layout box should never be more than a third of the mobile screen
     var sideLength = Math.min(200, window.innerWidth / 3, window.innerHeight / 3);
@@ -234,9 +237,11 @@ function showAnnotations() {
         } else {
             // display off board
             annoDiv.style.left = "";
-            annoDiv.style.bottom = "";
+            // annoDiv.style.bottom = (window.innerHeight - boardCanvas.bg.getBoundingClientRect().bottom) + "px";
+            annoDiv.style.bottom = 0;
             annoDiv.style.top = "";
-            annoDiv.style.right = (window.innerWidth - boardCanvas.bg.getBoundingClientRect().right) + "px";
+            // annoDiv.style.right = (window.innerWidth - boardCanvas.bg.getBoundingClientRect().right) + "px";
+            annoDiv.style.right = 0;
         }
 
         if (schematicComponents[refId].annotation.length > 0) {
@@ -327,6 +332,10 @@ function boardClickListener(e) {
                 // Test mode is off, simply selecting
                 socket.emit("modules selected", [refId]);
             }
+
+            // If we've clicked something on the board, we should exit immediately
+            // to avoid sending duplicate events
+            return;
         }
     }
 
@@ -353,6 +362,13 @@ window.onload = () => {
     allcanvas.front.transform.zoom = PBI_ZOOM;
     // Trigger layout render
     resizeAll();
+}
+
+window.onresize = () => {
+    showAnnotations();
+    if (highlightedModules.length > 0) {
+        showLayout(highlightedModules[0]);
+    }
 }
 
 
