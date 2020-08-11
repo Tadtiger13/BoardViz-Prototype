@@ -66,11 +66,6 @@ function boardModulesSelected(modules, mode) {
     annoDiv.classList.add("hidden");
     layoutDiv.classList.add("hidden");
 
-    if (serverSettings.test.includes("off") && testModule !== null) {
-        // If we're in the middle of a test without BoardViz, we don't want to render any highlights
-        highlightedModules = [];
-    }
-
     if (mode == "layout" && highlightedModules.length > 0) {
         layoutDiv.classList.remove("hidden");
         showLayout(highlightedModules[0]);
@@ -399,16 +394,23 @@ socket.on("test", (type, value) => {
                 return;
             }
 
+            // Treat any "set" like a "modules selected" so everyone can see the selection
+            boardModulesSelected([value], serverSettings.highlight);
+
             if (serverSettings.test.includes("board")) {
                 // The user must find a module on the board
                 testModule = value;
+
+                if (serverSettings.test.includes("off")) {
+                    // We don't get to use boardviz, cancel the highlight
+                    boardModulesSelected([], serverSettings.highlight);
+                }
             }
             break;
 
         case "found":
             if (serverSettings.test.includes("board")) {
                 // The user found the module on the board
-                // TODO refresh display
                 testModule = null;
             }
             break;

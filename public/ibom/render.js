@@ -858,7 +858,7 @@ function handleMouseClick(e, layerdict) {
 
     for (var refId in schematicComponents) {
       if (isClickInBoxes(coords, schematicComponents[refId].boxes)) {
-        modulesSelected([refId]);
+        modulesSelected([refId], "schematic");
         clickHitNothing = false;
       }
     }
@@ -884,7 +884,7 @@ function handleMouseClick(e, layerdict) {
     if (highlightedNet === null) {
       var modules = bboxHitScan(layerdict.layer, ...v);
       if (modules.length > 0) {
-        modulesSelected(modules);
+        modulesSelected(modules, "layout");
         clickHitNothing = false;
       }
     }

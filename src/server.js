@@ -81,7 +81,7 @@ function handleTestEvent(type, value, fromAuto = false) {
       }
 
       // Make sure the module is highlighted for everyone
-      io.emit("modules selected", [value]);
+      // io.emit("modules selected", [value]);
 
       testStart = currentTimeMS();
       testModule = value;

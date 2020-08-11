@@ -29,6 +29,8 @@ var highlightedNet = null;
 // Socket for communicating with server and mobile page
 var socket = io();
 
+var showHighlightsFlag = false;
+
 // Holds svg of schematic and its highlights
 var schematicCanvas = {
     transform: {
@@ -97,7 +99,7 @@ function drawSchematicHighlights() {
     }
 }
 
-function modulesSelected(modules) {
+function modulesSelected(modules, source) {
     if (modules.length == 0) {
         // We just want to deselect
         socket.emit("modules selected", []);
@@ -108,7 +110,12 @@ function modulesSelected(modules) {
         } else if (serverSettings.test.includes("schematic")) {
             // User will be trying to find a component on the schematic/layout
             if (testModule !== null && modules[0] == testModule) {
-                socket.emit("test", "found", modules[0]);
+                if (source === "schematic") {
+                    socket.emit("test", "found", modules[0]);
+                } else {
+                    showHighlightsFlag = true;
+                    socket.emit("modules selected", modules);
+                }
             }
         } else {
             // Test mode is off, simply selecting
@@ -125,12 +132,6 @@ function highlightModules(modules, flipFullscreen) {
         if (refId in schematicComponents) {
             highlightedModules.push(refId);
         }
-    }
-
-    if (serverSettings.test.includes("off") && testModule !== null) {
-        // If we're in the middle of a test without BoardViz, we don't want to render any highlights
-        console.log("not displaying b/c test")
-        highlightedModules = [];
     }
 
     if (serverSettings.viewmode === "fullscreen" && flipFullscreen && highlightedModules.length > 0) {
@@ -309,13 +310,25 @@ socket.on("test", (type, value) => {
                 return;
             }
 
+            // Treat any "set" like a "modules selected" so everyone can see the selection
+            highlightModules([value], false);
+
             if (serverSettings.test.includes("schematic")) {
                 // The user must find a module on the schematic/layout
                 testModule = value;
+
+                if (serverSettings.test.includes("off")) {
+                    // We don't get to use boardviz, cancel highlight
+                    highlightModules([], false);
+                }
             }
 
             statusSpan.innerHTML = "Active";
             statusSpan.style.color = "#007bff"; // highlight blue
+
+            if (serverSettings.test.includes("schematic")) {
+                showHighlightsFlag = false;
+            }
 
             break;
 
