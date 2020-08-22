@@ -5,7 +5,8 @@
 
 // ---- Variables ---- //
 
-// TODO move settings to single variable
+// imported schematic data
+var schematicData;
 
 // Keeps track of the currently highlighted modules for use by
 // drawHighlights() and drawSchematicHighlights() in render.js
@@ -71,9 +72,9 @@ function initSchematicCanvas() {
     hl.height *= ratio;
 
     schematicCanvas.img.onload = function () {
-        drawCanvasImg(schematicCanvas, 0, SCH02_MAGIC_Y);
+        drawCanvasImg(schematicCanvas, 0, 0);
     };
-    schematicCanvas.img.src = "./images/sch-02-color.svg";
+    schematicCanvas.img.src = "./images/sch-03-kicad.svg";
 }
 
 function drawSchematicHighlights() {
@@ -392,20 +393,63 @@ function selectModuleById(id) {
     console.log("Module not found");
 }
 
-window.onload = () => {
-    initUtils();
-
-    initLayoutCanvas();
-
-    initSchematicCanvas();
-
-    initSwapButton();
-
-    // Initiates actual render
-    updateViewmode();
-
-    for (var i in schematicComponents) {
-        console.log(`${i}: ${schematicComponents[i].name}`)
+function highlightAll() {
+    modules = []
+    for (var refId in schematicComponents) {
+        modules.push(refId)
     }
+    socket.emit("modules selected", modules)
+}
+
+function initSchematicData() {
+    for (var refId in pcbdata.modules) {
+        var refName = pcbdata.modules[refId].ref;
+
+        var boxes = [];
+        for (var datacomp of schematicData.components) {
+            if (datacomp.ref == refName) {
+                var bbox = datacomp.bbox.map((r) => (r / 10));
+                boxes.push(bbox);
+            }
+        }
+        if (refId in schematicComponents) {
+            console.log(refId)
+            console.log(boxes)
+            schematicComponents[refId].boxes = boxes;
+        } else {
+            schematicComponents[refId] = {
+                name: datacomp.ref,
+                boxes: boxes,
+                boardBox: [],
+                boardHitbox: [],
+                annotation: []
+            }
+        }
+    }
+}
+
+window.onload = () => {
+    // Get schematic component data
+    fetch("http://" + window.location.host + "/schematicdata")
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)
+            schematicData = data;
+            
+            // Wait for rest of init until we've gotten back the schematic data
+            initUtils();
+
+            initSchematicData();
+
+            initLayoutCanvas();
+
+            initSchematicCanvas();
+
+            initSwapButton();
+
+            // Initiates actual render
+            updateViewmode();
+        })
+        .catch((e) => console.log(e));
 }
 window.onresize = resizeAll;

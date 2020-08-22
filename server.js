@@ -1,11 +1,19 @@
 const express = require("express");
 const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
 const winston = require("winston");
 
+var schematicData = require("./parsing/schematicComponents.json")
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
+app.get("/schematicdata", (req, res) => {
+  res.send(schematicData);
+});
 app.use(express.static("public"));
-http.listen(3000);
+
+const server = app.listen(3000);
+const io = require("socket.io")(server);
 
 // Logging
 const logger = winston.createLogger({
@@ -25,12 +33,15 @@ var connectionCount = 0;
 // Server setting vars
 var serverModules = [];
 
+// TODO WIP refactoring
 var serverSettings = {
-  viewmode: "side-by-side",   // "side-by-side", "fullscreen", "peek-by-inset"
-  highlight: "box",           // "box", "circle", "crosshair", "layout"
-  annotation: "on min",       // "[on/off] [min/max]", "none"
-  test: "off",                // "off", "[board/schematic] [on/off]"
-  sound: "on",                // "on", "off"
+  viewmode: "side-by-side",       // "side-by-side", "fullscreen", "peek-by-inset"
+  highlight: "box",               // "box", "circle", "crosshair", "layout"
+  annotation: "on min",           // "[on/off] [min/max]", "none",
+  annotationPosition: "onboard",  // "onboard", "offboard"
+  test: "off",                    // "off", "[board/schematic] [on/off]"
+  testTarget: "board",            // "board", "schematic"
+  sound: "on",                    // "on", "off"
 };
 
 // Test state
@@ -45,6 +56,8 @@ var testAutoIndex = null;
 
 var moduleArray = [44, 57, 58, 59, 62, 64, 66, 67, 72, 74, 75, 78, 79, 80, 81, 83, 85, 86, 88, 89];
 var onOffArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+
 
 
 // ---- Functions ---- //

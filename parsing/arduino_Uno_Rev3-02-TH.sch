@@ -1,0 +1,2133 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr User 15395 11447
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Wire Wire Line
+	11300 4500 11300 4600
+Wire Wire Line
+	11300 4600 10900 4600
+Text Label 11300 4500 0    10   ~ 0
++5V
+Wire Wire Line
+	9600 6600 9100 6600
+Wire Wire Line
+	8900 6600 9100 6600
+Wire Wire Line
+	9600 6300 9100 6300
+Wire Wire Line
+	9100 6300 9100 6600
+Connection ~ 9100 6600
+Text Label 9600 6600 0    10   ~ 0
++5V
+Wire Wire Line
+	9400 3500 9400 3100
+Wire Wire Line
+	10300 3500 10000 3500
+Wire Wire Line
+	10000 3500 9400 3500
+Wire Wire Line
+	10300 3200 10000 3200
+Wire Wire Line
+	10000 3200 10000 3500
+Connection ~ 10000 3500
+Text Label 9400 3500 0    10   ~ 0
++5V
+Wire Wire Line
+	11700 3300 11700 3100
+Wire Wire Line
+	11700 3100 11700 2900
+Connection ~ 11700 3100
+Text Label 11700 3300 0    10   ~ 0
++5V
+Wire Wire Line
+	8900 7200 8900 7100
+Wire Wire Line
+	8700 7700 8900 7700
+Wire Wire Line
+	8900 7200 8900 7700
+Wire Wire Line
+	8700 7200 8900 7200
+Connection ~ 8900 7200
+Text Label 8900 7200 0    10   ~ 0
++5V
+Wire Wire Line
+	3300 1200 3300 1300
+Wire Wire Line
+	3300 1300 3600 1300
+Wire Wire Line
+	3600 1300 3600 1500
+Wire Wire Line
+	3100 1300 3300 1300
+Connection ~ 3300 1300
+Text Label 3300 1200 0    10   ~ 0
++5V
+Wire Wire Line
+	12400 1600 12400 1800
+Wire Wire Line
+	12100 1900 12100 1800
+Wire Wire Line
+	12100 1800 12400 1800
+Wire Wire Line
+	11700 1700 12100 1700
+Wire Wire Line
+	11700 1600 12100 1600
+Wire Wire Line
+	12100 1600 12100 1700
+Wire Wire Line
+	12100 1700 12100 1800
+Wire Wire Line
+	12400 1800 12700 1800
+Wire Wire Line
+	12700 1800 12700 1900
+Connection ~ 12100 1700
+Connection ~ 12100 1800
+Connection ~ 12400 1800
+Text Label 12400 1650 0    70   ~ 0
++5V
+Wire Wire Line
+	4700 6400 4500 6400
+Wire Wire Line
+	4500 6400 2900 6400
+Wire Wire Line
+	2900 6400 2900 7000
+Wire Wire Line
+	4300 6300 4500 6300
+Wire Wire Line
+	4500 6300 4500 6400
+Wire Wire Line
+	4700 6100 4600 6100
+Wire Wire Line
+	4600 6100 4600 6300
+Wire Wire Line
+	4600 6300 4500 6300
+Connection ~ 4500 6400
+Connection ~ 4500 6300
+Text Label 4700 6400 0    10   ~ 0
++5V
+Wire Wire Line
+	4200 4400 4200 4600
+Wire Wire Line
+	3900 4400 3900 4100
+Wire Wire Line
+	3900 4400 4200 4400
+Wire Wire Line
+	3600 4400 3900 4400
+Wire Wire Line
+	4200 4400 4500 4400
+Wire Wire Line
+	4500 4400 4500 4700
+Connection ~ 3900 4400
+Connection ~ 4200 4400
+Text Label 4200 4400 0    10   ~ 0
++5V
+Wire Wire Line
+	6900 2800 7300 2800
+Wire Wire Line
+	7300 3000 6900 3000
+Wire Wire Line
+	6900 3000 6900 2800
+Wire Wire Line
+	6300 2800 6300 2700
+Wire Wire Line
+	6300 2800 6900 2800
+Wire Wire Line
+	5900 2800 6300 2800
+Connection ~ 6900 2800
+Connection ~ 6300 2800
+Text Label 5900 2800 0    70   ~ 0
++5V
+Wire Wire Line
+	9000 5000 9300 5000
+Wire Wire Line
+	9300 5000 9300 5100
+Connection ~ 9000 5000
+Text Label 9000 5000 0    10   ~ 0
++5V
+Wire Wire Line
+	11200 4800 10900 4800
+Text Label 11200 4800 0    10   ~ 0
+GND
+Wire Wire Line
+	9400 6900 9400 6700
+Wire Wire Line
+	9400 6700 9600 6700
+Wire Wire Line
+	9600 6400 9400 6400
+Wire Wire Line
+	9400 6900 9100 6900
+Wire Wire Line
+	9400 6400 9400 6700
+Wire Wire Line
+	9400 6900 9500 6900
+Wire Wire Line
+	9500 6900 9500 7000
+Connection ~ 9400 6700
+Connection ~ 9400 6900
+Text Label 9400 6900 0    10   ~ 0
+GND
+Wire Wire Line
+	12700 2200 12700 2300
+Text Label 12700 2200 0    10   ~ 0
+GND
+Wire Wire Line
+	12100 2200 12100 2300
+Text Label 12100 2200 0    10   ~ 0
+GND
+Wire Wire Line
+	10600 2300 10600 2200
+Text Label 10600 2300 0    10   ~ 0
+GND
+Wire Wire Line
+	9500 3600 9500 3700
+Wire Wire Line
+	9500 3700 9500 3800
+Wire Wire Line
+	10300 3600 9500 3600
+Wire Wire Line
+	10300 3700 9500 3700
+Connection ~ 9500 3700
+Text Label 9500 3600 0    10   ~ 0
+GND
+Wire Wire Line
+	12900 5100 11900 5100
+Text Label 11925 5100 0    70   ~ 0
+GND
+Wire Wire Line
+	12600 3100 12500 3100
+Text Label 12600 3100 0    10   ~ 0
+GND
+Wire Wire Line
+	9000 2000 9000 2200
+Wire Wire Line
+	9000 2200 9000 2400
+Wire Wire Line
+	9000 2200 9800 2200
+Wire Wire Line
+	9800 2200 9800 1600
+Wire Wire Line
+	9000 2300 9000 2200
+Connection ~ 9000 2200
+Text Label 9000 2000 0    10   ~ 0
+GND
+Wire Wire Line
+	9300 4200 9400 4200
+Wire Wire Line
+	9400 4200 10400 4200
+Wire Wire Line
+	9300 4200 9300 4300
+Wire Wire Line
+	9400 4200 9400 4300
+Connection ~ 9400 4200
+Text Label 9300 4200 0    10   ~ 0
+GND
+Wire Wire Line
+	11300 2300 11300 2000
+Text Label 11300 2300 0    10   ~ 0
+GND
+Wire Wire Line
+	11800 4300 11800 4400
+Text Label 11800 4300 0    10   ~ 0
+GND
+Wire Wire Line
+	2900 7400 2900 7300
+Text Label 2900 7400 0    10   ~ 0
+GND
+Wire Wire Line
+	8300 2500 8300 2400
+Text Label 8300 2500 0    10   ~ 0
+GND
+Wire Wire Line
+	3300 2000 3300 1900
+Wire Wire Line
+	3600 1800 3600 1900
+Wire Wire Line
+	3600 1900 3300 1900
+Wire Wire Line
+	3100 1900 3300 1900
+Connection ~ 3300 1900
+Text Label 3300 2000 0    10   ~ 0
+GND
+Wire Wire Line
+	8600 3300 8600 3200
+Text Label 8600 3300 0    10   ~ 0
+GND
+Wire Wire Line
+	3600 4600 3900 4600
+Wire Wire Line
+	3900 4600 3900 4800
+Text Label 3600 4600 0    10   ~ 0
+GND
+Wire Wire Line
+	4700 6500 4500 6500
+Wire Wire Line
+	4700 7400 4500 7400
+Wire Wire Line
+	4500 6500 4500 7400
+Wire Wire Line
+	4500 7500 4500 7400
+Wire Wire Line
+	4400 7400 4500 7400
+Connection ~ 4500 7400
+Text Label 4700 6500 0    10   ~ 0
+GND
+Wire Wire Line
+	7300 3200 6900 3200
+Wire Wire Line
+	6900 3200 6900 3300
+Text Label 7300 3200 0    10   ~ 0
+GND
+Wire Wire Line
+	4500 2000 4500 1900
+Text Label 4500 2000 0    10   ~ 0
+GND
+Wire Wire Line
+	3700 5900 3700 5700
+Wire Wire Line
+	3700 5700 3700 5500
+Connection ~ 3700 5700
+Text Label 3700 5900 0    10   ~ 0
+GND
+Wire Wire Line
+	8400 5800 8200 5800
+Text Label 8400 5800 0    10   ~ 0
+GND
+Wire Wire Line
+	9600 6200 9300 6200
+Text Label 9300 6200 0    70   ~ 0
+AREF
+Wire Wire Line
+	11800 4700 11800 5000
+Text Label 11900 5000 0    70   ~ 0
+AREF
+Wire Wire Line
+	9600 5500 9300 5500
+Wire Wire Line
+	9300 5500 9000 5500
+Wire Wire Line
+	9000 5500 8900 5500
+Wire Wire Line
+	8800 5200 8800 5100
+Wire Wire Line
+	8800 5100 8800 4900
+Wire Wire Line
+	8900 3300 10300 3300
+Wire Wire Line
+	8400 5200 8800 5200
+Wire Wire Line
+	8400 5200 8400 4900
+Wire Wire Line
+	8800 5100 8900 5100
+Wire Wire Line
+	8900 5100 8900 5500
+Wire Wire Line
+	8900 5100 8900 4800
+Wire Wire Line
+	8900 4800 8900 3300
+Wire Wire Line
+	9000 5400 9000 5500
+Wire Wire Line
+	10600 4800 9400 4800
+Wire Wire Line
+	9400 4800 9300 4800
+Wire Wire Line
+	9300 4800 8900 4800
+Wire Wire Line
+	9300 4700 9300 4800
+Wire Wire Line
+	9400 4700 9400 4800
+Wire Wire Line
+	9300 5300 9300 5500
+Connection ~ 8400 5200
+Connection ~ 8800 5100
+Connection ~ 8900 5100
+Connection ~ 9000 5500
+Connection ~ 8900 4800
+Connection ~ 9300 4800
+Connection ~ 9400 4800
+Connection ~ 9300 5500
+Text Label 9150 5500 0    70   ~ 0
+RESET
+Text Label 9500 3300 0    66   ~ 0
+RESET
+Wire Wire Line
+	9700 3800 10300 3800
+Text Label 9700 3800 0    70   ~ 0
+VIN
+Wire Wire Line
+	11000 1600 10600 1600
+Wire Wire Line
+	10600 1900 10600 1800
+Wire Wire Line
+	10600 1800 10600 1600
+Wire Wire Line
+	10300 1800 10600 1800
+Connection ~ 10600 1800
+Text Label 10700 1600 0    70   ~ 0
+VIN
+Wire Wire Line
+	4100 800  4500 800 
+Wire Wire Line
+	4500 800  4500 900 
+Text Label 4175 800  0    70   ~ 0
+VIN
+Wire Wire Line
+	6900 7100 7500 7100
+Wire Wire Line
+	7500 7100 7500 8000
+Wire Wire Line
+	7500 8000 10300 8000
+Text Label 6950 7100 0    70   ~ 0
+M8RXD
+Text Label 9700 8000 0    70   ~ 0
+M8RXD
+Wire Wire Line
+	7400 8200 7400 7200
+Wire Wire Line
+	7400 7200 6900 7200
+Wire Wire Line
+	10300 8200 7400 8200
+Text Label 9700 8200 0    70   ~ 0
+M8TXD
+Text Label 6950 7200 0    70   ~ 0
+M8TXD
+Wire Wire Line
+	11700 5200 12900 5200
+Wire Wire Line
+	11700 5500 11700 5200
+Wire Wire Line
+	11400 5500 11700 5500
+Wire Wire Line
+	10600 4700 10300 4700
+Wire Wire Line
+	10300 4700 10300 5200
+Wire Wire Line
+	10300 5200 11400 5200
+Wire Wire Line
+	11400 5200 11400 5500
+Wire Wire Line
+	11100 5500 11400 5500
+Connection ~ 11400 5500
+Text Label 12325 5200 0    70   ~ 0
+SCK
+Wire Wire Line
+	7200 1800 6700 1800
+Text Label 6800 1800 0    70   ~ 0
+SCK
+Wire Wire Line
+	12200 3100 12100 3100
+Wire Wire Line
+	12100 3300 12100 3100
+Connection ~ 12100 3100
+Wire Wire Line
+	8300 7700 8100 7700
+Wire Wire Line
+	8300 7200 8100 7200
+Wire Wire Line
+	9400 2000 10100 2000
+Wire Wire Line
+	10100 2000 10100 1800
+Text Label 9500 2000 0    70   ~ 0
+PWRIN
+Wire Wire Line
+	1500 5800 2600 5800
+Wire Wire Line
+	2600 5800 2800 5800
+Wire Wire Line
+	2600 5800 2600 6200
+Wire Wire Line
+	2800 5700 2800 5800
+Connection ~ 2600 5800
+Text Label 2400 5800 0    70   ~ 0
+D-
+Wire Wire Line
+	2800 5900 2200 5900
+Wire Wire Line
+	2200 5900 1500 5900
+Wire Wire Line
+	2200 5900 2200 6200
+Wire Wire Line
+	2800 5900 2800 6000
+Connection ~ 2200 5900
+Text Label 2400 5900 0    70   ~ 0
+D+
+Wire Wire Line
+	8200 2800 8600 2800
+Wire Wire Line
+	8600 2800 8600 2900
+Text Label 8200 2800 0    70   ~ 0
++3V3
+Wire Wire Line
+	5400 1700 5000 1700
+Text Label 5025 1700 0    70   ~ 0
++3V3
+Wire Wire Line
+	10300 3400 9500 3400
+Text Label 9550 3400 0    70   ~ 0
++3V3
+Wire Wire Line
+	10600 4600 10100 4600
+Wire Wire Line
+	10100 4600 10100 5300
+Wire Wire Line
+	10100 5300 11500 5300
+Wire Wire Line
+	11500 5300 11500 5600
+Wire Wire Line
+	11500 5600 11100 5600
+Wire Wire Line
+	11500 5600 12200 5600
+Wire Wire Line
+	12200 5600 12200 5300
+Wire Wire Line
+	12200 5300 12900 5300
+Connection ~ 11500 5600
+Text Label 12325 5300 0    70   ~ 0
+MISO
+Wire Wire Line
+	12900 5400 12300 5400
+Wire Wire Line
+	12300 5400 12300 5700
+Wire Wire Line
+	10900 4700 11600 4700
+Wire Wire Line
+	11600 4700 11600 5700
+Wire Wire Line
+	11600 5700 11100 5700
+Wire Wire Line
+	12300 5700 11600 5700
+Connection ~ 11600 5700
+Text Label 12350 5400 0    70   ~ 0
+MOSI
+Wire Wire Line
+	11100 5800 12400 5800
+Wire Wire Line
+	12400 5800 12400 5500
+Wire Wire Line
+	12400 5500 12900 5500
+Text Label 12425 5500 0    70   ~ 0
+SS
+Text Label 11300 5800 0    70   ~ 0
+SS
+Wire Wire Line
+	8100 5200 8000 5200
+Wire Wire Line
+	8000 6700 8000 6100
+Wire Wire Line
+	8000 6100 8000 5200
+Wire Wire Line
+	6900 6700 8000 6700
+Wire Wire Line
+	7700 6100 8000 6100
+Connection ~ 8000 6100
+Text Label 6900 6700 1    70   ~ 0
+DTR
+Wire Wire Line
+	6300 2300 6300 1600
+Wire Wire Line
+	5800 2300 6300 2300
+Wire Wire Line
+	5800 2600 5800 2300
+Wire Wire Line
+	6300 1600 6000 1600
+Text Label 6300 2300 1    70   ~ 0
+GATE_CMD
+Wire Wire Line
+	4500 1300 4500 1400
+Wire Wire Line
+	4500 1400 4500 1500
+Wire Wire Line
+	4500 1400 5300 1400
+Wire Wire Line
+	5400 1500 5300 1500
+Wire Wire Line
+	5300 1500 5300 1400
+Connection ~ 4500 1400
+Text Label 4900 1400 0    70   ~ 0
+CMP
+Wire Wire Line
+	4900 2800 5500 2800
+Text Label 5100 2800 0    70   ~ 0
+USBVCC
+Wire Wire Line
+	3600 6900 4700 6900
+Text Label 4025 6900 0    70   ~ 0
+USBVCC
+Wire Wire Line
+	3100 5400 2700 5400
+Text Label 2700 5400 0    70   ~ 0
+USBVCC
+Wire Wire Line
+	9300 5800 9600 5800
+Wire Wire Line
+	9300 5600 9300 5800
+Wire Wire Line
+	9100 5600 9300 5600
+Wire Wire Line
+	8700 5600 9100 5600
+Wire Wire Line
+	8700 5700 8700 5600
+Connection ~ 9100 5600
+Text Label 8700 5700 0    70   ~ 0
+XTAL2
+Wire Wire Line
+	9600 6000 9100 6000
+Wire Wire Line
+	9100 6000 8700 6000
+Wire Wire Line
+	8700 6000 8700 5900
+Connection ~ 9100 6000
+Text Label 8700 6000 0    70   ~ 0
+XTAL1
+Wire Wire Line
+	4700 6800 3100 6800
+Wire Wire Line
+	3100 7100 3100 6800
+Text Label 4025 6800 0    70   ~ 0
+TP_VUCAP
+Wire Wire Line
+	4700 7000 3400 7000
+Wire Wire Line
+	3200 5800 3400 5800
+Wire Wire Line
+	3400 5800 3400 7000
+Wire Wire Line
+	3200 5700 3200 5800
+Text Label 3200 5800 0    70   ~ 0
+RD-
+Text Label 4025 7000 0    70   ~ 0
+RD-
+Wire Wire Line
+	3300 7100 4700 7100
+Wire Wire Line
+	3200 6000 3300 6000
+Wire Wire Line
+	3300 6000 3300 7100
+Text Label 3200 6000 0    70   ~ 0
+RD+
+Text Label 4025 7100 0    70   ~ 0
+RD+
+Wire Wire Line
+	4700 5300 4500 5300
+Wire Wire Line
+	4500 5300 4200 5300
+Wire Wire Line
+	4200 5300 2600 5300
+Wire Wire Line
+	2600 5300 2600 4600
+Wire Wire Line
+	2600 4600 3300 4600
+Wire Wire Line
+	4200 5300 4200 5000
+Wire Wire Line
+	4500 4900 4500 5300
+Connection ~ 4200 5300
+Connection ~ 4500 5300
+Text Label 3800 5300 0    70   ~ 0
+RESET2
+Text Label 2700 4600 0    70   ~ 0
+RESET2
+Wire Wire Line
+	6900 5500 7800 5500
+Wire Wire Line
+	7800 5500 7800 4600
+Wire Wire Line
+	7800 4600 4600 4600
+Wire Wire Line
+	4600 4600 4600 5100
+Wire Wire Line
+	4600 5100 2400 5100
+Wire Wire Line
+	2400 5100 2400 4400
+Wire Wire Line
+	2400 4400 3300 4400
+Text Label 6950 5500 0    70   ~ 0
+MISO2
+Text Label 2600 4400 0    70   ~ 0
+MISO2
+Wire Wire Line
+	6900 5600 7900 5600
+Wire Wire Line
+	7900 5600 7900 4500
+Wire Wire Line
+	7900 4500 3600 4500
+Text Label 6950 5600 0    70   ~ 0
+MOSI2
+Text Label 4000 4500 0    70   ~ 0
+MOSI2
+Wire Wire Line
+	6900 5700 7700 5700
+Wire Wire Line
+	7700 5700 7700 4700
+Wire Wire Line
+	7700 4700 4700 4700
+Wire Wire Line
+	4700 4700 4700 5200
+Wire Wire Line
+	4700 5200 2500 5200
+Wire Wire Line
+	2500 5200 2500 4500
+Wire Wire Line
+	2500 4500 3300 4500
+Text Label 6950 5700 0    70   ~ 0
+SCK2
+Text Label 2700 4500 0    70   ~ 0
+SCK2
+Wire Wire Line
+	1200 6300 1200 6400
+Wire Wire Line
+	1200 6400 1300 6400
+Wire Wire Line
+	1300 6400 1300 6300
+Wire Wire Line
+	1300 6900 1300 6400
+Wire Wire Line
+	2200 6900 1300 6900
+Wire Wire Line
+	2600 6600 2600 6800
+Wire Wire Line
+	2600 6800 2200 6800
+Wire Wire Line
+	2200 6800 2200 6900
+Wire Wire Line
+	2200 6800 2200 6600
+Wire Wire Line
+	2200 7100 2200 6900
+Connection ~ 1300 6400
+Connection ~ 2200 6800
+Connection ~ 2200 6900
+Text Label 1500 6900 0    70   ~ 0
+USHIELD
+Wire Wire Line
+	1500 6000 1900 6000
+Wire Wire Line
+	1900 6000 1900 7700
+Wire Wire Line
+	1900 7700 2200 7700
+Wire Wire Line
+	2200 7700 3100 7700
+Wire Wire Line
+	3100 7700 3900 7700
+Wire Wire Line
+	3900 7700 3900 7400
+Wire Wire Line
+	3900 7400 3900 7200
+Wire Wire Line
+	3900 7200 4700 7200
+Wire Wire Line
+	4000 7400 3900 7400
+Wire Wire Line
+	2200 7500 2200 7700
+Wire Wire Line
+	3100 7400 3100 7700
+Connection ~ 3900 7400
+Connection ~ 3100 7700
+Connection ~ 2200 7700
+Text Label 1900 6500 1    70   ~ 0
+UGND
+Text Label 4000 7200 0    70   ~ 0
+UGND
+Wire Wire Line
+	2200 5700 2200 5400
+Wire Wire Line
+	1500 5700 2200 5700
+Wire Wire Line
+	2200 5400 2300 5400
+Text Label 1700 5700 0    70   ~ 0
+XUSB
+Wire Wire Line
+	4600 5600 4700 5600
+Wire Wire Line
+	4600 5500 4600 5600
+Wire Wire Line
+	4300 5500 4600 5500
+Wire Wire Line
+	4300 5500 4000 5500
+Connection ~ 4600 5500
+Connection ~ 4300 5500
+Text Label 4000 5500 0    70   ~ 0
+XT2
+Wire Wire Line
+	4700 5900 4700 5800
+Wire Wire Line
+	4600 5900 4700 5900
+Wire Wire Line
+	4600 5900 4300 5900
+Wire Wire Line
+	4300 5900 4000 5900
+Connection ~ 4600 5900
+Connection ~ 4300 5900
+Text Label 4000 5900 0    70   ~ 0
+XT1
+Text Label 4700 5900 0    70   ~ 0
+XT1
+Wire Wire Line
+	7800 7700 7700 7700
+Wire Wire Line
+	7700 7700 7700 7000
+Wire Wire Line
+	7700 7000 6900 7000
+Text Label 7000 7000 0    70   ~ 0
+RXLED
+Wire Wire Line
+	7800 7200 7800 6900
+Wire Wire Line
+	7800 6900 6900 6900
+Text Label 7000 6900 0    70   ~ 0
+TXLED
+Wire Wire Line
+	12900 6600 12600 6600
+Wire Wire Line
+	12600 6600 12600 6700
+Wire Wire Line
+	12600 6700 11100 6700
+Text Label 11300 6700 0    70   ~ 0
+AD0
+Wire Wire Line
+	11100 6600 12500 6600
+Wire Wire Line
+	12500 6600 12500 6500
+Wire Wire Line
+	12500 6500 12900 6500
+Text Label 11300 6600 0    70   ~ 0
+AD1
+Wire Wire Line
+	12900 6400 12400 6400
+Wire Wire Line
+	12400 6400 12400 6500
+Wire Wire Line
+	12400 6500 11100 6500
+Text Label 11300 6500 0    70   ~ 0
+AD2
+Wire Wire Line
+	11100 6400 12300 6400
+Wire Wire Line
+	12300 6400 12300 6300
+Wire Wire Line
+	12300 6300 12900 6300
+Text Label 11300 6400 0    70   ~ 0
+AD3
+Wire Wire Line
+	12900 6200 12200 6200
+Wire Wire Line
+	12200 6200 12200 6300
+Wire Wire Line
+	12200 6300 11100 6300
+Text Label 11300 6300 0    70   ~ 0
+AD4/SDA
+Wire Wire Line
+	12900 4900 12100 4900
+Text Label 12400 4900 0    70   ~ 0
+AD4/SDA
+Wire Wire Line
+	11100 6200 12100 6200
+Wire Wire Line
+	12100 6200 12100 6100
+Wire Wire Line
+	12100 6100 12900 6100
+Text Label 11300 6200 0    70   ~ 0
+AD5/SCL
+Wire Wire Line
+	12900 4800 12200 4800
+Text Label 12400 4800 0    70   ~ 0
+AD5/SCL
+Wire Wire Line
+	12900 7500 12100 7500
+Wire Wire Line
+	12100 7500 12100 7400
+Wire Wire Line
+	12100 7400 11100 7400
+Text Label 11300 7400 0    70   ~ 0
+IO2
+Wire Wire Line
+	12000 7600 12900 7600
+Wire Wire Line
+	12000 7500 12000 7600
+Wire Wire Line
+	11100 7500 11800 7500
+Wire Wire Line
+	11800 7500 12000 7500
+Wire Wire Line
+	11800 8200 11800 7500
+Wire Wire Line
+	10700 8200 11800 8200
+Connection ~ 11800 7500
+Text Label 11300 7500 0    70   ~ 0
+IO1
+Wire Wire Line
+	12900 7700 11900 7700
+Wire Wire Line
+	11900 7700 11900 7600
+Wire Wire Line
+	11900 7600 11700 7600
+Wire Wire Line
+	11700 7600 11100 7600
+Wire Wire Line
+	11700 8000 10700 8000
+Wire Wire Line
+	11700 8000 11700 7600
+Connection ~ 11700 7600
+Text Label 11300 7600 0    70   ~ 0
+IO0
+Wire Wire Line
+	11100 7300 12200 7300
+Wire Wire Line
+	12200 7300 12200 7400
+Wire Wire Line
+	12200 7400 12900 7400
+Text Label 11300 7300 0    70   ~ 0
+IO3
+Wire Wire Line
+	12900 7300 12300 7300
+Wire Wire Line
+	12300 7300 12300 7200
+Wire Wire Line
+	12300 7200 11100 7200
+Text Label 11300 7200 0    70   ~ 0
+IO4
+Wire Wire Line
+	11100 7100 12400 7100
+Wire Wire Line
+	12400 7100 12400 7200
+Wire Wire Line
+	12400 7200 12900 7200
+Text Label 11300 7100 0    70   ~ 0
+IO5
+Wire Wire Line
+	12900 7100 12500 7100
+Wire Wire Line
+	12500 7100 12500 7000
+Wire Wire Line
+	12500 7000 11100 7000
+Text Label 11300 7000 0    70   ~ 0
+IO6
+Wire Wire Line
+	11100 6900 12600 6900
+Wire Wire Line
+	12600 6900 12600 7000
+Wire Wire Line
+	12600 7000 12900 7000
+Text Label 11300 6900 0    70   ~ 0
+IO7
+Wire Wire Line
+	11100 6000 12600 6000
+Wire Wire Line
+	12600 6000 12600 5700
+Wire Wire Line
+	12600 5700 12900 5700
+Text Label 11300 6000 0    70   ~ 0
+IO8
+Wire Wire Line
+	12900 5600 12500 5600
+Wire Wire Line
+	12500 5600 12500 5900
+Wire Wire Line
+	12500 5900 11100 5900
+Text Label 11300 5900 0    70   ~ 0
+IO9
+Wire Wire Line
+	8300 2000 8300 2100
+Wire Wire Line
+	6900 5400 7600 5400
+Wire Wire Line
+	7600 5400 7600 4200
+Text Label 7000 5400 0    70   ~ 0
+PB4
+Wire Wire Line
+	6900 5300 7500 5300
+Wire Wire Line
+	7500 5300 7500 4200
+Text Label 7000 5300 0    70   ~ 0
+PB5
+Wire Wire Line
+	6900 5200 7300 5200
+Wire Wire Line
+	7300 5200 7300 3600
+Wire Wire Line
+	7300 3600 7600 3600
+Wire Wire Line
+	7600 3600 7600 3900
+Text Label 7000 5200 0    70   ~ 0
+PB6
+Wire Wire Line
+	6900 5100 7200 5100
+Wire Wire Line
+	7500 3900 7500 3700
+Wire Wire Line
+	7500 3700 7200 3700
+Wire Wire Line
+	7200 3700 7200 5100
+Text Label 7000 5100 0    70   ~ 0
+PB7
+Wire Wire Line
+	7800 1900 8000 1900
+Wire Wire Line
+	8000 1900 8000 2200
+Wire Wire Line
+	8000 2200 7100 2200
+Wire Wire Line
+	7100 2200 7100 2000
+Wire Wire Line
+	7100 2000 7200 2000
+Wire Wire Line
+	8300 1600 8300 1400
+Wire Wire Line
+	8300 1400 8000 1400
+Wire Wire Line
+	8000 1400 8000 1900
+Connection ~ 8000 1900
+Text Label 8000 1400 0    70   ~ 0
+L13
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:ATMEGA328P-PU ZU4
+U 1 1 57919429
+P 10400 6500
+F 0 "ZU4" H 9800 7630 59  0000 L BNN
+F 1 "ATMEGA328P-PU" H 9800 5200 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:DIL28-3" H 10400 6500 50  0001 C CNN
+F 3 "" H 10400 6500 50  0001 C CNN
+	1    10400 6500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-2X3 ICSP2
+U 1 1 E9B395D1
+P 10700 4700
+F 0 "ICSP2" H 10450 4925 59  0000 L BNN
+F 1 "3x2 M" H 10450 4400 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:2X03" H 10700 4700 50  0001 C CNN
+F 3 "" H 10700 4700 50  0001 C CNN
+	1    10700 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+01
+U 1 1 48DD0DF0
+P 11300 4400
+F 0 "#P+01" H 11300 4400 50  0001 C CNN
+F 1 "+5V" V 11375 4500 59  0000 R TNN
+F 2 "" H 11300 4400 50  0001 C CNN
+F 3 "" H 11300 4400 50  0001 C CNN
+	1    11300 4400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND01
+U 1 1 A7315E89
+P 11200 4900
+F 0 "#GND01" H 11200 4900 50  0001 C CNN
+F 1 "GND" H 11100 4800 59  0000 L BNN
+F 2 "" H 11200 4900 50  0001 C CNN
+F 3 "" H 11200 4900 50  0001 C CNN
+	1    11200 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+02
+U 1 1 534F544F
+P 9000 4900
+F 0 "#P+02" H 9000 4900 50  0001 C CNN
+F 1 "+5V" V 9075 5000 59  0000 R TNN
+F 2 "" H 9000 4900 50  0001 C CNN
+F 3 "" H 9000 4900 50  0001 C CNN
+	1    9000 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+03
+U 1 1 4F0D6BCD
+P 8900 6500
+F 0 "#P+03" H 8900 6500 50  0001 C CNN
+F 1 "+5V" V 8975 6600 59  0000 R TNN
+F 2 "" H 8900 6500 50  0001 C CNN
+F 3 "" H 8900 6500 50  0001 C CNN
+	1    8900 6500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND02
+U 1 1 C92C8F3B
+P 9500 7100
+F 0 "#GND02" H 9500 7100 50  0001 C CNN
+F 1 "GND" H 9400 7000 59  0000 L BNN
+F 2 "" H 9500 7100 50  0001 C CNN
+F 3 "" H 9500 7100 50  0001 C CNN
+	1    9500 7100
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND03
+U 1 1 E2B99DEF
+P 8200 5700
+F 0 "#GND03" H 8200 5700 50  0001 C CNN
+F 1 "GND" H 8100 5600 59  0000 L BNN
+F 2 "" H 8200 5700 50  0001 C CNN
+F 3 "" H 8200 5700 50  0001 C CNN
+	1    8200 5700
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-1X8 IOL1
+U 1 1 23AF9D7D
+P 13000 7300
+F 0 "IOL1" H 12750 7825 59  0000 L BNN
+F 1 "8x1F-H8.5" H 12750 6800 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:1X08" H 13000 7300 50  0001 C CNN
+F 3 "" H 13000 7300 50  0001 C CNN
+	1    13000 7300
+	1    0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-1X10_ARD IOH1
+U 1 1 54E8B2E6
+P 13000 5300
+F 0 "IOH1" H 12750 5825 59  0000 L BNN
+F 1 "10x1F-H8.5" H 12750 4600 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:1X10" H 13000 5300 50  0001 C CNN
+F 3 "" H 13000 5300 50  0001 C CNN
+	1    13000 5300
+	1    0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-1X6 AD1
+U 1 1 174A693B
+P 13000 6300
+F 0 "AD1" H 12750 6725 59  0000 L BNN
+F 1 "6x1F-H8.5" H 12750 5900 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:1X06" H 13000 6300 50  0001 C CNN
+F 3 "" H 13000 6300 50  0001 C CNN
+	1    13000 6300
+	1    0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND05
+U 1 1 6CC61BFB
+P 9500 3900
+F 0 "#GND05" H 9500 3900 50  0001 C CNN
+F 1 "GND" H 9400 3800 59  0000 L BNN
+F 2 "" H 9500 3900 50  0001 C CNN
+F 3 "" H 9500 3900 50  0001 C CNN
+	1    9500 3900
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+04
+U 1 1 40DCAEBA
+P 9400 3000
+F 0 "#P+04" H 9400 3000 50  0001 C CNN
+F 1 "+5V" V 9475 3100 59  0000 R TNN
+F 2 "" H 9400 3000 50  0001 C CNN
+F 3 "" H 9400 3000 50  0001 C CNN
+	1    9400 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C2
+U 1 1 A6FA2B05
+P 12700 2100
+F 0 "C2" H 13000 2000 59  0000 R TNN
+F 1 "100n" H 13000 2100 59  0000 R TNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 12700 2100 50  0001 C CNN
+F 3 "" H 12700 2100 50  0001 C CNN
+	1    12700 2100
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND07
+U 1 1 2E923FEC
+P 12700 2400
+F 0 "#GND07" H 12700 2400 50  0001 C CNN
+F 1 "GND" H 12600 2300 59  0000 L BNN
+F 2 "" H 12700 2400 50  0001 C CNN
+F 3 "" H 12700 2400 50  0001 C CNN
+	1    12700 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:CPOL-EUD PC1
+U 1 1 37DBDA6A
+P 10600 2000
+F 0 "PC1" H 10300 2000 59  0000 L BNN
+F 1 "47u" H 10300 1900 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:PANASONIC_D" H 10600 2000 50  0001 C CNN
+F 3 "" H 10600 2000 50  0001 C CNN
+	1    10600 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:CPOL-EUD PC2
+U 1 1 79F3A8DC
+P 12100 2000
+F 0 "PC2" H 12200 1979 59  0000 L BNN
+F 1 "47u" H 12190 1879 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:PANASONIC_D" H 12100 2000 50  0001 C CNN
+F 3 "" H 12100 2000 50  0001 C CNN
+	1    12100 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND09
+U 1 1 158B4DC7
+P 10600 2400
+F 0 "#GND09" H 10600 2400 50  0001 C CNN
+F 1 "GND" H 10500 2300 59  0000 L BNN
+F 2 "" H 10600 2400 50  0001 C CNN
+F 3 "" H 10600 2400 50  0001 C CNN
+	1    10600 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND010
+U 1 1 EE95B960
+P 12100 2400
+F 0 "#GND010" H 12100 2400 50  0001 C CNN
+F 1 "GND" H 12000 2300 59  0000 L BNN
+F 2 "" H 12100 2400 50  0001 C CNN
+F 3 "" H 12100 2400 50  0001 C CNN
+	1    12100 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND012
+U 1 1 E480151F
+P 10400 4300
+F 0 "#GND012" H 10400 4300 50  0001 C CNN
+F 1 "GND" H 10300 4200 59  0000 L BNN
+F 2 "" H 10400 4300 50  0001 C CNN
+F 3 "" H 10400 4300 50  0001 C CNN
+	1    10400 4300
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND019
+U 1 1 BFE1AC94
+P 9000 2500
+F 0 "#GND019" H 9000 2500 50  0001 C CNN
+F 1 "GND" H 8900 2400 59  0000 L BNN
+F 2 "" H 9000 2500 50  0001 C CNN
+F 3 "" H 9000 2500 50  0001 C CNN
+	1    9000 2500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LEDCHIP-LED0805 ON1
+U 1 1 4737ECCA
+P 12300 3100
+F 0 "ON1" V 12440 2920 59  0000 L BNN
+F 1 "GREEN" V 12525 2920 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CHIP-LED0805" H 12300 3100 50  0001 C CNN
+F 3 "" H 12300 3100 50  0001 C CNN
+	1    12300 3100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND014
+U 1 1 A1A53D2B
+P 12700 3100
+F 0 "#GND014" H 12700 3100 50  0001 C CNN
+F 1 "GND" H 12600 3000 59  0000 L BNN
+F 2 "" H 12700 3100 50  0001 C CNN
+F 3 "" H 12700 3100 50  0001 C CNN
+	1    12700 3100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+05
+U 1 1 A86A3590
+P 11700 2800
+F 0 "#P+05" H 11700 2800 50  0001 C CNN
+F 1 "+5V" V 11775 2900 59  0000 R TNN
+F 2 "" H 11700 2800 50  0001 C CNN
+F 3 "" H 11700 2800 50  0001 C CNN
+	1    11700 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LEDCHIP-LED0805 RX1
+U 1 1 7164C371
+P 8000 7700
+F 0 "RX1" V 8215 7520 59  0000 L BNN
+F 1 "YELLOW" V 8325 7520 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CHIP-LED0805" H 8000 7700 50  0001 C CNN
+F 3 "" H 8000 7700 50  0001 C CNN
+	1    8000 7700
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LEDCHIP-LED0805 TX1
+U 1 1 2CD836CA
+P 8000 7200
+F 0 "TX1" V 8140 7020 59  0000 L BNN
+F 1 "YELLOW" V 8225 7020 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CHIP-LED0805" H 8000 7200 50  0001 C CNN
+F 3 "" H 8000 7200 50  0001 C CNN
+	1    8000 7200
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:DIODE-SMB D1
+U 1 1 735FD367
+P 10200 1800
+F 0 "D1" H 10300 1819 59  0000 L BNN
+F 1 "M7" H 10300 1709 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:SMB" H 10200 1800 50  0001 C CNN
+F 3 "" H 10200 1800 50  0001 C CNN
+	1    10200 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:POWERSUPPLY_DC21MMX X1
+U 1 1 6F919911
+P 9200 1600
+F 0 "X1" H 8800 1900 42  0000 L BNN
+F 1 "POWERSUPPLY_DC21MMX" H 8800 1800 42  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:POWERSUPPLY_DC-21MM" H 9200 1600 50  0001 C CNN
+F 3 "" H 9200 1600 50  0001 C CNN
+	1    9200 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:FIDUCIALMOUNT FD1
+U 1 1 9980BE91
+P 10800 3300
+F 0 "FD1" H 10800 3300 50  0001 C CNN
+F 1 "FIDUCIALMOUNT" H 10800 3300 50  0001 C CNN
+F 2 "arduino_Uno_Rev3-02-TH:FIDUCIA-MOUNT" H 10800 3300 50  0001 C CNN
+F 3 "" H 10800 3300 50  0001 C CNN
+	1    10800 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:FIDUCIALMOUNT FD2
+U 1 1 32367758
+P 10800 3500
+F 0 "FD2" H 10800 3500 50  0001 C CNN
+F 1 "FIDUCIALMOUNT" H 10800 3500 50  0001 C CNN
+F 2 "arduino_Uno_Rev3-02-TH:FIDUCIA-MOUNT" H 10800 3500 50  0001 C CNN
+F 3 "" H 10800 3500 50  0001 C CNN
+	1    10800 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:FIDUCIALMOUNT FD3
+U 1 1 984E5A47
+P 10800 3700
+F 0 "FD3" H 10800 3700 50  0001 C CNN
+F 1 "FIDUCIALMOUNT" H 10800 3700 50  0001 C CNN
+F 2 "arduino_Uno_Rev3-02-TH:FIDUCIA-MOUNT" H 10800 3700 50  0001 C CNN
+F 3 "" H 10800 3700 50  0001 C CNN
+	1    10800 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PN61729 X2
+U 1 1 8718A934
+P 1400 5900
+F 0 "X2" H 1400 6250 59  0000 L BNN
+F 1 "USB-B_TH" H 1400 6400 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:PN61729" H 1400 5900 50  0001 C CNN
+F 3 "" H 1400 5900 50  0001 C CNN
+	1    1400 5900
+	-1   0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND011
+U 1 1 DE30151E
+P 11300 2400
+F 0 "#GND011" H 11300 2400 50  0001 C CNN
+F 1 "GND" H 11200 2300 59  0000 L BNN
+F 2 "" H 11300 2400 50  0001 C CNN
+F 3 "" H 11300 2400 50  0001 C CNN
+	1    11300 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:MC33269ST U1
+U 1 1 EBA67C8F
+P 11300 1800
+F 0 "U1" H 11100 2200 59  0000 L BNN
+F 1 "NCP1117ST50T3G" H 11100 2100 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:SOT223" H 11300 1800 50  0001 C CNN
+F 3 "" H 11300 1800 50  0001 C CNN
+	1    11300 1800
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C4
+U 1 1 2222F638
+P 11800 4500
+F 0 "C4" H 11860 4515 59  0000 L BNN
+F 1 "100n" H 11860 4315 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 11800 4500 50  0001 C CNN
+F 3 "" H 11800 4500 50  0001 C CNN
+	1    11800 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND013
+U 1 1 78C00C8D
+P 11800 4200
+F 0 "#GND013" H 11800 4200 50  0001 C CNN
+F 1 "GND" H 11700 4100 59  0000 L BNN
+F 2 "" H 11800 4200 50  0001 C CNN
+F 3 "" H 11800 4200 50  0001 C CNN
+	1    11800 4200
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:L-EUL1812 F1
+U 1 1 663CC30D
+P 2500 5400
+F 0 "F1" V 2441 5250 59  0000 L BNN
+F 1 "MF-MSMF050-2 500mA" V 2630 5250 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:L1812" H 2500 5400 50  0001 C CNN
+F 3 "" H 2500 5400 50  0001 C CNN
+	1    2500 5400
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+06
+U 1 1 53312C75
+P 4300 6200
+F 0 "#P+06" H 4300 6200 50  0001 C CNN
+F 1 "+5V" V 4375 6300 59  0000 R TNN
+F 2 "" H 4300 6200 50  0001 C CNN
+F 3 "" H 4300 6200 50  0001 C CNN
+	1    4300 6200
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+07
+U 1 1 F95C80BF
+P 8900 7000
+F 0 "#P+07" H 8900 7000 50  0001 C CNN
+F 1 "+5V" V 8975 7100 59  0000 R TNN
+F 2 "" H 8900 7000 50  0001 C CNN
+F 3 "" H 8900 7000 50  0001 C CNN
+	1    8900 7000
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C7
+U 1 1 B2EBE89C
+P 2900 7100
+F 0 "C7" H 3025 6975 59  0000 L BNN
+F 1 "100n" H 3025 7075 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 2900 7100 50  0001 C CNN
+F 3 "" H 2900 7100 50  0001 C CNN
+	1    2900 7100
+	-1   0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND016
+U 1 1 4CC6CA08
+P 2900 7500
+F 0 "#GND016" H 2900 7500 50  0001 C CNN
+F 1 "GND" H 2800 7400 59  0000 L BNN
+F 2 "" H 2900 7500 50  0001 C CNN
+F 3 "" H 2900 7500 50  0001 C CNN
+	1    2900 7500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LEDCHIP-LED0805 L2
+U 1 1 C57B95E5
+P 8300 2200
+F 0 "L2" V 8440 2020 59  0000 L BNN
+F 1 "YELLOW" V 8525 2020 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CHIP-LED0805" H 8300 2200 50  0001 C CNN
+F 3 "" H 8300 2200 50  0001 C CNN
+	1    8300 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND017
+U 1 1 D1FA1B5E
+P 8300 2600
+F 0 "#GND017" H 8300 2600 50  0001 C CNN
+F 1 "GND" H 8200 2500 59  0000 L BNN
+F 2 "" H 8300 2600 50  0001 C CNN
+F 3 "" H 8300 2600 50  0001 C CNN
+	1    8300 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PMOSSOT23 T1
+U 1 1 0A796088
+P 5700 2800
+F 0 "T1" H 5800 2900 59  0000 L BNN
+F 1 "FDN340P" H 5800 2800 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:SOT-23" H 5700 2800 50  0001 C CNN
+F 3 "" H 5700 2800 50  0001 C CNN
+	1    5700 2800
+	0    -1   1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+08
+U 1 1 615237C0
+P 12400 1500
+F 0 "#P+08" H 12400 1500 50  0001 C CNN
+F 1 "+5V" V 12475 1600 59  0000 R TNN
+F 2 "" H 12400 1500 50  0001 C CNN
+F 3 "" H 12400 1500 50  0001 C CNN
+	1    12400 1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND020
+U 1 1 9DCBE17A
+P 4500 2100
+F 0 "#GND020" H 4500 2100 50  0001 C CNN
+F 1 "GND" H 4400 2000 59  0000 L BNN
+F 2 "" H 4500 2100 50  0001 C CNN
+F 3 "" H 4500 2100 50  0001 C CNN
+	1    4500 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND018
+U 1 1 8D801CC1
+P 3300 2100
+F 0 "#GND018" H 3300 2100 50  0001 C CNN
+F 1 "GND" H 3200 2000 59  0000 L BNN
+F 2 "" H 3300 2100 50  0001 C CNN
+F 3 "" H 3300 2100 50  0001 C CNN
+	1    3300 2100
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+09
+U 1 1 A813F830
+P 3300 1100
+F 0 "#P+09" H 3300 1100 50  0001 C CNN
+F 1 "+5V" V 3375 1200 59  0000 R TNN
+F 2 "" H 3300 1100 50  0001 C CNN
+F 3 "" H 3300 1100 50  0001 C CNN
+	1    3300 1100
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C1
+U 1 1 E7DFC9C0
+P 3600 1700
+F 0 "C1" H 3845 1625 59  0000 R TNN
+F 1 "100n" H 3910 1725 59  0000 R TNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 3600 1700 50  0001 C CNN
+F 3 "" H 3600 1700 50  0001 C CNN
+	1    3600 1700
+	1    0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+010
+U 1 1 886C3673
+P 6300 2600
+F 0 "#P+010" H 6300 2600 50  0001 C CNN
+F 1 "+5V" V 6375 2700 59  0000 R TNN
+F 2 "" H 6300 2600 50  0001 C CNN
+F 3 "" H 6300 2600 50  0001 C CNN
+	1    6300 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:ATMEGA16U2-MU U3
+U 1 1 0E9845A5
+P 5800 6300
+F 0 "U3" H 4900 7630 59  0000 L BNN
+F 1 "ATMEGA16U2-MU(R)" H 4900 5000 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:MLF32" H 5800 6300 50  0001 C CNN
+F 3 "" H 5800 6300 50  0001 C CNN
+	1    5800 6300
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND021
+U 1 1 B6C57476
+P 8600 3400
+F 0 "#GND021" H 8600 3400 50  0001 C CNN
+F 1 "GND" H 8500 3300 59  0000 L BNN
+F 2 "" H 8600 3400 50  0001 C CNN
+F 3 "" H 8600 3400 50  0001 C CNN
+	1    8600 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C5
+U 1 1 A09D61F4
+P 8200 5200
+F 0 "C5" H 8260 5215 59  0000 L BNN
+F 1 "100n" H 8260 5015 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 8200 5200 50  0001 C CNN
+F 3 "" H 8200 5200 50  0001 C CNN
+	1    8200 5200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-2X3 ICSP1
+U 1 1 1B3E8EDF
+P 3400 4500
+F 0 "ICSP1" H 3150 4725 59  0000 L BNN
+F 1 "3x2 M" H 3150 4200 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:2X03" H 3400 4500 50  0001 C CNN
+F 3 "" H 3400 4500 50  0001 C CNN
+	1    3400 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:+5V #P+011
+U 1 1 47FE03AB
+P 3900 4000
+F 0 "#P+011" H 3900 4000 50  0001 C CNN
+F 1 "+5V" V 3975 4100 59  0000 R TNN
+F 2 "" H 3900 4000 50  0001 C CNN
+F 3 "" H 3900 4000 50  0001 C CNN
+	1    3900 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND022
+U 1 1 FBBD076C
+P 3900 4900
+F 0 "#GND022" H 3900 4900 50  0001 C CNN
+F 1 "GND" H 3800 4800 59  0000 L BNN
+F 2 "" H 3900 4900 50  0001 C CNN
+F 3 "" H 3900 4900 50  0001 C CNN
+	1    3900 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND023
+U 1 1 AA6367B1
+P 4500 7600
+F 0 "#GND023" H 4500 7600 50  0001 C CNN
+F 1 "GND" H 4400 7500 59  0000 L BNN
+F 2 "" H 4500 7600 50  0001 C CNN
+F 3 "" H 4500 7600 50  0001 C CNN
+	1    4500 7600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:VARISTORCN0603 Z1
+U 1 1 AC2FB7A2
+P 2200 6400
+F 0 "Z1" H 2100 6500 59  0000 L BNN
+F 1 "CG0603MLC-05E" H 1900 6200 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CT_CN0603" H 2200 6400 50  0001 C CNN
+F 3 "" H 2200 6400 50  0001 C CNN
+	1    2200 6400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:VARISTORCN0603 Z2
+U 1 1 4939D244
+P 2600 6400
+F 0 "Z2" H 2500 6500 59  0000 L BNN
+F 1 "CG0603MLC-05E" H 2300 6200 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CT_CN0603" H 2600 6400 50  0001 C CNN
+F 3 "" H 2600 6400 50  0001 C CNN
+	1    2600 6400
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:SJ GROUND1
+U 1 1 5120A724
+P 4200 7400
+F 0 "GROUND1" H 4100 7500 59  0000 L BNN
+F 1 "SJ" H 4100 7250 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:SJ" H 4200 7400 50  0001 C CNN
+F 3 "" H 4200 7400 50  0001 C CNN
+	1    4200 7400
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:WE-CBF_0805 L1
+U 1 1 B7E6C04B
+P 2300 7300
+F 0 "L1" H 2150 7500 59  0000 L BNN
+F 1 "BLM21" H 2150 7250 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:0805" H 2300 7300 50  0001 C CNN
+F 3 "" H 2300 7300 50  0001 C CNN
+	1    2300 7300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:SJ RESET-EN1
+U 1 1 60735640
+P 8600 4900
+F 0 "RESET-EN1" H 8500 5000 59  0000 L BNN
+F 1 "SJ" H 8500 4750 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:SJ" H 8600 4900 50  0001 C CNN
+F 3 "" H 8600 4900 50  0001 C CNN
+	1    8600 4900
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:R-EU_R0603 R2
+U 1 1 9F795A68
+P 9100 5800
+F 0 "R2" V 9166 5900 59  0000 L BNN
+F 1 "1M" V 9080 5875 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:R0603-ROUND" H 9100 5800 50  0001 C CNN
+F 3 "" H 9100 5800 50  0001 C CNN
+	1    9100 5800
+	0    1    -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN2
+U 1 1 1FD54097
+P 8300 1800
+F 0 "RN2" H 8400 1700 59  0000 R TNN
+F 1 "1K" H 8300 1900 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 8300 1800 50  0001 C CNN
+F 3 "" H 8300 1800 50  0001 C CNN
+	1    8300 1800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN2
+U 2 1 1FD5409B
+P 8500 7700
+F 0 "RN2" H 8600 7620 59  0000 R TNN
+F 1 "1K" H 8500 7800 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 8500 7700 50  0001 C CNN
+F 3 "" H 8500 7700 50  0001 C CNN
+	2    8500 7700
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN2
+U 3 1 1FD5409F
+P 8500 7200
+F 0 "RN2" H 8300 7080 59  0000 L BNN
+F 1 "1K" H 8600 7080 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 8500 7200 50  0001 C CNN
+F 3 "" H 8500 7200 50  0001 C CNN
+	3    8500 7200
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN2
+U 4 1 1FD54083
+P 7700 6300
+F 0 "RN2" H 7500 6180 59  0000 L BNN
+F 1 "1K" H 7800 6180 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 7700 6300 50  0001 C CNN
+F 3 "" H 7700 6300 50  0001 C CNN
+	4    7700 6300
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND04
+U 1 1 6AE2E73F
+P 6900 3400
+F 0 "#GND04" H 6900 3400 50  0001 C CNN
+F 1 "GND" H 6800 3300 59  0000 L BNN
+F 2 "" H 6900 3400 50  0001 C CNN
+F 3 "" H 6900 3400 50  0001 C CNN
+	1    6900 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN1
+U 1 1 9ED4A74B
+P 4500 1100
+F 0 "RN1" H 4300 980 59  0000 L BNN
+F 1 "10K" H 4600 980 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 4500 1100 50  0001 C CNN
+F 3 "" H 4500 1100 50  0001 C CNN
+	1    4500 1100
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN1
+U 2 1 9ED4A747
+P 4500 1700
+F 0 "RN1" H 4300 1580 59  0000 L BNN
+F 1 "10K" H 4600 1580 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 4500 1700 50  0001 C CNN
+F 3 "" H 4500 1700 50  0001 C CNN
+	2    4500 1700
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN1
+U 3 1 9ED4A743
+P 4200 4800
+F 0 "RN1" H 4000 4680 59  0000 L BNN
+F 1 "10K" H 4300 4680 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 4200 4800 50  0001 C CNN
+F 3 "" H 4200 4800 50  0001 C CNN
+	3    4200 4800
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN1
+U 4 1 9ED4A75F
+P 9000 5200
+F 0 "RN1" H 8800 5080 59  0000 L BNN
+F 1 "10K" H 9100 5080 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 9000 5200 50  0001 C CNN
+F 3 "" H 9000 5200 50  0001 C CNN
+	4    9000 5200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C6
+U 1 1 312D0660
+P 9100 6800
+F 0 "C6" H 9345 6725 59  0000 R TNN
+F 1 "100n" H 9410 6825 59  0000 R TNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 9100 6800 50  0001 C CNN
+F 3 "" H 9100 6800 50  0001 C CNN
+	1    9100 6800
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C8
+U 1 1 5848FE1E
+P 3100 7200
+F 0 "C8" H 2825 6975 59  0000 L BNN
+F 1 "1u" H 2825 6875 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 3100 7200 50  0001 C CNN
+F 3 "" H 3100 7200 50  0001 C CNN
+	1    3100 7200
+	-1   0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN4
+U 1 1 EAC5F74D
+P 10500 8200
+F 0 "RN4" H 10300 8080 59  0000 L BNN
+F 1 "1K" H 10600 8080 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 10500 8200 50  0001 C CNN
+F 3 "" H 10500 8200 50  0001 C CNN
+	1    10500 8200
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN4
+U 2 1 EAC5F741
+P 10500 8000
+F 0 "RN4" H 10300 7880 59  0000 L BNN
+F 1 "1K" H 10600 7880 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 10500 8000 50  0001 C CNN
+F 3 "" H 10500 8000 50  0001 C CNN
+	2    10500 8000
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN4
+U 3 1 EAC5F745
+P 11900 3300
+F 0 "RN4" H 11700 3180 59  0000 L BNN
+F 1 "1K" H 12000 3180 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 11900 3300 50  0001 C CNN
+F 3 "" H 11900 3300 50  0001 C CNN
+	3    11900 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN4
+U 4 1 EAC5F759
+P 11900 3100
+F 0 "RN4" H 11700 2980 59  0000 L BNN
+F 1 "1K" H 12000 2980 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 11900 3100 50  0001 C CNN
+F 3 "" H 11900 3100 50  0001 C CNN
+	4    11900 3100
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN3
+U 1 1 48029482
+P 3000 5700
+F 0 "RN3" H 2800 5580 59  0000 L BNN
+F 1 "22R" H 3100 5580 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 3000 5700 50  0001 C CNN
+F 3 "" H 3000 5700 50  0001 C CNN
+	1    3000 5700
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN3
+U 2 1 4802948E
+P 14300 6200
+F 0 "RN3" H 14100 6080 59  0000 L BNN
+F 1 "22R" H 14400 6080 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 14300 6200 50  0001 C CNN
+F 3 "" H 14300 6200 50  0001 C CNN
+	2    14300 6200
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN3
+U 3 1 4802948A
+P 14300 6500
+F 0 "RN3" H 14100 6380 59  0000 L BNN
+F 1 "22R" H 14400 6380 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 14300 6500 50  0001 C CNN
+F 3 "" H 14300 6500 50  0001 C CNN
+	3    14300 6500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:4R-NCAY16 RN3
+U 4 1 48029496
+P 3000 6000
+F 0 "RN3" H 2800 5880 59  0000 L BNN
+F 1 "22R" H 3100 5880 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:CAY16" H 3000 6000 50  0001 C CNN
+F 3 "" H 3000 6000 50  0001 C CNN
+	4    3000 6000
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C3
+U 1 1 DA298FB4
+P 8600 3100
+F 0 "C3" H 8845 3025 59  0000 R TNN
+F 1 "1u" H 8910 3125 59  0000 R TNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 8600 3100 50  0001 C CNN
+F 3 "" H 8600 3100 50  0001 C CNN
+	1    8600 3100
+	1    0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:R-EU_R0603 R1
+U 1 1 02EA5A8E
+P 4600 5700
+F 0 "R1" V 4666 5800 59  0000 L BNN
+F 1 "1M" V 4580 5775 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:R0603-ROUND" H 4600 5700 50  0001 C CNN
+F 3 "" H 4600 5700 50  0001 C CNN
+	1    4600 5700
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C9
+U 1 1 A49B96D8
+P 3900 5900
+F 0 "C9" H 4145 5825 59  0000 R TNN
+F 1 "22p" H 4210 5925 59  0000 R TNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 3900 5900 50  0001 C CNN
+F 3 "" H 3900 5900 50  0001 C CNN
+	1    3900 5900
+	0    1    -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:C-EU0603-RND C11
+U 1 1 9FFBA55C
+P 3900 5500
+F 0 "C11" H 3855 5275 59  0000 L BNN
+F 1 "22p" H 3890 5475 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:C0603-ROUND" H 3900 5500 50  0001 C CNN
+F 3 "" H 3900 5500 50  0001 C CNN
+	1    3900 5500
+	0    1    -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND08
+U 1 1 D5805D3F
+P 3600 5700
+F 0 "#GND08" H 3600 5700 50  0001 C CNN
+F 1 "GND" H 3500 5600 59  0000 L BNN
+F 2 "" H 3600 5700 50  0001 C CNN
+F 3 "" H 3600 5700 50  0001 C CNN
+	1    3600 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-2X2 JP2
+U 1 1 7C071B31
+P 7500 4000
+F 0 "JP2" H 7150 4225 59  0000 L BNN
+F 1 "2x2 M - NM" H 7150 3800 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:2X02" H 7500 4000 50  0001 C CNN
+F 3 "" H 7500 4000 50  0001 C CNN
+	1    7500 4000
+	0    1    -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:GND #GND015
+U 1 1 37668089
+P 7700 6600
+F 0 "#GND015" H 7700 6600 50  0001 C CNN
+F 1 "GND" H 7600 6500 59  0000 L BNN
+F 2 "" H 7700 6600 50  0001 C CNN
+F 3 "" H 7700 6600 50  0001 C CNN
+	1    7700 6600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LMV358?MM U5
+U 1 1 ADCECC7A
+P 5700 1600
+F 0 "U5" H 5800 1725 59  0001 L BNN
+F 1 "LMV358IDGKR" H 5800 1400 59  0001 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:MSOP08" H 5700 1600 50  0001 C CNN
+F 3 "" H 5700 1600 50  0001 C CNN
+	1    5700 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LMV358?MM U5
+U 2 1 ADCECC76
+P 7500 1900
+F 0 "U5" H 7600 2025 59  0001 L BNN
+F 1 "LMV358IDGKR" H 7600 1700 59  0001 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:MSOP08" H 7500 1900 50  0001 C CNN
+F 3 "" H 7500 1900 50  0001 C CNN
+	2    7500 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LMV358?MM U5
+U 3 1 ADCECC72
+P 3100 1600
+F 0 "U5" H 3200 1725 59  0001 L BNN
+F 1 "LMV358IDGKR" H 3200 1400 59  0001 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:MSOP08" H 3100 1600 50  0001 C CNN
+F 3 "" H 3100 1600 50  0001 C CNN
+	3    3100 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:TS42 RESET1
+U 1 1 6BEDB1CB
+P 9400 4500
+F 0 "RESET1" V 9150 4400 59  0000 L BNN
+F 1 "TS42031-160R-TR-7260" V 9250 4625 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:TS42" H 9400 4500 50  0001 C CNN
+F 3 "" H 9400 4500 50  0001 C CNN
+	1    9400 4500
+	-1   0    0    1   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:RESONATORMU Y2
+U 1 1 9412C595
+P 8700 5800
+F 0 "Y2" H 8500 5980 59  0001 L BNN
+F 1 "CSTCE16M0V53-R0 16MHZ" H 8300 5500 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:RESONATOR" H 8700 5800 50  0001 C CNN
+F 3 "" H 8700 5800 50  0001 C CNN
+	1    8700 5800
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:LP2985-XXDBVR U2
+U 1 1 4740A047
+P 7700 3000
+F 0 "U2" H 7400 3350 70  0000 L BNN
+F 1 "LP2985-33DBVR" H 7400 2600 70  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:SOT23-DBV" H 7700 3000 50  0001 C CNN
+F 3 "" H 7700 3000 50  0001 C CNN
+	1    7700 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:PINHD-1X8 POWER1
+U 1 1 881216EC
+P 10400 3500
+F 0 "POWER1" H 10150 4025 59  0000 L BNN
+F 1 "8x1F-H8.5" H 10150 3000 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:1X08" H 10400 3500 50  0001 C CNN
+F 3 "" H 10400 3500 50  0001 C CNN
+	1    10400 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:DIODE-MINIMELF D2
+U 1 1 A0A17686
+P 9300 5200
+F 0 "D2" H 9400 5381 59  0000 R TNN
+F 1 "CD1206-S01575" H 8900 5009 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:MINIMELF" H 9300 5200 50  0001 C CNN
+F 3 "" H 9300 5200 50  0001 C CNN
+	1    9300 5200
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:DIODE-MINIMELF D3
+U 1 1 C2D03ED1
+P 4500 4800
+F 0 "D3" H 4500 4919 59  0000 L BNN
+F 1 "CD1206-S01575" H 4100 4609 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:MINIMELF" H 4500 4800 50  0001 C CNN
+F 3 "" H 4500 4800 50  0001 C CNN
+	1    4500 4800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:XTAL_S Y1
+U 1 1 1E094E3A
+P 4300 5700
+F 0 "Y1" H 4100 5850 59  0000 L BNN
+F 1 "16MHz" H 4100 5500 59  0000 L BNN
+F 2 "arduino_Uno_Rev3-02-TH:QS" H 4300 5700 50  0001 C CNN
+F 3 "" H 4300 5700 50  0001 C CNN
+	1    4300 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L arduino_Uno_Rev3-02-TH-eagle-import:DISCLAIMER U$1
+U 1 1 4D826FCC
+P 900 10300
+F 0 "U$1" H 900 10300 50  0001 C CNN
+F 1 "DISCLAIMER" H 900 10300 50  0001 C CNN
+F 2 "arduino_Uno_Rev3-02-TH:DISCLAIMER" H 900 10300 50  0001 C CNN
+F 3 "" H 900 10300 50  0001 C CNN
+	1    900  10300
+	1    0    0    -1  
+$EndComp
+Text Notes 13075 7750 0    59   ~ 0
+0
+Text Notes 13075 7650 0    59   ~ 0
+1
+Text Notes 13075 7550 0    59   ~ 0
+2
+Text Notes 13075 7450 0    59   ~ 0
+3
+Text Notes 13075 7350 0    59   ~ 0
+4
+Text Notes 13075 7250 0    59   ~ 0
+5
+Text Notes 13075 7150 0    59   ~ 0
+6
+Text Notes 13075 7050 0    59   ~ 0
+7
+Text Notes 13175 5750 0    59   ~ 0
+8
+Text Notes 13175 5650 0    59   ~ 0
+9
+Text Notes 13175 5550 0    59   ~ 0
+10
+Text Notes 13175 5450 0    59   ~ 0
+11
+Text Notes 13175 5350 0    59   ~ 0
+12
+Text Notes 13175 5250 0    59   ~ 0
+13
+Text Notes 1775 3600 0    215  ~ 0
+Arduino(TM) UNO Rev3
+Text Notes 7500 6600 0    59   ~ 0
+USB boot En
+Text Notes 13100 4900 0    59   ~ 0
+SDA
+Text Notes 13100 4800 0    59   ~ 0
+SCL
+Text Notes 900  10600 0    170  ~ 0
+Use of the ARDUINO name must be compliant with http://www.arduino.cc/en/Main/Policy
+Text GLabel 9200 4300 0    10   BiDi ~ 0
+5-GND
+Wire Wire Line
+	11800 5000 12900 5000
+$EndSCHEMATC

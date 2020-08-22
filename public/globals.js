@@ -7,9 +7,6 @@ const topmostdiv = document.getElementById("display");
 // Default zoom level of peek-by-inset
 const PBI_ZOOM = 2.5;
 
-// y offset to trim top whitespace from sch-02-color.svg and center correctly
-const SCH02_MAGIC_Y = -40;
-
 // extra padding for board components in test mode
 const TEST_HITBOX_PADDING = 2.5;
 
@@ -17,7 +14,7 @@ const TEST_HITBOX_PADDING = 2.5;
 // Z1, RN2, C7, C8, C6, D3
 // TODO improve accuracy/aesthetic of boxes
 // TODO separate highlight and hitbox boxes for board
-const schematicComponents = {
+var schematicComponents = {
     44: {
         name: "C2",
         boxes: [[755.62,131.76,783.56,150.97]],

@@ -623,7 +623,7 @@ function redrawCanvas(layerdict) {
   if (layerdict.layer === "S") {
     // schematic
     prepareLayer(layerdict);
-    drawCanvasImg(layerdict, 0, SCH02_MAGIC_Y);
+    drawCanvasImg(layerdict, 0, 0);
     drawSchematicHighlights();
   } else {
     // layout (original)
@@ -664,10 +664,14 @@ function resizeSchematic() {
   // var maxX = 985;
   // var maxY = 690;
   // sch-02-color.svg has viewbox -90 -190 390 260 (and also mm widths)
+  // var minX = 0;
+  // var minY = 0;
+  // var maxX = 985;
+  // var maxY = 663;
   var minX = 0;
   var minY = 0;
-  var maxX = 985;
-  var maxY = 663;
+  var maxX = schematicCanvas.img.width;
+  var maxY = schematicCanvas.img.height;
 
   var scalefactor = 0.98 * Math.min(
     width / (maxX - minX),
@@ -854,7 +858,7 @@ function handleMouseClick(e, layerdict) {
     // Schematic click handler
     var coords = getMousePos(layerdict, e);
 
-    console.log(`click in schematic canvas at (${coords.x},${coords.y})`)
+    console.log(`click in schematic canvas at (${coords.x.toFixed(1)},${coords.y.toFixed(1)})`)
 
     for (var refId in schematicComponents) {
       if (isClickInBoxes(coords, schematicComponents[refId].boxes)) {
