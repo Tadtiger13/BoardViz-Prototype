@@ -1,8 +1,13 @@
 #!/bin/bash
-logfile="test.log"
-outfile="$1"
+logfile="$1"
+outfile="$2"
 
 if [ -z "$1" ]; then
+  echo "No input file specified, reading test.log"
+  logfile="test.log"
+fi
+
+if [ -z "$2" ]; then
   echo "No output file specified, writing to outputlog.txt"
   outfile="outputlog.txt"
 fi
