@@ -401,29 +401,27 @@ function highlightAll() {
     socket.emit("modules selected", modules)
 }
 
-function initSchematicData() {
-    for (var refId in pcbdata.modules) {
-        var refName = pcbdata.modules[refId].ref;
+function compBbox(comp) {
+    var x1 = parseInt(comp.bbox[0]) / 10;
+    var x2 = parseInt(comp.bbox[2]) / 10;
+    var y1 = parseInt(comp.bbox[1]) / 10;
+    var y2 = parseInt(comp.bbox[3]) / 10;
+    
+    return [Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2)];
+}
 
-        var boxes = [];
-        for (var datacomp of schematicData.components) {
+function initSchematicData(data) {
+    for (let refId in pcbdata.modules) {
+        let refName = pcbdata.modules[refId].ref;
+
+        let boxes = [];
+        for (let datacomp of data.components) {
             if (datacomp.ref == refName) {
-                var bbox = datacomp.bbox.map((r) => (r / 10));
-                boxes.push(bbox);
+                boxes.push(compBbox(datacomp));
             }
         }
         if (refId in schematicComponents) {
-            console.log(refId)
-            console.log(boxes)
             schematicComponents[refId].boxes = boxes;
-        } else {
-            schematicComponents[refId] = {
-                name: datacomp.ref,
-                boxes: boxes,
-                boardBox: [],
-                boardHitbox: [],
-                annotation: []
-            }
         }
     }
 }
@@ -433,13 +431,11 @@ window.onload = () => {
     fetch("http://" + window.location.host + "/schematicdata")
         .then((res) => res.json())
         .then((data) => {
-            console.log(data)
-            schematicData = data;
             
             // Wait for rest of init until we've gotten back the schematic data
             initUtils();
 
-            initSchematicData();
+            initSchematicData(data);
 
             initLayoutCanvas();
 
