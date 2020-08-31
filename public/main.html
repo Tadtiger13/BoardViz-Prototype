@@ -9,26 +9,39 @@
 <body>
   <div id="menubar">
     <h2>BoardViz Demo: Arduino Uno</h2>
-    <!--
-    <div id="menubuttons">
-      View mode:&nbsp;
-      <button id="btn-fsn" onclick="setViewmode('fullscreen')" style="width: 150px;">Fullscreen</button>
-      <button id="btn-pbi" onclick="setViewmode('peek-by-inset')" style="width: 150px;">Peek-By-Inset</button>
-      <button id="btn-sbs" onclick="setViewmode('side-by-side')" style="width: 150px;">Side-By-Side</button>
-    </div>
-    -->
-    <div id="testmode">
-      Test mode:&nbsp;
-      <span id="teststatus">Off</span>&nbsp;
-      <!--<button id="testcancel" onclick="socket.emit('test','cancel',null)">Cancel</button>-->
-    </div>
     <div id="swap-icon"><img src="./images/swap_icon.png" /></div>
+    <div id="settings-menu">
+      <div id="settings-btn"></div>
+      <div id="settings-content">
+        <div class="menu-row">
+          <span>Projector Scale</span>
+          <span id="projectorscale-display" style="float: right;">1.0</span>
+          <input type="range" min="-20" max="20" value="0" class="slider" id="projectorscale" oninput="scaleProjector(this.value)">
+        </div>
+        <div class="menu-row">
+          <button class="blue" style="width: 100%;" onclick="toggleDebugPanel(true)">Open Debug Panel</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div id="display" class="main">
     <div id="schematic-div">
       <div id="schematiccanvas">
         <canvas id="schematic-bg" style="z-index: 0" width="985px" height="690px"><!-- Dimensions are from SVG --></canvas>
         <canvas id="schematic-hl" style="z-index: 1" width="985px" height="690px"><!-- Dimensions must match--></canvas>
+      </div>
+      <div id="schematic-info" class="hidden">
+        <div id="sch-info-name"></div>
+        <div id="sch-info-anno"></div>
+      </div>
+      <div id="multi-click-menu" class="hidden"></div>
+      <div id="right-click-menu" class="hidden">
+        <div id="right-click-name">Comp</div>
+        <select multiple id="right-click-options">
+          <option value="all">All</option>
+          <option value="none">None</option>
+          <option value="custom">Custom</option>
+        </select>
       </div>
     </div>
     <div id="layout-div">
@@ -43,6 +56,16 @@
         <canvas id="B_fab" style="z-index: 11"></canvas>
         <canvas id="B_slk" style="z-index: 12"></canvas>
         <canvas id="B_hl" style="z-index: 13"></canvas>
+      </div>
+    </div>
+    <div id="debug-panel" class="hidden">
+      <button class="x" onclick="toggleDebugPanel(false)">X</button>
+      <h2>Debug Session</h2>
+      <div class="button-container">
+        <button id="debug-panel-s-btn" class="blue" onclick="debugModeChange('start')">Start</button>
+        <button id="debug-panel-p-btn" class="blue hidden" onclick="debugModeChange('pause')">Pause</button>
+        <button id="debug-panel-r-btn" class="blue hidden" onclick="debugModeChange('resume')">Resume</button>
+        <button id="debug-panel-f-btn" class="blue hidden" onclick="debugModeChange('end')" style="float: right;">Finished</button>
       </div>
     </div>
   </div>

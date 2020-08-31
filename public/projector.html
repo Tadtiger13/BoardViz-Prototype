@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>BoardViz Demo</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+
+<body>
+    <div id="display" class="projector">
+        <div id="layout-div">
+            <div id="frontcanvas">
+                <canvas id="F_bg"></canvas>
+                <canvas id="F_hl"></canvas>
+            </div>
+            <div id="backcanvas">
+                <canvas id="B_hl"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./globals.js"></script>
+    <script src="./ibom/lz-string.js"></script>
+    <script src="./ibom/data.js"></script>
+    <script src="./ibom/render.js"></script>
+    <script src="./projector.js"></script>
+</body>
+</html>

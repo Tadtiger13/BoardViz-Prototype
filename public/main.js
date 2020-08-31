@@ -5,18 +5,8 @@
 
 // ---- Variables ---- //
 
-// imported schematic data
-var schematicData;
-
-// Keeps track of the currently highlighted modules for use by
-// drawHighlights() and drawSchematicHighlights() in render.js
-var highlightedModules = [];
-
 // Determines whether we log the time of selections, etc
 var testMode;
-
-// True if we're in find-on-schematic mode and a component has been selected but not yet found
-var currentlyTesting = false;
 
 // TODO comment this
 var testModule = null;
@@ -30,17 +20,15 @@ var highlightedNet = null;
 // Socket for communicating with server and mobile page
 var socket = io();
 
-var showHighlightsFlag = false;
-
-// Holds svg of schematic and its highlights
-var schematicCanvas = {
+// Populate only if we're on the main page (it will be ignored otherwise)
+schematicCanvas = {
     transform: {
-      x: 0,
-      y: 0,
-      s: 1,
-      panx: 0,
-      pany: 0,
-      zoom: 2, // Start zoomed in for better aesthetics
+        x: 0,
+        y: 0,
+        s: 1,
+        panx: 0,
+        pany: 0,
+        zoom: 2, // Start zoomed in for better aesthetics
     },
     pointerStates: {},
     anotherPointerTapped: false,
@@ -53,7 +41,6 @@ var schematicCanvas = {
 // Audio to give feedback during test mode
 var successSound = new Audio("./sounds/win7tada.m4a");
 var failureSound = new Audio("./sounds/win7nope.m4a");
-
 
 // ---- Functions ---- //
 
@@ -78,6 +65,10 @@ function initSchematicCanvas() {
 }
 
 function drawSchematicHighlights() {
+    if (moduleArray.length == 0) {
+        // Haven't finished loading schematic data yet
+        return;
+    }
     var style = getComputedStyle(topmostdiv);
 
     var canvas = schematicCanvas.highlight;
@@ -85,8 +76,8 @@ function drawSchematicHighlights() {
     clearCanvas(canvas);
     var ctx = canvas.getContext("2d");
     if (highlightedModules.length > 0) {
-        for (var i in highlightedModules) {
-            var boxes = schematicComponents[highlightedModules[i]].boxes;
+        for (var moduleId of highlightedModules) {
+            var boxes = moduleArray[moduleId].schematicBboxes;
             for (var j in boxes) {
                 var box = boxes[j];
                 ctx.beginPath();
@@ -103,7 +94,7 @@ function drawSchematicHighlights() {
 function modulesSelected(modules, source) {
     if (modules.length == 0) {
         // We just want to deselect
-        socket.emit("modules selected", []);
+        socket.emit("highlight", []);
     } else {
         if (serverSettings.test.includes("board")) {
             // We're selecting a component for the user to find on the board
@@ -114,13 +105,12 @@ function modulesSelected(modules, source) {
                 if (source === "schematic") {
                     socket.emit("test", "found", modules[0]);
                 } else {
-                    showHighlightsFlag = true;
-                    socket.emit("modules selected", modules);
+                    socket.emit("highlight", modules);
                 }
             }
         } else {
             // Test mode is off, simply selecting
-            socket.emit("modules selected", [modules]);
+            socket.emit("highlight", modules);
         }
     }
 }
@@ -129,10 +119,10 @@ function highlightModules(modules, flipFullscreen) {
     highlightedModules = [];
     for (var refId of modules) {
         refId = parseInt(refId);
-        // Only highlight modules that are part of the demo set
-        if (refId in schematicComponents) {
-            highlightedModules.push(refId);
-        }
+        // No longer only highlight modules that are part of the demo set
+        // if (refId in schematicComponents) {
+        highlightedModules.push(refId);
+        // }
     }
 
     if (serverSettings.viewmode === "fullscreen" && flipFullscreen && highlightedModules.length > 0) {
@@ -145,6 +135,11 @@ function highlightModules(modules, flipFullscreen) {
 
     drawHighlights();
     drawSchematicHighlights();
+
+    var multiclickmenu = document.getElementById("multi-click-menu");
+    if (multiclickmenu) {
+        multiclickmenu.classList.add("hidden");
+    }
 }
 
 function peekLayout() {
@@ -223,14 +218,6 @@ function setViewmode(mode) {
 }
 
 function updateViewmode() {
-    var fullscreenButton = document.getElementById("btn-fsn");
-    var peekByInsetButton = document.getElementById("btn-pbi");
-    var sideBySideButton = document.getElementById("btn-sbs");
-
-    // fullscreenButton.classList = "";
-    // peekByInsetButton.classList = "";
-    // sideBySideButton.classList = "";
-
     var schematicDiv = document.getElementById("schematic-div");
     var layoutDiv = document.getElementById("layout-div");
 
@@ -242,32 +229,21 @@ function updateViewmode() {
 
     switch (serverSettings.viewmode) {
         case "fullscreen":
-            // fullscreenButton.classList.add("selected");
-
             schematicDiv.classList.add("fullscreen");
             layoutDiv.classList.add("fullscreen");
             layoutDiv.classList.add("hidden");
             fullscreenShowLayout = false;
-
             break;
         case "peek-by-inset":
-            // peekByInsetButton.classList.add("selected");
-
             schematicDiv.classList.add("fullscreen");
             layoutDiv.classList.add("peek");
             layoutDiv.classList.add("hidden");
-
             swapButton.classList.add("hidden");
-
             break;
         default:  // "side-by-side"
-            // sideBySideButton.classList.add("selected");
-
             schematicDiv.classList.add("split");
             layoutDiv.classList.add("split");
-
             swapButton.classList.add("hidden");
-
             break;
     }
 
@@ -276,23 +252,94 @@ function updateViewmode() {
     highlightModules(highlightedModules, false);
 }
 
+function scaleProjector(value) {
+    var exp = value / 20.0;
+    if (exp < -1 || exp > 1) {
+        exp = 0;
+    }
+    serverSettings.projectorScale = Math.pow(10, exp);
+    socket.emit("settings", serverSettings, "projectorScale");
+}
+
+function toggleDebugPanel(value) {
+    var panel = document.getElementById("debug-panel");
+    if (value) {
+        panel.classList.remove("hidden");
+    } else {
+        panel.classList.add("hidden");
+    }
+    resizeAll();
+}
+
+function debugModeChange(action) {
+    switch (action) {
+        case "start":
+            serverSettings.debugMode = "on";
+            break;
+        case "resume":
+            serverSettings.debugMode = "on";
+            break;
+        case "pause":
+            serverSettings.debugMode = "paused";
+            break;
+        case "end":
+            serverSettings.debugMode = "off";
+            break;
+    }
+    socket.emit("settings", serverSettings, "debugMode");
+}
+
 
 // ---- Page Setup ---- //
 
-socket.on("modules selected", (modules) => {
+socket.on("highlight", (modules) => {
     highlightModules(modules, true);
+    if (modules.length == 0) {
+        document.getElementById("right-click-menu").classList.add("hidden");
+    }
 });
 
-socket.on("settings", (newSettings) => {
+socket.on("settings", (newSettings, change) => {
     serverSettings = newSettings;
 
     updateViewmode();
 
-    if (serverSettings.test === "off") {
-        var statusSpan = document.getElementById("teststatus");
-        statusSpan.innerHTML = "Off";
-        statusSpan.style.color = "";
+    if (change == "projectorScale") {
+        var scaleDisplay = document.getElementById("projectorscale-display");
+        scaleDisplay.innerHTML = parseFloat(serverSettings.projectorScale).toFixed(2);
+    } else if (change == "debugMode") {
+        var startButton = document.getElementById("debug-panel-s-btn");
+        var pauseButton = document.getElementById("debug-panel-p-btn");
+        var resumeButton = document.getElementById("debug-panel-r-btn");
+        var finishButton = document.getElementById("debug-panel-f-btn");
+
+        switch (serverSettings.debugMode) {
+            case "on":
+                startButton.classList.add("hidden");
+                pauseButton.classList.remove("hidden");
+                resumeButton.classList.add("hidden");
+                finishButton.classList.remove("hidden");
+                break;
+            case "paused":
+                startButton.classList.add("hidden");
+                pauseButton.classList.add("hidden");
+                resumeButton.classList.remove("hidden");
+                finishButton.classList.remove("hidden");
+                break;
+            case "off":
+                startButton.classList.remove("hidden");
+                pauseButton.classList.add("hidden");
+                resumeButton.classList.add("hidden");
+                finishButton.classList.add("hidden");
+                break;
+        }
     }
+
+    // if (serverSettings.test === "off") {
+    //     var statusSpan = document.getElementById("teststatus");
+    //     statusSpan.innerHTML = "Off";
+    //     statusSpan.style.color = "";
+    // }
 });
 
 socket.on("test", (type, value) => {
@@ -301,7 +348,7 @@ socket.on("test", (type, value) => {
         return;
     }
 
-    var statusSpan = document.getElementById("teststatus");
+    // var statusSpan = document.getElementById("teststatus");
 
     switch (type) {
         case "set":
@@ -311,7 +358,7 @@ socket.on("test", (type, value) => {
                 return;
             }
 
-            // Treat any "set" like a "modules selected" so everyone can see the selection
+            // Treat any "set" like a "highlight" so everyone can see the selection
             highlightModules([value], false);
 
             if (serverSettings.test.includes("schematic")) {
@@ -324,12 +371,8 @@ socket.on("test", (type, value) => {
                 }
             }
 
-            statusSpan.innerHTML = "Active";
-            statusSpan.style.color = "#007bff"; // highlight blue
-
-            if (serverSettings.test.includes("schematic")) {
-                showHighlightsFlag = false;
-            }
+            // statusSpan.innerHTML = "Active";
+            // statusSpan.style.color = "#007bff"; // highlight blue
 
             break;
 
@@ -346,8 +389,8 @@ socket.on("test", (type, value) => {
                 testModule = null;
             }
 
-            statusSpan.innerHTML = "Found";
-            statusSpan.style.color = "#00aa00"; // green
+            // statusSpan.innerHTML = "Found";
+            // statusSpan.style.color = "#00aa00"; // green
 
             if (serverSettings.sound == "on") {
                 successSound.play();
@@ -357,21 +400,21 @@ socket.on("test", (type, value) => {
 
         case "cancel":
             testModule = null;
-            statusSpan.innerHTML = "Canceled";
-            statusSpan.style.color = "#d04040"; // red
-            break; 
+            // statusSpan.innerHTML = "Canceled";
+            // statusSpan.style.color = "#d04040"; // red
+            break;
     }
 });
 
 function selectModuleByName(name) {
     if (name === null) {
-        socket.emit("modules selected", []);
+        socket.emit("highlight", []);
         console.log("Deselecting modules");
         return;
     }
     for (var i in schematicComponents) {
         if (schematicComponents[i].name == name) {
-            socket.emit("modules selected", [i]);
+            socket.emit("highlight", [i]);
             console.log("Module found");
             return;
         }
@@ -381,12 +424,12 @@ function selectModuleByName(name) {
 
 function selectModuleById(id) {
     if (id === null) {
-        socket.emit("modules selected", []);
+        socket.emit("highlight", []);
         console.log("Deselecting modules");
         return;
     }
     if (id in schematicComponents) {
-        socket.emit("modules selected", [id]);
+        socket.emit("highlight", [id]);
         console.log("Module found");
         return;
     }
@@ -398,50 +441,21 @@ function highlightAll() {
     for (var refId in schematicComponents) {
         modules.push(refId)
     }
-    socket.emit("modules selected", modules)
+    socket.emit("highlight", modules)
 }
 
-function initSchematicData() {
-    for (var refId in pcbdata.modules) {
-        var refName = pcbdata.modules[refId].ref;
-
-        var boxes = [];
-        for (var datacomp of schematicData.components) {
-            if (datacomp.ref == refName) {
-                var bbox = datacomp.bbox.map((r) => (r / 10));
-                boxes.push(bbox);
-            }
-        }
-        if (refId in schematicComponents) {
-            console.log(refId)
-            console.log(boxes)
-            schematicComponents[refId].boxes = boxes;
-        } else {
-            schematicComponents[refId] = {
-                name: datacomp.ref,
-                boxes: boxes,
-                boardBox: [],
-                boardHitbox: [],
-                annotation: []
-            }
-        }
-    }
-}
 
 window.onload = () => {
     // Get schematic component data
     fetch("http://" + window.location.host + "/schematicdata")
         .then((res) => res.json())
         .then((data) => {
-            console.log(data)
-            schematicData = data;
-            
-            // Wait for rest of init until we've gotten back the schematic data
+            // Only complete init when we've received the schematic data
             initUtils();
 
-            initSchematicData();
+            initSchematicData(data);
 
-            initLayoutCanvas();
+            initLayoutClickHandlers();
 
             initSchematicCanvas();
 

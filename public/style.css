@@ -6,6 +6,8 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 button {
@@ -31,6 +33,20 @@ button.selected:hover {
     background-color: #3194FF;
 }
 
+button.blue {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+button.x {
+    padding: 5px;
+    border: none;
+    width: auto;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
 canvas {
     cursor: crosshair;
 }
@@ -44,7 +60,7 @@ canvas:active {
 }
 
 #display {
-    height: calc(100vh - 40px);
+    height: calc(100vh - 48px);
     width: 100vw;
     display: flex;
     flex-direction: row;
@@ -73,7 +89,6 @@ canvas:active {
     --track-color-highlight: #007bff;
     --zone-color: #def5f1;
     --zone-color-highlight: #d0404080;
-
     /* Style for schematic */
     /* --schematic-highlight-fill-color: rgba(208, 64, 64, 0.25); */
     --schematic-highlight-fill-color: rgba(0, 123, 255, 0.25);
@@ -85,7 +100,6 @@ canvas:active {
     /* Div Style */
     height: 100vh;
     background-color: #f4f4f4;
-
     /* Style for layout */
     --pcb-edge-color: black;
     --pad-color: black;
@@ -104,7 +118,6 @@ canvas:active {
     /* --track-color-highlight: #007bff; */
     --zone-color: black;
     --zone-color-highlight: black;
-
     /* Style for board */
     --board-highlight-fill-color: rgba(208, 64, 64, 0.7);
     /* --board-highlight-fill-color: rgba(0, 123, 255, 0.7); */
@@ -114,6 +127,22 @@ canvas:active {
     --board-highlight-circle-radius: 20;
 }
 
+#display.projector {
+    height: 100vh;
+    background-color: black;
+    --pad-color-highlight: white;
+    --track-color-highlight: white;
+    --zone-color-highlight: white;
+    --board-highlight-fill-color: white;
+    --board-highlight-line-color: white;
+    --board-highlight-line-width: 0.5;
+}
+#display.projector > #layout-div {
+    width: 100%;
+}
+#display.projector canvas {
+    cursor: none;
+}
 
 /* ---- mobile.html ---- */
 
@@ -125,7 +154,8 @@ canvas:active {
     position: relative;
     height: 100%;
     width: 100%;
-    max-height: 6in; /* experimental */
+    max-height: 6in;
+    /* experimental */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -133,7 +163,8 @@ canvas:active {
 
 #mobile-canvas canvas {
     position: absolute;
-    height: 100%;  /* on a horizontal phone this is the limiting factor we want */
+    height: 100%;
+    /* on a horizontal phone this is the limiting factor we want */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -148,7 +179,6 @@ canvas:active {
 }
 
 .annotation {
-    font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
     font-size: 18pt;
     position: absolute;
@@ -210,7 +240,7 @@ div#schematiccanvas canvas {
 }
 
 #menubar {
-    height: 40px;
+    height: 48px;
     width: 100%;
     border-bottom: 3px solid #d6d6d9;
     box-sizing: border-box;
@@ -242,7 +272,92 @@ div#schematiccanvas canvas {
     display: inline-block;
 }
 
+#settings-menu {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#settings-menu:hover #settings-content {
+    display: block;
+}
+#settings-menu:hover #settings-btn {
+    background-color: #eee;
+}
+#settings-btn {
+    background-color: white;
+    border: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 20 20'%3E%3Cpath fill='none' d='M0 0h20v20H0V0z'/%3E%3Cpath d='M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z'/%3E%3C/svg%3E%0A");
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 44px;
+    height: 44px;
+}
+#settings-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 44px;
+    min-width: 300px;
+    height: auto;
+    background: white;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    font-size: 16px;
+}
+.menu-row {
+    margin: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+.menu-row button {
+    font-size: inherit;
+}
+#projectorscale {
+    width: 100%;
+    margin-top: 10px;
+}
+
+#schematic-info {
+    position: absolute;
+}
+#sch-info-name {
+    font-weight: bold;
+}
+#sch-info-anno {
+
+}
+
+#multi-click-menu {
+    position: absolute;
+    z-index: 50;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    background: white;
+
+}
+#multi-click-menu div {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #eee;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+#right-click-menu {
+    position: absolute;
+    z-index: 50;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    padding: 10px;
+    min-width: 100px;
+}
+#right-click-name {
+    margin-bottom: 10px;
+}
+
 /* View Modes */
+
 /*  .full  = fullscreen
     .split = side-by-side
     .peek  = peek-by-inset
@@ -280,6 +395,17 @@ div.fullscreen {
     border: none;
 }
 
+#debug-panel {
+    min-width: 200px;
+    height: 100%;
+    border-left: 3px solid #d6d6d9;
+    position: relative;
+    padding: 0 16px;
+}
+
+#debug-panel-start {
+
+}
 
 /* ---- index.html ---- */
 
@@ -295,11 +421,12 @@ div.fullscreen {
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
 }
 
 .button-container button {
     margin: 10px;
-    width: 170px;
+    /* width: 170px; */
     border-radius: 4px;
 }
 

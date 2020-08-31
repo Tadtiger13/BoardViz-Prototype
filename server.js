@@ -36,12 +36,14 @@ var serverModules = [];
 // TODO WIP refactoring
 var serverSettings = {
   viewmode: "side-by-side",       // "side-by-side", "fullscreen", "peek-by-inset"
-  highlight: "box",               // "box", "circle", "crosshair", "layout"
-  annotation: "on min",           // "[on/off] [min/max]", "none",
+  highlight: "crosshair",         // "box", "circle", "crosshair", "layout"
+  annotation: "off min",           // "[on/off] [min/max]", "none",
   annotationPosition: "onboard",  // "onboard", "offboard"
+  annotationContent: "min",       // "min", "max"
   test: "off",                    // "off", "[board/schematic] [on/off]"
-  testTarget: "board",            // "board", "schematic"
   sound: "on",                    // "on", "off"
+  projectorScale: 1.00,           // 0.10 to 10.00
+  debugMode: "off",               // "on", "off", "paused"
 };
 
 // Test state
@@ -94,7 +96,7 @@ function handleTestEvent(type, value, fromAuto = false) {
       }
 
       // Make sure the module is highlighted for everyone
-      // io.emit("modules selected", [value]);
+      // io.emit("highlight", [value]);
 
       testStart = currentTimeMS();
       testModule = value;
@@ -118,7 +120,7 @@ function handleTestEvent(type, value, fromAuto = false) {
       testModule = null;
 
       // Make sure the module is highlighted for everyone
-      io.emit("modules selected", [value]);
+      io.emit("highlight", [value]);
 
       break;
 
@@ -159,7 +161,7 @@ function handleTestEvent(type, value, fromAuto = false) {
 
 function turnOffTest() {
   // Any time we change the test mode, we should deselect existing highlights
-  io.emit("modules selected", []);
+  io.emit("highlight", []);
 
   if (testModule !== null) {
     // If we're changing the test mode during a test, cancel the test
@@ -204,21 +206,23 @@ io.on("connection", (socket) => {
   })
 
   // Send the current settings to any new connection
-  io.emit("modules selected", serverModules);
-  io.emit("settings", serverSettings);
+  io.emit("highlight", serverModules);
+  io.emit("settings", serverSettings, "all");
   io.emit("selectionmode", testSelectionMode);
 
-  socket.on("modules selected", (modules) => {
+  socket.on("highlight", (modules) => {
     serverModules = modules;
-    io.emit("modules selected", modules);
+    io.emit("highlight", modules);
   });
 
-  socket.on("settings", (newSettings) => {
-    var oldTest = serverSettings.test;
+  // newSettings is the updated serverSettings object
+  // change is a string matching the name of the setting that was modified
+  socket.on("settings", (newSettings, change) => {
+    var oldSettings = serverSettings;
     serverSettings = newSettings;
-    io.emit("settings", serverSettings);
+    io.emit("settings", serverSettings, change);
 
-    if (oldTest !== serverSettings.test) {
+    if (change == "test" && oldSettings[change] != newSettings[change]) {
       turnOffTest();
     }
   });

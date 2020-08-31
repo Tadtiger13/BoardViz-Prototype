@@ -4,8 +4,18 @@
 // Used as proxy to get styles for layout, schematic, and board from CSS 'properties'
 const topmostdiv = document.getElementById("display");
 
+
+// The length of time a blinking highlight says on or off while blinking, in ms
+const BLINK_INTERVAL_MS = 500;
+
+// The total length of time a component is blinking when selected
+const BLINK_TOTAL_MS = 3000;
+
 // Default zoom level of peek-by-inset
 const PBI_ZOOM = 2.5;
+
+// padding around pin hitboxes
+const PIN_HITBOX_PADDING = 5;
 
 // extra padding for board components in test mode
 const TEST_HITBOX_PADDING = 2.5;
@@ -181,6 +191,12 @@ var serverSettings = {
     // Determines whether the sounds play or not in test mode
     // "off" or "on"
     sound: "on",
+
+    // Determines the scale factor used for the projector
+    projectorScale: 1.00,
+
+    // Determines whether we are in board debug mode or not
+    debugMode: "off",
 };
 
 

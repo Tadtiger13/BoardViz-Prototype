@@ -5,18 +5,8 @@
 
 // ---- Variables ---- //
 
-const BLINK_INTERVAL_MS = 500;
-const BLINK_TOTAL_MS = 3000;
-
-// TODO move all settings to one variable
-// See main.js for details -- TODO move to render.js
-var highlightedModules = [];
-
 // Determines whether we log the time of selections, etc
 var testMode = "off";
-
-// True if we're in find-on-board mode and a component has been selected (but not yet found)
-var currentlyTesting = false;
 
 // The module to be found
 // Note that this value MUST be null unless we are actively testing "board"
@@ -105,7 +95,15 @@ function drawBoardHighlights(modules, mode) {
     var ctx = canvas.getContext("2d");
     if (modules.length > 0) {
         for (var mod of modules) {
-            var box = schematicComponents[mod].boardBox;
+            // Because we now use moduleId instead of the old pcbId, we need to convert to pcbid,
+            // and then get the hitbox info from the old schematicComponents hardcoded info
+            // Note: currently broken
+            var pcbId = moduleArray[mod];
+            if (!pcbId ||!(pcbId in schematicComponents)) {
+                continue;
+            }
+            var box = schematicComponents[pcbId].boardBox;
+
             switch (mode) {
                 case "box":
                     // Just highlight the bounding box
@@ -325,7 +323,7 @@ function boardClickListener(e) {
                 socket.emit("test", "set", refId);
             } else {
                 // Test mode is off, simply selecting
-                socket.emit("modules selected", [refId]);
+                socket.emit("highlight", [refId]);
             }
 
             // If we've clicked something on the board, we should exit immediately
@@ -340,7 +338,7 @@ function boardClickListener(e) {
             socket.emit("test", "miss", null);
         } else {
             // Otherwise, deselect the current module
-            socket.emit("modules selected", []);
+            socket.emit("highlight", []);
         }
     }
 }
@@ -350,7 +348,7 @@ function boardClickListener(e) {
 
 window.onload = () => {
     // Click listeners for layout canvas
-    // initLayoutCanvas();
+    // initLayoutClickHandlers();
 
     initBoardCanvas();
 
@@ -369,7 +367,7 @@ window.onresize = () => {
 
 var socket = io();
 
-socket.on("modules selected", (modules) => {
+socket.on("highlight", (modules) => {
     boardModulesSelected(modules, serverSettings.highlight);
 });
 
@@ -394,7 +392,7 @@ socket.on("test", (type, value) => {
                 return;
             }
 
-            // Treat any "set" like a "modules selected" so everyone can see the selection
+            // Treat any "set" like a "highlight" so everyone can see the selection
             boardModulesSelected([value], serverSettings.highlight);
 
             if (serverSettings.test.includes("board")) {

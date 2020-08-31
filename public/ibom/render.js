@@ -42,7 +42,29 @@ var allcanvas = {
   }
 };
 
-var schematicCanvas;
+// Holds transform and canvas elements for manipulating schematic
+// Populated by main.js (declared here because it is used in this file)
+var schematicCanvas = null;
+
+// Keeps track of the currently highlighted modules for use by
+// drawHighlights() and drawSchematicHighlights() in render.js
+var highlightedModules = [];
+
+// Array of all selectable modules (components and pins)
+// Each module is an object with the following:
+//      ref: name of component (eg. C8) or pin (eg. +)
+//      schematicBboxes
+//      pcbid: index in pcbdata.modules
+//      pins: moduleIds of the pins (for components)
+//      parent: moduleId of the component (for pins)
+//      num: pin number (for pins)
+var moduleArray = [];
+
+// Maps ref name to corresponding moduleId
+var moduleIdMap = {};
+
+// Set to true only by projector.js, to disable layout rendering
+var projectorMode = false;
 
 
 // ---- Functions ---- //
@@ -396,10 +418,24 @@ function drawModules(canvas, layer, scalefactor, highlight) {
     padcolor = style.getPropertyValue('--pad-color-highlight');
     outlinecolor = style.getPropertyValue('--pin1-outline-color-highlight');
   }
+
+  // Convert from moduleId to pcbId
+  if (moduleArray.length == 0) {
+    // Haven't yet gotten the schematic data, so show nothing
+    return;
+  }
+  var highlightedPcbModules = [];
+  for (var moduleId of highlightedModules) {
+    var pcbid = moduleArray[moduleId].pcbid;
+    if (pcbid) {
+      highlightedPcbModules.push(parseInt(pcbid));
+    }
+  }
+
   for (var i = 0; i < pcbdata.modules.length; i++) {
     var mod = pcbdata.modules[i];
     var outline = settings.renderDnpOutline && pcbdata.bom.skipped.includes(i);
-    if (!highlight || highlightedModules.includes(i)) {
+    if (!highlight || highlightedPcbModules.includes(i)) {
       drawModule(ctx, layer, scalefactor, mod, padcolor, outlinecolor, highlight, outline);
     }
   }
@@ -492,6 +528,10 @@ function drawHighlights() {
 }
 
 function drawBackground(canvasdict, clear = true) {
+  if (projectorMode) {
+    return;
+  }
+
   if (clear) {
     clearCanvas(canvasdict.bg);
     clearCanvas(canvasdict.fab);
@@ -691,7 +731,7 @@ function resizeAll() {
   resizeCanvas(allcanvas.front);
   resizeCanvas(allcanvas.back);
 
-  if (schematicCanvas !== undefined) {
+  if (schematicCanvas !== null) {
     resizeSchematic();
   }
 }
@@ -845,6 +885,16 @@ function isClickInBoxes(coords, boxes) {
   return false;
 }
 
+function schematicBBoxHitscan(coords) {
+  var modulesHit = [];
+  for (var moduleId in moduleArray) {
+    if (isClickInBoxes(coords, moduleArray[moduleId].schematicBboxes)) {
+      modulesHit.push(parseInt(moduleId));
+    }
+  }
+  return modulesHit;
+}
+
 function handleMouseClick(e, layerdict) {
   if (!e.hasOwnProperty("offsetX")) {
     // The polyfill doesn't set this properly
@@ -860,11 +910,41 @@ function handleMouseClick(e, layerdict) {
 
     console.log(`click in schematic canvas at (${coords.x.toFixed(1)},${coords.y.toFixed(1)})`)
 
-    for (var refId in schematicComponents) {
-      if (isClickInBoxes(coords, schematicComponents[refId].boxes)) {
-        modulesSelected([refId], "schematic");
-        clickHitNothing = false;
+    var modulesHit = schematicBBoxHitscan(coords);
+
+    clickHitNothing = modulesHit.length == 0;
+
+    if (modulesHit.length < 2) {
+      modulesSelected(modulesHit, "schematic");
+    } else {
+      // Display multi-click menu
+      var clickmenu = document.getElementById("multi-click-menu");
+      // clear existing children
+      clickmenu.innerHTML = "";
+      clickmenu.style.top = (e.clientY) + "px";
+      clickmenu.style.left = e.clientX + "px";
+
+      // Important to use 'let' to ensure moduleId is scoped within for loop
+      for (let moduleId of modulesHit) {
+        var mod = moduleArray[moduleId];
+
+        var type = mod.parent === null ? "Component" : "Pin";
+        var name = mod.ref;
+        if (mod.parent !== null) {
+          // This is a pin
+          name = `${moduleArray[mod.parent].ref}.${mod.ref} (${mod.num})`;
+        }
+
+        var optdiv = document.createElement("div");
+        optdiv.addEventListener("click", () => {
+          modulesSelected([moduleId]);
+        });
+        optdiv.innerHTML = `${type}: ${name}`;
+        
+        clickmenu.appendChild(optdiv);
       }
+
+      clickmenu.classList.remove("hidden");
     }
   } else {
     // Original code
@@ -888,7 +968,20 @@ function handleMouseClick(e, layerdict) {
     if (highlightedNet === null) {
       var modules = bboxHitScan(layerdict.layer, ...v);
       if (modules.length > 0) {
-        modulesSelected(modules, "layout");
+        // We've selected one or more pcb modules
+        // We need to convert to moduleId
+        var selection = [];
+        for (var mod of modules) {
+          for (var moduleId in moduleArray) {
+            if (moduleArray[moduleId].pcbid == mod) {
+              selection.push(parseInt(moduleId));
+              // For now, only allow one component to correspond to click
+              // Since components come before their pins, this disables pin selection on the layout
+              break;
+            }
+          }
+        }
+        modulesSelected(selection, "layout");
         clickHitNothing = false;
       }
     }
@@ -945,9 +1038,37 @@ function handlePointerUp(e, layerdict) {
   e.stopPropagation();
 
   if (e.button == 2) {
-    // Reset pan and zoom on right click.
-    resetTransform(layerdict);
-    layerdict.anotherPointerTapped = false;
+    if (layerdict.layer == "S") {
+      // If we're in the schematic, we use this to select the component in detail
+      var modulesHit = schematicBBoxHitscan(getMousePos(layerdict, e));
+      
+      var component = null;
+      // Get the first component (non-pin)
+      for (var moduleId of modulesHit) {
+        if (moduleArray[moduleId].parent == null) {
+          component = moduleId;
+        }
+      }
+
+      // If we didn't find a component, just exit
+      if (!component) {
+        return;
+      }
+
+      // Highlight the module
+      modulesSelected([component]);
+      
+      var clickmenu = document.getElementById("right-click-menu");
+      // TODO actually position based on bbox and fill content
+      clickmenu.style.top = e.clientY + "px";
+      clickmenu.style.left = e.clientX + "px";
+      clickmenu.classList.remove("hidden");
+
+    } else {
+      // Reset pan and zoom on right click.
+      resetTransform(layerdict);
+      layerdict.anotherPointerTapped = false;
+    }
     return;
   }
 
@@ -1108,7 +1229,85 @@ function setBoardRotation(value) {
   resizeAll();
 }
 
-function initLayoutCanvas() {
+function initLayoutClickHandlers() {
   addMouseHandlers(document.getElementById("frontcanvas"), allcanvas.front);
   addMouseHandlers(document.getElementById("backcanvas"), allcanvas.back);
+}
+
+function initSchematicData(schematicData) {
+  moduleArray = [];
+  moduleIdMap = {};
+
+  for (let comp of schematicData.components) {
+      if (comp.ref in moduleIdMap) {
+          // This is another schematic component for a physical component we already have
+          let compIndex = moduleIdMap[comp.ref];
+          let compModule = moduleArray[compIndex];
+          compModule.schematicBboxes.push(compBbox(comp));
+      } else {
+          // We've not seen this component yet
+          let compIndex = moduleArray.length;
+          let compModule = {
+              ref: comp.ref,
+              schematicBboxes: [compBbox(comp)],
+              pcbid: getPcbId(comp),
+              pins: [],
+              parent: null,
+              num: null
+          }
+          moduleIdMap[comp.ref] = compIndex;
+          moduleArray.push(compModule);
+      }
+      // In both cases, we now have a component in moduleArray and can process the pins
+      let pinIds = addPins(comp, compModule.pcbid, compIndex);
+      compModule.pins.concat(pinIds);
+  }
+}
+
+function getPcbId(comp) {
+  for (var i in pcbdata.modules) {
+      if (pcbdata.modules[i].ref == comp.ref) {
+          return i;
+      }
+  }
+  // Didn't find a match
+  return null;
+}
+
+function compBbox(comp) {
+  var x1 = parseInt(comp.bbox[0]) / 10;
+  var x2 = parseInt(comp.bbox[2]) / 10;
+  var y1 = parseInt(comp.bbox[1]) / 10;
+  var y2 = parseInt(comp.bbox[3]) / 10;
+  
+  return [Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2)];
+}
+
+function pinHitbox(pin) {
+  var x = parseInt(pin.pos[0]) / 10;
+  var y = parseInt(pin.pos[1]) / 10;
+  return [x - PIN_HITBOX_PADDING, y - PIN_HITBOX_PADDING,
+          x + PIN_HITBOX_PADDING, y + PIN_HITBOX_PADDING];
+}
+
+// Note: for now, all pins share the pcbId of their parent
+// because I don't have the data to identify individual pins
+function addPins(comp, pcbId, parentId) {
+  var pinIdList = [];
+  for (var pin of comp.pins) {
+      var pinModule = {
+          ref: pin.name,
+          schematicBboxes: [pinHitbox(pin)],
+          pcbid: pcbId,
+          pins: null,
+          parent: parentId,
+          num: pin.num
+      }
+      var pinref = comp.ref + "." + pin.name;
+      var arrindex = moduleArray.length;
+      moduleIdMap[pinref] = arrindex;
+      pinIdList.push(arrindex);
+      moduleArray.push(pinModule);
+  }
+  return pinIdList;
 }
