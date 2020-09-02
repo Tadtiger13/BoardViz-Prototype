@@ -1239,15 +1239,17 @@ function initSchematicData(schematicData) {
   moduleIdMap = {};
 
   for (let comp of schematicData.components) {
+      let compIndex;
+      let compModule;
       if (comp.ref in moduleIdMap) {
           // This is another schematic component for a physical component we already have
-          let compIndex = moduleIdMap[comp.ref];
-          let compModule = moduleArray[compIndex];
+          compIndex = moduleIdMap[comp.ref];
+          compModule = moduleArray[compIndex];
           compModule.schematicBboxes.push(compBbox(comp));
       } else {
           // We've not seen this component yet
-          let compIndex = moduleArray.length;
-          let compModule = {
+          compIndex = moduleArray.length;
+          compModule = {
               ref: comp.ref,
               schematicBboxes: [compBbox(comp)],
               pcbid: getPcbId(comp),
