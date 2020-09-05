@@ -289,6 +289,92 @@ function debugModeChange(action) {
     socket.emit("settings", serverSettings, "debugMode");
 }
 
+var dropdownShown = false;
+function dropdownToggle(off) {
+    var dropdown = document.getElementById("right-click-dropdown-list");
+    var img = document.getElementById("right-click-chevron");
+    if (off) {
+        dropdownShown = true;
+    } 
+
+    dropdownShown = !dropdownShown;
+    if (dropdownShown) {
+        dropdown.classList.remove("hidden");
+        img.src = "images/chevronup.png"
+    } else {
+        dropdown.classList.add("hidden")
+        img.src = "images/chevrondown.png"
+    }
+}
+
+function initToggle() {
+    var dropdown = document.getElementById("right-click-dropdown-list");
+    dropdown.addEventListener("click", evt => evt.stopPropagation());
+}
+
+function newPcbPad(pos, size, angle = -90, shape = "rect") {
+    return {
+        pos: pos,
+        size: size,
+        angle: angle,
+        shape: shape,
+        type: "smd",
+        layers: ["F"],
+        offset: [0, 0],
+        path2d: null
+    }
+}
+
+function addPcbPin(name, pad) {
+    // Note: requires moduleArray to be initialized
+    for (let moduleId in moduleArray) {
+        let module = moduleArray[moduleId];
+        if (module.parent == null) {
+            continue;
+        }
+        let pinname = moduleArray[module.parent].ref + "." + module.num;
+        if (pinname == name) {
+            moduleArray[moduleId].pcbid = pcbdata.modules.length;
+        }
+    }
+    
+    pcbdata.modules.push({
+        ref: name,
+        pads: [pad],
+        layer: "F",
+        bbox: {
+            angle: 0,
+            pos: [0, 0],
+            relpos: [0, 0],
+            size: [0, 0]
+        },
+        drawings: []
+    });
+}
+
+// Adds modules to pcbdata.modules for the pins selectable in the video
+function initHardcodedPins() {
+    addPcbPin("U1.3", newPcbPad([61.6458, 140.3096], [1.2192, 2.2352]));
+    addPcbPin("PC1.+", newPcbPad([76.327, 148.476], [3, 1.4]));
+    addPcbPin("D1.C", newPcbPad([74.59, 157.226], [2.4, 2.4]));
+    addPcbPin("RN1.8", newPcbPad([78.065, 137.344], [0.5, 0.65]));
+    addPcbPin("POWER1.8", 
+        {
+            angle: -0,
+            drillshape: "circle",
+            drillsize: [0.85, 0.85],
+            layers: ["F", "B"],
+            offset: [ 0, 0 ],
+            path2d: null,
+            pos: [96.52, 157.48],
+            shape: "oval",
+            size: [1.4224, 2.8448],
+            type: "th"
+        }
+    );
+    addPcbPin("RESET1.3", newPcbPad([52.95, 112.867], [1.6, 1.4]));
+}
+
 
 // ---- Page Setup ---- //
 
@@ -296,6 +382,7 @@ socket.on("highlight", (modules) => {
     highlightModules(modules, true);
     if (modules.length == 0) {
         document.getElementById("right-click-menu").classList.add("hidden");
+        dropdownToggle(true);
     }
 });
 
@@ -412,10 +499,10 @@ function selectModuleByName(name) {
         console.log("Deselecting modules");
         return;
     }
-    for (var i in schematicComponents) {
-        if (schematicComponents[i].name == name) {
+    for (let i in moduleArray) {
+        if (moduleArray[i].ref == name) {
             socket.emit("highlight", [i]);
-            console.log("Module found");
+            console.log(`Module found (id=${i})`);
             return;
         }
     }
@@ -428,17 +515,32 @@ function selectModuleById(id) {
         console.log("Deselecting modules");
         return;
     }
-    if (id in schematicComponents) {
+    if (id in moduleArray) {
         socket.emit("highlight", [id]);
-        console.log("Module found");
+        console.log(`Module found (ref=${moduleArray[i].ref})`);
         return;
     }
     console.log("Module not found");
 }
 
+function multiSelectById(ids) {
+    if (!ids || ids.length == 0) {
+        socket.emit("highlight", []);
+        console.log("Deselecting modules");
+        return;
+    }
+    var modules = [];
+    for (let id of ids) {
+        if (id in moduleArray) {
+            modules.push(id);
+        }
+    }
+    socket.emit("highlight", modules);
+}
+
 function highlightAll() {
     modules = []
-    for (var refId in schematicComponents) {
+    for (var refId in moduleArray) {
         modules.push(refId)
     }
     socket.emit("highlight", modules)
@@ -455,11 +557,15 @@ window.onload = () => {
 
             initSchematicData(data);
 
+            initHardcodedPins();
+
             initLayoutClickHandlers();
 
             initSchematicCanvas();
 
             initSwapButton();
+
+            initToggle();
 
             // Initiates actual render
             updateViewmode();

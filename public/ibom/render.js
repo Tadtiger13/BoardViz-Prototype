@@ -58,6 +58,7 @@ var highlightedModules = [];
 //      pins: moduleIds of the pins (for components)
 //      parent: moduleId of the component (for pins)
 //      num: pin number (for pins)
+// Note that a pin's "unique" identifier is parentref.num, NOT parentref.ref
 var moduleArray = [];
 
 // Maps ref name to corresponding moduleId
@@ -65,6 +66,29 @@ var moduleIdMap = {};
 
 // Set to true only by projector.js, to disable layout rendering
 var projectorMode = false;
+
+// Hardcoded pin data for net VIN
+var netdata = {
+  0: {
+    name: "VIN",
+    schematicHitboxes: [
+      [1028.3,148.1,1104.2,192.2],
+      [408.8,66.0,454.9,90.7],
+      [971.9,368.6,1035.5,386.0]
+    ],
+    pins: [85, 113, 133, 281, 454]
+  }
+}
+
+var annotationdata = {
+  130: {
+    name: "U1",
+    options: [
+      "Test 1",
+      "Test 2"
+    ]
+  }
+}
 
 
 // ---- Functions ---- //
@@ -388,10 +412,10 @@ function drawModule(ctx, layer, scalefactor, module, padcolor, outlinecolor, hig
     }
   }
   // draw pads
-  if (settings.renderPads) {
+  if (true || settings.renderPads) {
     for (var pad of module.pads) {
       if (pad.layers.includes(layer)) {
-        drawPad(ctx, pad, padcolor, outline, true);
+        drawPad(ctx, pad, padcolor, outline, true, module.ref == "U1.3");
         if (pad.pin1 && settings.highlightpin1) {
           drawPad(ctx, pad, outlinecolor, true, false);
         }
@@ -529,6 +553,7 @@ function drawHighlights() {
 
 function drawBackground(canvasdict, clear = true) {
   if (projectorMode) {
+    drawEdgeCuts(canvasdict.bg, canvasdict.transform.s);
     return;
   }
 
@@ -669,7 +694,10 @@ function redrawCanvas(layerdict) {
     // layout (original)
     prepareLayer(layerdict);
     drawBackground(layerdict);
-    drawHighlightsOnLayer(layerdict);
+
+    if (!projectorMode || blinkStateOn) {
+      drawHighlightsOnLayer(layerdict);
+    }
   }
 }
 
@@ -914,7 +942,17 @@ function handleMouseClick(e, layerdict) {
 
     clickHitNothing = modulesHit.length == 0;
 
-    if (modulesHit.length < 2) {
+    if (clickHitNothing) {
+      // Check if we clicked the hardcoded net
+      if (isClickInBoxes(coords, netdata[0].schematicHitboxes)) {
+        for (let moduleId of netdata[0].pins) {
+          modulesHit.push(moduleId);
+        }
+        clickHitNothing = false;
+      }
+      modulesSelected(modulesHit, "schematic");
+    } else if (modulesHit.length < 2) {
+      // A normal (single or empty) selection
       modulesSelected(modulesHit, "schematic");
     } else {
       // Display multi-click menu
@@ -932,7 +970,7 @@ function handleMouseClick(e, layerdict) {
         var name = mod.ref;
         if (mod.parent !== null) {
           // This is a pin
-          name = `${moduleArray[mod.parent].ref}.${mod.ref} (${mod.num})`;
+          name = `${moduleArray[mod.parent].ref}.${mod.num} (${mod.ref})`;
         }
 
         var optdiv = document.createElement("div");
@@ -1027,6 +1065,84 @@ function resetAllTransform() {
   resetTransform(schematicCanvas);
 }
 
+function dropdownListClick(evt, value) {
+  var list = document.getElementById("right-click-dropdown-list");
+  if (value == "All") {
+    for (let li of list.childNodes) {
+      for (let elem of li.childNodes) {
+        if (elem.nodeName == "INPUT" && elem.value != "Custom") {
+          elem.checked = evt.target.checked;
+        }
+      }
+    }
+  } else {
+    if (!evt.target.checked) {
+      // If we're unchecking one in the list, unchecked "All"
+      for (let elem of list.childNodes[0]) {
+        if (elem.nodeName == "INPUT") {
+          elem.checked = false;
+        }
+      }
+    }
+  }
+}
+
+function createLi(name, checked = false, compId = null) {
+  var li = document.createElement("li");
+  var input = document.createElement("input");
+  input.type = "checkbox";
+  input.value = name;
+  input.checked = checked;
+  if (compId == null) {
+    input.addEventListener("click", (evt) => {
+      dropdownListClick(evt, name);
+    });
+  }
+  li.appendChild(input);
+
+  var span = document.createElement("span");
+  span.innerHTML = name;
+  li.appendChild(span);
+
+  if (compId != null) {
+    var textfield = document.createElement("input");
+    textfield.type = "text";
+    textfield.addEventListener("change", () => {
+      // Add result to new option and append to list
+      let newli = addOption(textfield.value, compId, true);
+      textfield.value = "";
+      document.getElementById("right-click-dropdown-list").insertBefore(newli, li);
+    });
+    input.addEventListener("click", (evt) => {
+      // This should not be selectable
+      evt.preventDefault();
+      // Otherwise the same as above
+      let newli = addOption(textfield.value, compId, true);
+      textfield.value = "";
+      document.getElementById("right-click-dropdown-list").insertBefore(newli, li);
+    });
+
+    li.appendChild(textfield);
+  }
+  return li;
+}
+
+function addOption(option, annoindex, checked) {
+  if (option == "") {
+    // Don't add empty
+    return;
+  }
+  if (annoindex in annotationdata) {
+    annotationdata[annoindex].options.push(option);
+  } else {
+    annotationdata[annoindex] = {
+      name: moduleArray[annoindex].ref,
+      options: [option]
+    }
+  }
+  return createLi(option, checked);
+}
+
 function handlePointerUp(e, layerdict) {
   if (!e.hasOwnProperty("offsetX")) {
     // The polyfill doesn't set this properly
@@ -1062,8 +1178,21 @@ function handlePointerUp(e, layerdict) {
       // TODO actually position based on bbox and fill content
       clickmenu.style.top = e.clientY + "px";
       clickmenu.style.left = e.clientX + "px";
-      clickmenu.classList.remove("hidden");
 
+      document.getElementById("right-click-name").innerHTML = moduleArray[component].ref;
+
+      var optionList = document.getElementById("right-click-dropdown-list");
+      optionList.innerHTML = "";
+
+      optionList.appendChild(createLi("All"));
+      if (annotationdata[component]) {
+        for (let option of annotationdata[component].options) {
+          optionList.appendChild(createLi(option));
+        }
+      }
+      optionList.appendChild(createLi("Custom", false, component));
+
+      clickmenu.classList.remove("hidden");
     } else {
       // Reset pan and zoom on right click.
       resetTransform(layerdict);
@@ -1262,7 +1391,7 @@ function initSchematicData(schematicData) {
       }
       // In both cases, we now have a component in moduleArray and can process the pins
       let pinIds = addPins(comp, compModule.pcbid, compIndex);
-      compModule.pins.concat(pinIds);
+      compModule.pins = compModule.pins.concat(pinIds);
   }
 }
 
@@ -1305,7 +1434,7 @@ function addPins(comp, pcbId, parentId) {
           parent: parentId,
           num: pin.num
       }
-      var pinref = comp.ref + "." + pin.name;
+      var pinref = comp.ref + "." + pin.num;
       var arrindex = moduleArray.length;
       moduleIdMap[pinref] = arrindex;
       pinIdList.push(arrindex);

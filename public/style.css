@@ -136,6 +136,7 @@ canvas:active {
     --board-highlight-fill-color: white;
     --board-highlight-line-color: white;
     --board-highlight-line-width: 0.5;
+    --pcb-edge-color: white;
 }
 #display.projector > #layout-div {
     width: 100%;
@@ -350,10 +351,37 @@ div#schematiccanvas canvas {
     border-radius: 4px;
     background: white;
     padding: 10px;
-    min-width: 100px;
+    min-width: 150px;
 }
 #right-click-name {
     margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 14pt;
+}
+#right-click-dropdown {
+    position: relative;
+    box-sizing: border-box;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 10pt;
+}
+#right-click-dropdown img {
+    width: 16px;
+    float: right;
+}
+#right-click-dropdown>ul {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    margin: 0;
+    width: 100%;
+    background: white;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+    list-style-type: none;
 }
 
 /* View Modes */

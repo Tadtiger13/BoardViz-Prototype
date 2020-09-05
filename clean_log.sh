@@ -2,14 +2,9 @@
 logfile="$1"
 outfile="$2"
 
-if [ -z "$1" ]; then
-  echo "No input file specified, reading test.log"
-  logfile="test.log"
-fi
-
 if [ -z "$2" ]; then
-  echo "No output file specified, writing to outputlog.txt"
-  outfile="outputlog.txt"
+  echo "Usage: ./clean_log.sh <input file> <output file>"
+  exit 1
 fi
 
 > "$outfile"

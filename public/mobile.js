@@ -36,6 +36,25 @@ var currentlyBlinking = false;
 // True if blinking on, false if blinking off
 var blinkStateOn = true;
 
+var hardcodedHitboxes = {
+    0: {
+        ref: "ZU4",
+        box: [336.02,318.95,552.64,380.84]
+    },
+    140: {
+        ref: "F1",
+        box: [179.29,269.03,202.25,306.97]
+    },
+    157: {
+        ref: "T1",
+        box: [206.24,279.01,224.21,298.98]
+    },
+    433: {
+        ref: "RESET1.3",
+        box: [173.80,161.22, 186.78,171.20]
+    }
+}
+
 // ---- Functions ---- //
 
 // Handles modules being selected for the board
@@ -45,16 +64,17 @@ function boardModulesSelected(modules, mode) {
     highlightedModules = [];
     for (var refId of modules) {
         refId = parseInt(refId);
-        // Only highlight modules that are part of the demo set
-        if (refId in schematicComponents) {
-            highlightedModules.push(refId);
-        }
+        highlightedModules.push(refId);
     }
 
     var annoDiv = document.getElementById("anno");
     var layoutDiv = document.getElementById("layout-div");
     annoDiv.classList.add("hidden");
     layoutDiv.classList.add("hidden");
+
+    // Rest of code now obsolete
+    drawBoardHighlights(highlightedModules, mode);
+    return;
 
     if (mode == "layout" && highlightedModules.length > 0) {
         layoutDiv.classList.remove("hidden");
@@ -93,6 +113,29 @@ function drawBoardHighlights(modules, mode) {
     prepareCanvas(canvas, false, boardCanvas.transform);
     clearCanvas(canvas);
     var ctx = canvas.getContext("2d");
+
+    // To support video production, we're adding a green box around the components we're using in the demo
+    // We're clicking on ZU4 (id=0), F1 (id=140), and T1 (id=157)
+    // All other features of the mobile page are disabled
+    for (let moduleId in hardcodedHitboxes) {
+        var box = hardcodedHitboxes[moduleId].box;
+        ctx.strokeStyle = "#0f0";
+        ctx.lineWidth = 1;
+        let padding = 0;
+        ctx.strokeRect(box[0] - padding, box[1] - padding, box[2] - box[0] + 2 * padding, box[3] - box[1] + 2 * padding);
+    }
+
+    // Check if we've highlighted any of the hardcoded components to give feedback on click
+    for (let moduleId of modules) {
+        if (moduleId in hardcodedHitboxes) {
+            drawBoardHighlight(hardcodedHitboxes[moduleId].box, ctx, "box");
+        }
+    }
+
+    // Rest of code is obsolete
+    return;
+
+
     if (modules.length > 0) {
         for (var mod of modules) {
             // Because we now use moduleId instead of the old pcbId, we need to convert to pcbid,
@@ -288,6 +331,21 @@ function boardClickListener(e) {
 
     console.log(`canvas:  (${coords.x.toFixed(2)},${coords.y.toFixed(2)})`);
 
+    // Again, we're now in video mode
+    // The only thing to check is if we're in the hardcoded boxes
+    for (let moduleId in hardcodedHitboxes) {
+        if (isClickInBoxes(coords, [hardcodedHitboxes[moduleId].box])) {
+            socket.emit("highlight", [moduleId]);
+            return;
+        }
+    }
+
+    // If we hit none of those, a click counts as a deselect
+    socket.emit("highlight", []);
+
+    // Rest of the code is now obsolete
+    return;
+
     var clickHitNothing = true;
 
     if (serverSettings.test.includes("board") && testModule !== null) {
@@ -375,7 +433,7 @@ socket.on("settings", (newSettings) => {
     serverSettings = newSettings;
 
     boardModulesSelected(highlightedModules, serverSettings.highlight);
-    showAnnotations();
+    // showAnnotations();
 });
 
 socket.on("test", (type, value) => {

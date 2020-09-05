@@ -11,10 +11,13 @@
     <div id="display" class="projector">
         <div id="layout-div">
             <div id="frontcanvas">
-                <canvas id="F_bg"></canvas>
-                <canvas id="F_hl"></canvas>
+                <canvas id="F_bg" style="z-index: 10"></canvas>
+                <canvas id="F_fab" style="z-index: 11"></canvas>
+                <canvas id="F_slk" style="z-index: 12"></canvas>
+                <canvas id="F_hl" style="z-index: 13"></canvas>
             </div>
             <div id="backcanvas">
+                <canvas id="B_bg"></canvas>
                 <canvas id="B_hl"></canvas>
             </div>
         </div>

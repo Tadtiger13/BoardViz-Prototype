@@ -7,6 +7,12 @@ var socket = io();
 
 projectorMode = true;
 
+// True if a new module has just been selected, so we don't multi-blink
+var alreadyBlinking = false;
+
+// True if blinking on, false if blinking off
+var blinkStateOn = true;
+
 
 // ---- Functions ---- //
 
@@ -85,6 +91,31 @@ function projectorHighlight() {
     }
 }
 
+function projectorModulesSelected(modules) {
+    highlightedModules = modules;
+
+    if (!alreadyBlinking) {
+        // Draw highlights once initially
+        blinkStateOn = true;
+        projectorHighlight();
+
+        if (highlightedModules.length > 0) {
+            alreadyBlinking = true;
+            var counter = 0;
+            var intervalCode = setInterval(() => {
+                blinkStateOn = !blinkStateOn;
+                if (counter * BLINK_INTERVAL_MS > BLINK_TOTAL_MS) {
+                    clearInterval(intervalCode);
+                    alreadyBlinking = false;
+                    blinkStateOn = true;
+                }
+                projectorHighlight();
+                counter++;
+            }, BLINK_INTERVAL_MS);
+        }
+    }
+}
+
 function projectorZoom(zoom) {
     allcanvas.front.transform.zoom = zoom;
     projectorHighlight();
@@ -94,8 +125,7 @@ function projectorZoom(zoom) {
 // ---- Execution ---- //
 
 socket.on("highlight", (modules) => {
-    highlightedModules = modules;
-    projectorHighlight();
+    projectorModulesSelected(modules);
 });
 
 socket.on("settings", (newSettings, change) => {

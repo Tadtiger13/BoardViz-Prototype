@@ -37,11 +37,11 @@
       <div id="multi-click-menu" class="hidden"></div>
       <div id="right-click-menu" class="hidden">
         <div id="right-click-name">Comp</div>
-        <select multiple id="right-click-options">
-          <option value="all">All</option>
-          <option value="none">None</option>
-          <option value="custom">Custom</option>
-        </select>
+        <div id="right-click-dropdown" onclick="dropdownToggle()">
+          <span>Select values</span>
+          <img id="right-click-chevron" src="images/chevrondown.png" />
+          <ul id="right-click-dropdown-list" class="hidden"></ul>
+        </div>
       </div>
     </div>
     <div id="layout-div">
@@ -65,7 +65,7 @@
         <button id="debug-panel-s-btn" class="blue" onclick="debugModeChange('start')">Start</button>
         <button id="debug-panel-p-btn" class="blue hidden" onclick="debugModeChange('pause')">Pause</button>
         <button id="debug-panel-r-btn" class="blue hidden" onclick="debugModeChange('resume')">Resume</button>
-        <button id="debug-panel-f-btn" class="blue hidden" onclick="debugModeChange('end')" style="float: right;">Finished</button>
+        <button id="debug-panel-f-btn" class="blue hidden" onclick="debugModeChange('end')" style="float: right;">Save and End</button>
       </div>
     </div>
   </div>
