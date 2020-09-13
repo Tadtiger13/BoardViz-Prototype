@@ -355,8 +355,8 @@ div#schematiccanvas canvas {
 }
 #right-click-name {
     margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 14pt;
+    /* font-weight: bold;
+    font-size: 14pt; */
 }
 #right-click-dropdown {
     position: relative;
@@ -382,6 +382,10 @@ div#schematiccanvas canvas {
     border-radius: 4px;
     padding: 4px;
     list-style-type: none;
+}
+#right-click-dropdown>ul input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* View Modes */

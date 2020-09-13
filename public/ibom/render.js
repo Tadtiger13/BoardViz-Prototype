@@ -83,10 +83,8 @@ var netdata = {
 var annotationdata = {
   130: {
     name: "U1",
-    options: [
-      "Test 1",
-      "Test 2"
-    ]
+    value: "NCP1117ST50T3G",
+    options: []
   }
 }
 
@@ -1179,18 +1177,22 @@ function handlePointerUp(e, layerdict) {
       clickmenu.style.top = e.clientY + "px";
       clickmenu.style.left = e.clientX + "px";
 
-      document.getElementById("right-click-name").innerHTML = moduleArray[component].ref;
+      var namestr = `<strong style="font-size: 14pt">${moduleArray[component].ref}</strong>`;
 
       var optionList = document.getElementById("right-click-dropdown-list");
       optionList.innerHTML = "";
 
       optionList.appendChild(createLi("All"));
       if (annotationdata[component]) {
+        optionList.appendChild(createLi(annotationdata[component].value));
+        namestr += "&nbsp;" + annotationdata[component].value;
         for (let option of annotationdata[component].options) {
           optionList.appendChild(createLi(option));
         }
       }
       optionList.appendChild(createLi("Custom", false, component));
+
+      document.getElementById("right-click-name").innerHTML = namestr;
 
       clickmenu.classList.remove("hidden");
     } else {
