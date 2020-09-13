@@ -20,6 +20,9 @@ var highlightedNet = null;
 // Socket for communicating with server and mobile page
 var socket = io();
 
+
+var rightclickcomp = null;
+
 // Populate only if we're on the main page (it will be ignored otherwise)
 schematicCanvas = {
     transform: {
@@ -379,9 +382,13 @@ function initHardcodedPins() {
 // ---- Page Setup ---- //
 
 socket.on("highlight", (modules) => {
+    if (modules != rightclickcomp) {
+        document.getElementById("right-click-menu").classList.add("hidden");
+    }
     highlightModules(modules, true);
     if (modules.length == 0) {
         document.getElementById("right-click-menu").classList.add("hidden");
+        rightclickcomp = null;
         dropdownToggle(true);
     }
 });

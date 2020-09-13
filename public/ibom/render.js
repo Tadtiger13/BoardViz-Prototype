@@ -83,8 +83,14 @@ var netdata = {
 var annotationdata = {
   130: {
     name: "U1",
-    value: "NCP1117ST50T3G",
-    options: []
+    value: "IC Linear Reg 5V",
+    options: [
+      "Voltage: 5V",
+      "Max Curr.: 1A",
+      "Package: SOT223",
+      "Mfr. PN: NCP1117ST50TG",
+      "Mfr.: ON Semi"
+    ]
   }
 }
 
@@ -1184,7 +1190,7 @@ function handlePointerUp(e, layerdict) {
 
       optionList.appendChild(createLi("All"));
       if (annotationdata[component]) {
-        optionList.appendChild(createLi(annotationdata[component].value));
+        optionList.appendChild(createLi("Value: " + annotationdata[component].value));
         namestr += "&nbsp;" + annotationdata[component].value;
         for (let option of annotationdata[component].options) {
           optionList.appendChild(createLi(option));
@@ -1193,6 +1199,8 @@ function handlePointerUp(e, layerdict) {
       optionList.appendChild(createLi("Custom", false, component));
 
       document.getElementById("right-click-name").innerHTML = namestr;
+
+      rightclickcomp = component;
 
       clickmenu.classList.remove("hidden");
     } else {
