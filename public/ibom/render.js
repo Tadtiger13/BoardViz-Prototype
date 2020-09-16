@@ -91,6 +91,11 @@ var annotationdata = {
       "Mfr. PN: NCP1117ST50TG",
       "Mfr.: ON Semi"
     ]
+  },
+  315: {
+    name: "C8",
+    value: "1uF",
+    options: []
   }
 }
 
