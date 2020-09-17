@@ -274,8 +274,17 @@ function toggleDebugPanel(value) {
     resizeAll();
 }
 
-var presetList = [4.65];
-function initiateDebug() {
+var presetList = [4.96, 3.27, 1.83];
+function initiateDebug(scene16) {
+    if (debugpanelitems.length == 0) {
+        // addPanel("PP_VYS_5V");
+        setTimeout(() => {
+            addPanel("PP_VYS_5V");
+            initiateDebug(true);
+        }, 3000);
+        return;
+    }
+
     for (let item of debugpanelitems) {
         let net = item.netname.lastChild.value;
         item.netname.innerHTML = net;
@@ -306,20 +315,27 @@ function initiateDebug() {
     let icode = setInterval(() => {
         if (counter < debugpanelitems.length) {
             let volt;
-            if (counter < presetList.length) {
+            if (scene16) {
+                volt = 4.96;
+            } else if (counter < presetList.length) {
                 volt = presetList[counter];
             } else {
                 volt = Math.floor(Math.random() * 600) / 100 + 2; // Picks num b/t 2.00 and 8.00
             }
 
             let item = debugpanelitems[counter];
-            if (item.range.length > 0 && (volt < item.range[0] || volt > item.range[1])) {
-                // We have bounds to check against and we're out of range
-                item.checkbox.classList.add("bad");
+
+            if (item.range.length > 0) {
+                if (volt >= item.range[0] && volt <= item.range[1]) {
+                    item.checkbox.classList.add("good");
+                } else {
+                    item.checkbox.classList.add("bad");
+                    item.bounds.classList.add("bad");
+                }
             } else {
-                // We don't have bounds, or we're in bounds
-                item.checkbox.classList.add("good");
+                item.checkbox.classList.add("okay");
             }
+
             item.voltage.innerHTML = volt.toFixed(2) + " V";
 
             counter++;
@@ -334,7 +350,7 @@ function debugModeChange(action) {
     switch (action) {
         case "start":
             serverSettings.debugMode = "on";
-            initiateDebug();
+            initiateDebug(false);
             break;
         case "resume":
             serverSettings.debugMode = "on";
@@ -441,13 +457,16 @@ var debugpanelcount = 0;
 
 var debugpanelitems = [];
 
-function createTextField() {
+function createTextField(name) {
     var input = document.createElement("input");
     input.setAttribute("type", "text");
+    if (name) {
+        input.value = name;
+    }
     return input;
 }
 
-function addPanel() {
+function addPanel(name) {
     var container = document.createElement("div");
     container.classList.add("debug-panel-item");
 
@@ -456,7 +475,7 @@ function addPanel() {
     
     var netname = document.createElement("div");
     netname.classList.add("debug-panel-netname");
-    netname.appendChild(createTextField());
+    netname.appendChild(createTextField(name));
 
     var voltage = document.createElement("div");
     voltage.classList.add("debug-panel-voltage");
@@ -473,9 +492,10 @@ function addPanel() {
     bounds.innerHTML = "Set bounds:&nbsp;"
     bounds.appendChild(createTextField());
     let span = document.createElement("span");
-    span.innerHTML = "-";
+    span.innerHTML = "V-";
     bounds.appendChild(span);
     bounds.appendChild(createTextField());
+    bounds.innerHTML += "V";
 
     debugpanelitems.push({
         checkbox: checkbox,
@@ -686,8 +706,6 @@ window.onload = () => {
             initSwapButton();
 
             initToggle();
-
-            addPanel();
 
             // Initiates actual render
             updateViewmode();

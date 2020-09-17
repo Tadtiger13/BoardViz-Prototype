@@ -436,7 +436,7 @@ div.fullscreen {
 }
 
 #debug-panel {
-    min-width: 200px;
+    min-width: 240px;
     height: 100%;
     border-left: 3px solid #d6d6d9;
     position: relative;
@@ -504,6 +504,9 @@ div.fullscreen {
 .debug-panel-checkbox.bad {
     background-image: url("images/red-check.png");
 }
+.debug-panel-checkbox.okay {
+    background-color: #007bff;
+}
 
 .debug-panel-netname {
     width: 90%;
@@ -527,5 +530,9 @@ div.fullscreen {
 }
 .debug-panel-bounds input {
     width: 30px;
+    text-align: right;
+}
+.debug-panel-bounds.bad {
+    color: red;
 }
 
