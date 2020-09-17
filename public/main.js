@@ -274,10 +274,67 @@ function toggleDebugPanel(value) {
     resizeAll();
 }
 
+var presetList = [4.65];
+function initiateDebug() {
+    for (let item of debugpanelitems) {
+        let net = item.netname.lastChild.value;
+        item.netname.innerHTML = net;
+
+        item.voltage.innerHTML = "&mdash; V";
+        item.voltage.classList.remove("hidden");
+
+        let lower = parseFloat(item.bounds.children[0].value);
+        let upper = parseFloat(item.bounds.children[2].value);
+
+        if (lower > upper) {
+            let temp = upper;
+            upper = lower;
+            lower = temp;
+        }
+        if (!isNaN(lower) && !isNaN(upper)) {
+            item.bounds.innerHTML = "Bounds: " + lower.toFixed(2) + "V-" + upper.toFixed(2) + "V";
+            item.range.push(lower);
+            item.range.push(upper);
+        } else {
+            item.bounds.classList.add("hidden");
+            // item.range.push(3.5);
+            // item.range.push(6.5);
+        }
+    }
+
+    var counter = 0;
+    let icode = setInterval(() => {
+        if (counter < debugpanelitems.length) {
+            let volt;
+            if (counter < presetList.length) {
+                volt = presetList[counter];
+            } else {
+                volt = Math.floor(Math.random() * 600) / 100 + 2; // Picks num b/t 2.00 and 8.00
+            }
+
+            let item = debugpanelitems[counter];
+            if (item.range.length > 0 && (volt < item.range[0] || volt > item.range[1])) {
+                // We have bounds to check against and we're out of range
+                item.checkbox.classList.add("bad");
+            } else {
+                // We don't have bounds, or we're in bounds
+                item.checkbox.classList.add("good");
+            }
+            item.voltage.innerHTML = volt.toFixed(2) + " V";
+
+            counter++;
+        } else {
+            clearInterval(icode);
+        }
+    }, 3000);
+}
+
+
 function debugModeChange(action) {
     switch (action) {
         case "start":
             serverSettings.debugMode = "on";
+            initiateDebug();
             break;
         case "resume":
             serverSettings.debugMode = "on";
@@ -376,6 +433,62 @@ function initHardcodedPins() {
         }
     );
     addPcbPin("RESET1.3", newPcbPad([52.95, 112.867], [1.6, 1.4]));
+}
+
+
+
+var debugpanelcount = 0;
+
+var debugpanelitems = [];
+
+function createTextField() {
+    var input = document.createElement("input");
+    input.setAttribute("type", "text");
+    return input;
+}
+
+function addPanel() {
+    var container = document.createElement("div");
+    container.classList.add("debug-panel-item");
+
+    var checkbox = document.createElement("div");
+    checkbox.classList.add("debug-panel-checkbox");
+    
+    var netname = document.createElement("div");
+    netname.classList.add("debug-panel-netname");
+    netname.appendChild(createTextField());
+
+    var voltage = document.createElement("div");
+    voltage.classList.add("debug-panel-voltage");
+    voltage.classList.add("hidden");
+
+    var row = document.createElement("div");
+    row.classList.add("debug-panel-row");
+    row.appendChild(checkbox);
+    row.appendChild(netname);
+    row.appendChild(voltage);
+
+    var bounds = document.createElement("div");
+    bounds.classList.add("debug-panel-bounds");
+    bounds.innerHTML = "Set bounds:&nbsp;"
+    bounds.appendChild(createTextField());
+    let span = document.createElement("span");
+    span.innerHTML = "-";
+    bounds.appendChild(span);
+    bounds.appendChild(createTextField());
+
+    debugpanelitems.push({
+        checkbox: checkbox,
+        netname: netname,
+        voltage: voltage,
+        bounds: bounds,
+        range: []
+    });
+
+    container.appendChild(row);
+    container.appendChild(bounds);
+
+    document.getElementById("debug-panel-list").appendChild(container);
 }
 
 
@@ -573,6 +686,8 @@ window.onload = () => {
             initSwapButton();
 
             initToggle();
+
+            addPanel();
 
             // Initiates actual render
             updateViewmode();

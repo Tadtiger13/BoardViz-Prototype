@@ -65,8 +65,12 @@
         <button id="debug-panel-s-btn" class="blue" onclick="debugModeChange('start')">Start</button>
         <button id="debug-panel-p-btn" class="blue hidden" onclick="debugModeChange('pause')">Pause</button>
         <button id="debug-panel-r-btn" class="blue hidden" onclick="debugModeChange('resume')">Resume</button>
-        <button id="debug-panel-f-btn" class="blue hidden" onclick="debugModeChange('end')" style="float: right;">Save and End</button>
+        <button id="debug-panel-f-btn" class="blue hidden" onclick="debugModeChange('end')" style="float: right; width: 120px;">Save and End</button>
       </div>
+      <div style="height: 40px;">
+        <button class="small-btn" onclick="addPanel()">+</button>
+      </div>
+      <div id="debug-panel-list"></div>
     </div>
   </div>
 

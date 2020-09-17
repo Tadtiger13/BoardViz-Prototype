@@ -38,6 +38,14 @@ button.blue {
     color: #007bff;
 }
 
+button.small-btn {
+    float: right;
+    font-size: 12pt;
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
 button.x {
     padding: 5px;
     border: none;
@@ -465,3 +473,59 @@ div.fullscreen {
 #action-btn-td {
     display: table-cell;
 }
+
+.debug-panel-item {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.debug-panel-row {
+    display: flex;
+    align-items: center;
+}
+
+.debug-panel-checkbox {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    margin-right: 10px;
+    background-size: cover;
+    background-image: none;
+}
+.debug-panel-checkbox.good {
+    background-image: url("images/green-check.png");
+}
+.debug-panel-checkbox.bad {
+    background-image: url("images/red-check.png");
+}
+
+.debug-panel-netname {
+    width: 90%;
+    text-align: left;
+}
+.debug-panel-netname input {
+    width: 90%;
+    box-sizing: border-box;
+    font-size: 12pt;
+}
+
+.debug-panel-voltage {
+    margin-left: 10px;
+    width: 90px;
+    text-align: right;
+}
+
+.debug-panel-bounds {
+    font-size: 10pt;
+    margin-top: 10px;
+}
+.debug-panel-bounds input {
+    width: 30px;
+}
+
