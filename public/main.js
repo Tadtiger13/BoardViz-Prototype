@@ -279,7 +279,7 @@ function initiateDebug(scene16) {
     if (debugpanelitems.length == 0) {
         // addPanel("PP_VYS_5V");
         setTimeout(() => {
-            addPanel("PP_VYS_5V");
+            addPanel("PP_VSYS_5V");
             initiateDebug(true);
         }, 3000);
         return;
